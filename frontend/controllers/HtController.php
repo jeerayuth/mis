@@ -1,0 +1,885 @@
+<?php
+
+namespace frontend\controllers;
+
+class HtController extends \yii\web\Controller {
+    /* รายงานสรุปทะเบียนความดันแยกตามที่อยู่ */
+
+    public function actionReport1() {
+
+        $report_name = "รายงานสรุปคนไข้ทะเบียนความดันแยกตามที่อยู่ในแต่ละสถานบริการ(คน)";
+
+
+        $sql = " SELECT
+'1' as hosp_area,'รพ.สต.ตำบลทุ่งหลวง' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860502'   and pt.moopart in (1,2,3,4,5,6,7,8,9)
+GROUP BY th.addressid 
+
+
+union
+
+
+SELECT
+'2' as hosp_area,'รพ.สต.ตำบลสวนแตง' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (2,3,4,5,6,9)
+GROUP BY th.addressid
+
+
+
+union
+
+
+SELECT
+'3' as hosp_area,'รพ.สต.ตำบลทุ่งคาวัด' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'   and pt.moopart in (1,2,3,4,6)
+GROUP BY th.addressid
+
+
+union
+
+
+SELECT
+'4' as hosp_area,'รพ.สต.บ้านคลองสง' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (8,11,13,15,17,18,20)
+GROUP BY th.addressid
+
+
+union
+
+
+SELECT
+'5' as hosp_area,'รพ.สต.บ้านทับใหม่' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in ('3','03')
+
+AND (concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501' and pt.moopart in (16,19)
+OR concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504' and pt.moopart in (5,7,8))
+GROUP BY  hosp_area
+
+
+
+union
+
+
+SELECT
+'6' as hosp_area,'รพ.สต.บ้านควรผาสุก' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (1,7,8,10)
+GROUP BY th.addressid
+
+
+
+union
+
+
+SELECT
+'7' as hosp_area,'รพ.ละแม' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14)
+GROUP BY th.addressid
+
+ ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report1', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+        ]);
+    }
+
+    /* รายงานสรุปทะเบียนความดันแบบ(แสดงรายชื่อคนไข้) */
+
+    public function actionReport2($hosp_area) {
+
+        $report_name = "รายงานสรุปคนไข้ทะเบียนความดันแยกตามที่อยู่";
+        $hosp_area_condition = "";
+
+        if ($hosp_area == 1) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860502'   and pt.moopart in (1,2,3,4,5,6,7,8,9) ";
+        } else if ($hosp_area == 2) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (2,3,4,5,6,9)";
+        } else if ($hosp_area == 3) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'   and pt.moopart in (1,2,3,4,6) ";
+        } else if ($hosp_area == 4) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (8,11,13,15,17,18,20) ";
+        } else if ($hosp_area == 5) {
+            $hosp_area_condition = " AND (concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'    and pt.moopart in (16,19)
+                                        OR concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'     and pt.moopart in (5,7,8)) ";
+        } else if ($hosp_area == 6) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (1,7,8,10) ";
+        } else if ($hosp_area == 7) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14) ";
+        }
+
+
+        $sql = "         
+SELECT
+pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+concat( timestampdiff(year,pt.birthday,now()), ' ปี') as age_y,
+pt.cid,cm.regdate,cm.begin_year,
+concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+pt.moopart
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+    
+AND pd.code in('3','03')
+
+$hosp_area_condition
+    
+GROUP BY pt.hn     
+ORDER BY pt.moopart,age_y ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report2', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+        ]);
+    }
+
+    public function actionReport3($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวนคนไข้คลินิกความดันโลหิตสูง ได้รับการคัดกรองการสูบบุหรี่-ดื่มสุรา";
+
+        $sql = "select os.hn, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
+                s.name as sex, os.bmi, st.smoking_type_name ,dt.drinking_type_name, 
+                v.moopart,t.full_name as address, os.vstdate
+
+from opdscreen os
+left outer join vn_stat v on v.vn=os.vn
+left outer join smoking_type st on st.smoking_type_id=os.smoking_type_id
+left outer join drinking_type dt on dt.drinking_type_id=os.drinking_type_id
+left outer join patient pt on pt.hn=os.hn
+left outer join clinicmember cm on cm.hn=os.hn
+left outer join clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+left outer join provis_typedis pd on pd.code=cs.provis_typedis
+left OUTER join thaiaddress t on t.addressid=v.aid
+left outer join sex s on s.code = pt.sex
+
+where 
+	os.vstdate between $datestart and $dateend and  os.smoking_type_id !=0 and dt.drinking_type_id !=0 
+and 	
+        cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+and
+    	cm.hn  not  in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+group by os.hn
+order by v.aid, v.moopart, os.hn, os.vstdate ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+        return $this->render('report3', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+// จบ function
+
+
+
+    public function actionReport4($datestart, $dateend, $details) {
+
+        $report_name = 'รายงานจำนวนคนไข้คลินิกความดันโลหิตสูง ได้รับการคัดกรองภาวะโรคซึมเศร้า';
+
+        $sql = "select v.hn, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y, o.bmi,
+                s.name as sex,
+                v.moopart,t.full_name as address, v.vstdate
+
+from vn_stat v
+
+left outer join opdscreen o on o.vn = v.vn
+left outer join depression_screen d on d.vn = v.vn
+left outer join patient pt on pt.hn = v.hn
+left outer join clinicmember cm on cm.hn = v.hn
+left outer join clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+left outer join provis_typedis pd on pd.code=cs.provis_typedis
+left OUTER join thaiaddress t on t.addressid=v.aid
+left outer join sex s on s.code = pt.sex
+
+where
+
+  v.vstdate between $datestart and $dateend
+
+and
+  d.depression_screen_id !=0
+and 
+  cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))      
+and
+  cm.hn  not in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+group by v.hn
+order by v.aid, v.moopart, v.hn, v.vstdate";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+        return $this->render('report4', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+// จบ function
+
+
+
+
+    public function actionReport5($datestart, $dateend, $details, $operators = null, $result_first = null, $lab_items = null) {
+        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+        $logics = "";
+        $get_labs = "";
+
+        $report_name = "รายงานจำนวนคนไข้คลินิกความดันโลหิตสูง ได้รับการตรวจแลปชนิดต่างๆ";
+
+        if ($lab_items != "") {
+            if ($lab_items == 1) {
+                $get_labs = 3248; // GFR
+            } else if ($lab_items == 2) {
+                $get_labs = '3209,3038'; // Urine Protine      
+            } else if ($lab_items == 3) {
+                $get_labs = '2070,3005,3006,2071,3007,2072,3008'; // Lipid Profile      
+            } else if ($lab_items == 4) {
+                $get_labs = 3001; // Glucose(FPG)      
+            }else if ($lab_items == 5) {
+                $get_labs = 3003; // Creatinine     
+            }
+        }
+
+        if ($operators != "" && $result_first != "") {
+            $logics = "  AND lo.lab_order_result  $operators  $result_first  ";
+        }
+
+        $sql = "            
+SELECT
+o.hn,concat(p.pname, p.fname,' ',p.lname) as pt_name,v.age_y,
+v.moopart,t.full_name as address,o.vstdate,lo.lab_order_result,
+
+(
+    SELECT CASE 
+      WHEN (lo.lab_order_result >=90) THEN '1'
+      WHEN (lo.lab_order_result >=60 AND lo.lab_order_result <=89.99) THEN '2'
+      WHEN (lo.lab_order_result >=30 AND lo.lab_order_result <=59.99) THEN '3A'
+      WHEN (lo.lab_order_result >=15 AND lo.lab_order_result <=29.99) THEN '4'
+      ELSE '5' END
+      
+) AS lab_order_result_report
+
+FROM ovst o
+
+left outer join clinicmember cm ON cm.hn=o.hn
+left outer join clinic_member_status cs on cs.clinic_member_status_id = cm.clinic_member_status_id
+left outer join provis_typedis pd on pd.code = cs.provis_typedis
+left outer join vn_stat v      ON v.vn = o.vn
+left outer join thaiaddress t  on t.addressid = v.aid
+left outer join patient p      ON p.hn = o.hn
+left outer join lab_head lh    ON lh.vn = v.vn
+left outer join lab_order lo   ON lo.lab_order_number = lh.lab_order_number
+left outer join lab_items li   ON li.lab_items_code = lo.lab_items_code
+
+WHERE lo.lab_items_code in ($get_labs) AND lo.confirm = 'Y'
+
+AND o.vstdate BETWEEN   $datestart and $dateend 
+AND cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND cm.hn not in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+AND lo.lab_order_result!='' AND lo.lab_order_result!='-'  AND lo.lab_order_result!='.'
+
+$logics
+    
+GROUP  BY o.hn
+ORDER  BY v.aid, v.moopart, v.hn, v.vstdate ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+        return $this->render('report5', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                    'lab_item' => $get_labs,
+                    'operators' => $operators,
+                    'result_first' => $result_first,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+        ]);
+    }
+
+// จบ function
+
+
+    public function actionReport6($datestart, $dateend, $details) {
+        $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน CKD Diag (N181 - N185)';
+
+
+        $sql = "select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
+                s.name as sex,
+                v.moopart,t.full_name as address, v.vstdate,
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+
+from ovst  o
+
+left outer join vn_stat v on v.vn = o.vn
+left outer join patient pt on pt.hn = o.hn
+left outer join clinicmember cm on cm.hn = o.hn
+left outer join clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+left outer join provis_typedis pd on pd.code = cs.provis_typedis
+left OUTER join thaiaddress t on t.addressid= v.aid
+left outer join sex s on s.code = pt.sex
+
+WHERE
+  o.vstdate between $datestart and $dateend
+AND 
+  cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND
+  cm.hn  not  in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+
+AND
+(
+          (v.dx0 = 'N181') OR
+          (v.dx1 = 'N181') OR
+          (v.dx2 = 'N181') OR
+          (v.dx3 = 'N181') OR
+          (v.dx4 = 'N181') OR
+          (v.dx5 = 'N181')
+ )
+ 
+GROUP BY v.hn
+
+UNION
+
+select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
+                s.name as sex,
+                v.moopart,t.full_name as address, v.vstdate,
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+
+from ovst  o
+
+left outer join vn_stat v on v.vn = o.vn
+left outer join patient pt on pt.hn = o.hn
+left outer join clinicmember cm on cm.hn = o.hn
+left outer join clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+left outer join provis_typedis pd on pd.code = cs.provis_typedis
+left OUTER join thaiaddress t on t.addressid= v.aid
+left outer join sex s on s.code = pt.sex
+
+WHERE
+  o.vstdate between $datestart and $dateend
+AND 
+  cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND
+  cm.hn  not  in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND
+(
+          (v.dx0 = 'N182') OR
+          (v.dx1 = 'N182') OR
+          (v.dx2 = 'N182') OR
+          (v.dx3 = 'N182') OR
+          (v.dx4 = 'N182') OR
+          (v.dx5 = 'N182')
+ )
+ 
+GROUP BY v.hn
+
+UNION
+
+select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
+                s.name as sex,
+                v.moopart,t.full_name as address, v.vstdate,
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+
+from ovst  o
+
+left outer join vn_stat v on v.vn = o.vn
+left outer join patient pt on pt.hn = o.hn
+left outer join clinicmember cm on cm.hn = o.hn
+left outer join clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+left outer join provis_typedis pd on pd.code = cs.provis_typedis
+left OUTER join thaiaddress t on t.addressid= v.aid
+left outer join sex s on s.code = pt.sex
+
+WHERE
+  o.vstdate between $datestart and $dateend
+AND 
+  cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND
+  cm.hn  not  in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND
+(
+          (v.dx0 = 'N183') OR
+          (v.dx1 = 'N183') OR
+          (v.dx2 = 'N183') OR
+          (v.dx3 = 'N183') OR
+          (v.dx4 = 'N183') OR
+          (v.dx5 = 'N183')
+ )
+ 
+GROUP BY v.hn
+
+
+UNION
+
+select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
+                s.name as sex,
+                v.moopart,t.full_name as address, v.vstdate,
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+
+from ovst  o
+
+left outer join vn_stat v on v.vn = o.vn
+left outer join patient pt on pt.hn = o.hn
+left outer join clinicmember cm on cm.hn = o.hn
+left outer join clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+left outer join provis_typedis pd on pd.code = cs.provis_typedis
+left OUTER join thaiaddress t on t.addressid= v.aid
+left outer join sex s on s.code = pt.sex
+
+WHERE
+  o.vstdate between $datestart and $dateend
+AND 
+  cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND
+  cm.hn  not  in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND
+(
+          (v.dx0 = 'N184') OR
+          (v.dx1 = 'N184') OR
+          (v.dx2 = 'N184') OR
+          (v.dx3 = 'N184') OR
+          (v.dx4 = 'N184') OR
+          (v.dx5 = 'N184')
+ )
+ 
+GROUP BY v.hn
+
+UNION
+
+select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
+                s.name as sex,
+                v.moopart,t.full_name as address, v.vstdate,
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+
+from ovst  o
+
+left outer join vn_stat v on v.vn = o.vn
+left outer join patient pt on pt.hn = o.hn
+left outer join clinicmember cm on cm.hn = o.hn
+left outer join clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+left outer join provis_typedis pd on pd.code = cs.provis_typedis
+left OUTER join thaiaddress t on t.addressid= v.aid
+left outer join sex s on s.code = pt.sex
+
+WHERE
+  o.vstdate between $datestart and $dateend
+AND 
+  cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND
+  cm.hn  not  in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND
+(
+          (v.dx0 = 'N185') OR
+          (v.dx1 = 'N185') OR
+          (v.dx2 = 'N185') OR
+          (v.dx3 = 'N185') OR
+          (v.dx4 = 'N185') OR
+          (v.dx5 = 'N185')
+ )
+ 
+GROUP BY v.hn ";
+
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+        return $this->render('report6', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+        ]);
+    }
+
+// จบ function
+
+    public function actionReport7($details) {
+
+        $report_name = 'รายงานคนไข้ทะเบียนความดัน + โรคหัวใจ';
+
+
+        $sql = "         
+SELECT
+pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+concat( timestampdiff(year,pt.birthday,now()), ' ปี') as age_y,
+pt.cid,cm.regdate,cm.begin_year,
+concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+pt.moopart
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+AND
+    cm.hn in(select cl.hn from clinicmember cl  where cl.hn = cm.hn and cl.clinic = '015')
+
+AND pd.code in('3','03')
+GROUP BY pt.hn     
+ORDER BY pt.moopart,age_y ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report7', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+// จบ function
+
+    public function actionReport8($details) {
+
+        $report_name = 'รายงานคนไข้ทะเบียนความดัน + หลอดเลือดสมอง';
+
+        $sql = "         
+SELECT
+pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+concat( timestampdiff(year,pt.birthday,now()), ' ปี') as age_y,
+pt.cid,cm.regdate,cm.begin_year,
+concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+pt.moopart
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+AND
+    cm.hn IN(select cl.hn from clinicmember cl  where cl.hn = cm.hn and cl.clinic = '014')
+
+AND pd.code in('3','03')
+GROUP BY pt.hn     
+ORDER BY pt.moopart,age_y ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report8', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+        ]);
+    }
+
+// จบ function
+
+    public function actionReport9($datestart, $dateend, $details) {
+
+        $report_name = 'รายงานคนไข้ทะเบียนความดันรายใหม่(ตามวันที่ลงทะเบียน)';
+
+        $sql = "         
+SELECT
+pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+concat( timestampdiff(year,pt.birthday,now()), ' ปี') as age_y,
+pt.cid,
+(
+   select cr.regdate from clinicmember cr where cr.hn = cm.hn and cr.clinic = 
+            (select sys_value from sys_var where sys_name='ht_clinic_code')  group by cr.hn
+) as regdate,
+
+(
+   select cr.begin_year from clinicmember cr where cr.hn = cm.hn and cr.clinic = 
+            (select sys_value from sys_var where sys_name='ht_clinic_code')  group by cr.hn
+) as begin_year,
+
+concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+pt.moopart
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+
+WHERE 
+    cm.hn in(
+                select hn from clinicmember 
+                    where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code') 
+                    and regdate between $datestart and $dateend      
+            )
+AND 
+    cm.hn  not  in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+GROUP BY pt.hn 
+ORDER BY pt.moopart,age_y ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report9', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+        ]);
+    }
+
+    public function actionReport10($datestart, $dateend, $details) {
+
+        $report_name = 'รายงาน CVD-RISK คนไข้ความดัน';
+
+        $sql = "  
+            
+select pn.hn, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,date(pn.note_datetime) as note_date,  pn.note_staff ,cl.other_chronic_text ,pn.plain_text ,
+pt.moopart,t.full_name as address
+
+ from ptnote  pn
+
+ left outer join patient pt on pt.hn = pn.hn
+ left outer join clinicmember cl  on cl.hn = pn.hn
+ left outer join thaiaddress t on t.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+
+ where pn.plain_text like 'cvd%'
+
+AND 
+  cl.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND
+  cl.hn not  in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code')
+  )
+ and note_datetime between $datestart and $dateend 
+
+ group by pn.hn
+ order by pn.plain_text  ,pt.tmbpart ,pt.moopart 
+ 
+ ";
+
+
+        $sql2 = "         
+
+select pn.plain_text , count(distinct(pn.hn)) as count_hn
+
+ from ptnote  pn
+
+ left outer join patient pt on pt.hn = pn.hn
+ left outer join clinicmember cl  on cl.hn = pn.hn
+ left outer join thaiaddress t on t.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+
+ where pn.plain_text like 'cvd%'
+
+AND 
+  cl.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND
+  cl.hn not  in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code')
+  )
+  
+ and note_datetime between $datestart and $dateend 
+
+ group by pn.plain_text
+ order by pn.plain_text ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        $dataProvider2 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData2,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report10', [
+                    'dataProvider' => $dataProvider,
+                    'dataProvider2' => $dataProvider2,
+                    'rawData2' => $rawData2,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+// จบตรวจสอบการเลือกประเภทคนไข้ในคลินิก
+}
