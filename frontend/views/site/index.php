@@ -20,39 +20,28 @@ $this->title = 'ระบบศูนย์ข้อมูลและสาร�
     ?>  
 </div>
 
-
+<!--
 <ul class="nav nav-tabs">
     <li><a data-toggle="tab" href="#">ข้อมูลสถิติทั่วไป รพ.ละแม => </a></li>
     <li><a data-toggle="tab" href="#menu1">ผู้ป่วยนอก</a></li>
     <li><a data-toggle="tab" href="#menu2">ผู้ป่วยใน</a></li>
 </ul>
+-->
 
-<div class="tab-content">
 
-    <div id="menu1" class="tab-pane fade in active">
-        <h3>ผู้ป่วยนอก</h3>
-        <p>
-        <div class="row">
-            <div class="col-md-6">
-                <div id="chart6"></div>
-            </div>
-        </div>
-        </p>
+
+ 
+  <div class="row">
+    <div class="col-md-6">
+        <div id="chart6"></div>
     </div>
-    <div id="menu2" class="tab-pane fade">
-        <h3>ผู้ป่วยใน</h3>
-        <p>
-        <div class="row">
-            <div class="col-md-6">
-                <div id="chart7"></div>
-            </div>
-        </div>
-        </p>
+    <div class="col-md-6">
+        <div id="chart7"></div>
     </div>
 </div>
 
-<br/>
 
+<br/>
 
   <div class="row">
     <div class="col-md-6">
