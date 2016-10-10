@@ -297,13 +297,14 @@ group by o.icode ";
     
      public function actionReport7($datestart, $dateend, $details) {
 
-        $report_name = "รายงานจ่ายยานอกเวลา 20.01น. - 07.59น.(ไม่รวมวันหยุด)";
+        $report_name = "รายงานจ่ายยานอกเวลา 16.01น. - 07.59น.(ไม่รวมวันหยุด)";
         $sql = "select
 
             o.vn,o.hn,
             concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate ,o.rxtime,
             concat(p.pname,p.fname,'  ',p.lname) as pt_name,v.age_y,c.bw as weight, c.cc as cc,v.pdx,
-            concat(v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5) as diag_second,o.icode,d.name as drug_name, nd.name as non_drug_name,o.qty
+            concat(v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5) as diag_second,o.icode,d.name as drug_name, nd.name as non_drug_name,o.qty,
+            u.shortlist
 
             from opitemrece    o
 
@@ -312,11 +313,13 @@ group by o.icode ";
             left outer join opdscreen c on c.vn = o.vn
             left outer join drugitems d on d.icode = o.icode
             left outer join nondrugitems nd on nd.icode = o.icode
+            left outer join drugusage u on u.drugusage = o.drugusage
 
             where o.vstdate between $datestart and $dateend
-            and (o.rxtime between '20:00:01' and '23:59:59' or o.rxtime between '00:00:01' and '07:59:59')
+            and (o.rxtime between '16:00:01' and '23:59:59' or o.rxtime between '00:00:01' and '07:59:59')
 
             and o.vn is   not null
+            
             and o.vstdate not in
             (
                 select holiday_date from holiday

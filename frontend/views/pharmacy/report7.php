@@ -69,13 +69,20 @@ echo GridView::widget([
             'attribute' => 'diag_second',
             'header' => 'รหัสวินิจฉัยรอง'
         ],
+        /*
          [
             'attribute' => 'icode',
             'header' => 'icode'
         ],
+         
+         */
          [
             'attribute' => 'drug_name',
             'header' => 'ชื่อยา'
+        ],
+        [
+            'attribute' => 'shortlist',
+            'header' => 'วิธีใช้'
         ],
          [
             'attribute' => 'qty',

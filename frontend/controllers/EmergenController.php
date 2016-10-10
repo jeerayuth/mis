@@ -293,6 +293,51 @@ public function actionReport7($datestart, $dateend, $details) {
     }
 
     
+    public function actionReport8($datestart, $dateend, $details) {
+
+        $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลา(16.00น.-07.59น.)ที่ห้องอุบัติเหตุฉุกเฉิน (เฉพาะวันหยุดราชการ)";
+        $sql = "SELECT
+                    o.icode,d.name as drug_name,sum(o.qty) as sum_qty
+                FROM opitemrece    o
+                    left outer join patient p on p.hn = o.hn
+                    left outer join vn_stat v on v.vn = o.vn
+                    left outer join opdscreen c on c.vn = o.vn
+                    left outer join drugitems d on d.icode = o.icode
+                    left outer join nondrugitems nd on nd.icode = o.icode
+                WHERE o.vstdate between $datestart and $dateend
+                    and (o.rxtime between '16:00:01' and '23:59:59' or o.rxtime between '00:00:01' and '07:59:59')
+                    and o.vn is   not null
+                    and o.vstdate  in
+                        (
+                            select holiday_date from holiday
+                        )  
+                    and o.icode like '1%'
+                    and o.vn in
+                        (
+                            select vn from er_regist
+                        )
+                GROUP BY  o.icode
+                ORDER BY  sum_qty  desc ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report8', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
     
     
     
