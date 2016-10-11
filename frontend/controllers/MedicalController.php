@@ -259,5 +259,35 @@ ORDER BY v.vstdate ";
                     'details' => $details,
         ]);
     }
+    
+    public function actionReport6($details) {
+
+        $report_name = "รายงานตรวจสอบคนไข้นอกเขต รพ.ละแม แต่ลง Typearea เป็นคนในเขต";
+
+        $sql = "SELECT p.hn,concat(p.pname,p.fname,'   ',p.lname) as pt_name,
+            concat(p.addrpart,' ม.',p.moopart,' ต.',p.tmbpart,' อ.',p.amppart,' จ.',p.chwpart) as full_address,p.type_area
+        FROM patient    p
+        WHERE concat(p.chwpart,p.amppart,p.tmbpart) = 860501
+        and p.moopart not in (1,2,3,4,5,6,7,9,10,12,14)  and p.type_area = 1";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report6', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
 
 }
