@@ -247,24 +247,39 @@ limit 40 ";
 
 
 
-public function actionReport7($datestart, $dateend, $details) {
-
-        $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลา(20.00น.-07.59น.)ที่ห้องอุบัติเหตุฉุกเฉิน (ไม่นับรวมวันหยุดราชการ)";
+public function actionReport7($rxtime_id,$datestart,$dateend, $details) {
+      
+        $rxtime = "";
+        $work = "";
+        
+        if($rxtime_id !='') {
+            if($rxtime_id == 1) {
+              $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 16.00น. ถึง 24.00น.)";  
+              $rxtime = " '16:00:01' and '23:59:59' ";
+            } else if ($rxtime_id == 2) {
+               $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 20.00น. ถึง 24.00น.)"; 
+               $rxtime = " '20:00:01' and '23:59:59' ";     
+            } else if ($rxtime_id == 3) {
+                $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 00.00น. ถึง 08.00น.)"; 
+                $rxtime = " '00:00:01' and '07:59:59' ";
+                
+            }
+        }
+        
+               
         $sql = "SELECT
                     o.icode,d.name as drug_name,sum(o.qty) as sum_qty
+
                 FROM opitemrece    o
                     left outer join patient p on p.hn = o.hn
                     left outer join vn_stat v on v.vn = o.vn
                     left outer join opdscreen c on c.vn = o.vn
                     left outer join drugitems d on d.icode = o.icode
                     left outer join nondrugitems nd on nd.icode = o.icode
-                WHERE o.vstdate between $datestart and $dateend
-                    and (o.rxtime between '20:00:01' and '23:59:59' or o.rxtime between '00:00:01' and '07:59:59')
+                WHERE o.rxdate between $datestart and $dateend  and o.rxtime between $rxtime
+
                     and o.vn is   not null
-                    and o.vstdate not in
-                        (
-                            select holiday_date from holiday
-                        )  
+                   
                     and o.icode like '1%'
                     and o.vn in
                         (
@@ -272,7 +287,8 @@ public function actionReport7($datestart, $dateend, $details) {
                         )
                 GROUP BY  o.icode
                 ORDER BY  sum_qty  desc ";
-
+        
+      
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -284,12 +300,13 @@ public function actionReport7($datestart, $dateend, $details) {
             'pagination' => FALSE,
         ]);
 
+     
         return $this->render('report7', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-        ]);
+        ]); 
     }
 
     
