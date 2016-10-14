@@ -372,6 +372,31 @@ echo GridView::widget([
             'attribute' => 'dx5',
             'header' => 'DX5',
         ],
+        
+        [
+            'attribute' => 'count_lab_gfr',
+            'header' => 'จำนวนตรวจแลป egfr',
+        ],
+        
+        [
+            'attribute' => 'lab_gfr_last',
+            'header' => 'แลป egfr ล่าสุด1',
+        ],
+        
+         [
+            'attribute' => 'lab_gfr_second_last',
+            'header' => 'แลป egfr ล่าสุด2',
+        ],
+        
+         [
+            'attribute' => 'lab_gfr_third_last',
+            'header' => 'แลป egfr ล่าสุด3',
+        ],
+        
+         [
+            'attribute' => 'lab_gfr_fourth_last',
+            'header' => 'แลป egfr ล่าสุด4',
+        ],
     ]
 ])
 ?>

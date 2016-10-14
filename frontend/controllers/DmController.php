@@ -821,7 +821,84 @@ ORDER BY v.aid, v.moopart, v.hn, v.vstdate";
             $sql = "select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
                 s.name as sex,
                 v.moopart,t.full_name as address, v.vstdate,
-                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 ,
+                
+                (
+                      select  count(distinct(lh.vn))
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )  as count_lab_gfr ,
+
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )!= '',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                ), '') as lab_gfr_last ,
+                             
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                ), '')  as lab_gfr_second_last
+
+                 ,
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                ), '')  as lab_gfr_third_last  ,
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                ), '')  as lab_gfr_fourth_last
 
 from ovst  o
 
@@ -856,7 +933,86 @@ UNION
 select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
                 s.name as sex,
                 v.moopart,t.full_name as address, v.vstdate,
-                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 ,
+                
+
+                (
+                      select  count(distinct(lh.vn))
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )  as count_lab_gfr ,
+
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                ), '') as lab_gfr_last ,
+                
+                    
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                ), '')  as lab_gfr_second_last
+
+                 ,
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                ), '')  as lab_gfr_third_last  ,
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                ), '')  as lab_gfr_fourth_last
 
 from ovst  o
 
@@ -891,7 +1047,85 @@ UNION
 select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
                 s.name as sex,
                 v.moopart,t.full_name as address, v.vstdate,
-                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 ,
+                
+                (
+                      select  count(distinct(lh.vn))
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )  as count_lab_gfr ,
+
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                ), '') as lab_gfr_last ,
+                
+                    
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                ), '')  as lab_gfr_second_last
+
+                 ,
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                ), '')  as lab_gfr_third_last  ,
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                ), '')  as lab_gfr_fourth_last
 
 from ovst  o
 
@@ -927,7 +1161,85 @@ UNION
 select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
                 s.name as sex,
                 v.moopart,t.full_name as address, v.vstdate,
-                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 ,
+                
+                (
+                      select  count(distinct(lh.vn))
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )  as count_lab_gfr ,
+
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                ), '') as lab_gfr_last ,
+                
+                    
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                ), '')  as lab_gfr_second_last
+
+                 ,
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                ), '')  as lab_gfr_third_last  ,
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                ), '')  as lab_gfr_fourth_last
 
 from ovst  o
 
@@ -962,7 +1274,85 @@ UNION
 select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
                 s.name as sex,
                 v.moopart,t.full_name as address, v.vstdate,
-                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+                v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5  ,
+                
+                (
+                      select  count(distinct(lh.vn))
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )  as count_lab_gfr ,
+
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 0,1
+                ), '') as lab_gfr_last ,
+                
+                    
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 1,1
+                ), '')  as lab_gfr_second_last
+
+                 ,
+
+                if((
+                      select lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 2,1
+                ), '')  as lab_gfr_third_last  ,
+
+                if((
+                      select  lh.vn
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                )!='',(
+                      select  concat(concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)),' => ',lo.lab_order_result)
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.hn = o.hn and lo.lab_items_code = 3248
+                      and lh.report_date between $datestart and $dateend
+                      order by lh.report_date desc limit 3,1
+                ), '')  as lab_gfr_fourth_last
 
 from ovst  o
 
