@@ -265,8 +265,9 @@ ORDER BY v.vstdate ";
         $report_name = "รายงานตรวจสอบคนไข้นอกเขต รพ.ละแม แต่ลง Typearea เป็นคนในเขต";
 
         $sql = "SELECT p.hn,concat(p.pname,p.fname,'   ',p.lname) as pt_name,
-            concat(p.addrpart,' ม.',p.moopart,' ต.',p.tmbpart,' อ.',p.amppart,' จ.',p.chwpart) as full_address,p.type_area
+            concat(p.addrpart,' ม.',p.moopart,' ', t.full_name) as full_address,p.type_area
         FROM patient    p
+        LEFT OUTER JOIN thaiaddress t on t.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
         WHERE concat(p.chwpart,p.amppart,p.tmbpart) = 860501
         and p.moopart not in (1,2,3,4,5,6,7,9,10,12,14)  and p.type_area = 1";
 
