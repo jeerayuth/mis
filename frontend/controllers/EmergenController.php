@@ -148,45 +148,92 @@ er.vn in
                     'details' => $details,
         ]);
     }
-    
-     public function actionReport5($datestart, $dateend, $details) {
+
+    public function actionReport5($datestart, $dateend, $details) {
 
         $report_name = "รายงานผู้ป่วยที่รับบริการที่ห้องฉุกเฉิน";
         $sql = "select 
 
-vs.vn as vn,vs.item_money as item_money,e.*,
-ert.name as emergency_name,erc.name as dch_name,
-o.icd10 as icd10,v.hn,v.vsttime,v.spclty as spclty,
-concat(p.pname,p.fname,'  ',p.lname) as pt_name,
-ep.name as period_name,d.name as doctor_name,
-k.department as name_department 
-								
-from er_regist  e 											
-    left outer join ovst v on v.vn=e.vn 
-    left outer join er_emergency_type ert on ert.er_emergency_type=e.er_emergency_type 
-    left outer join er_dch_type erc on erc.er_dch_type=e.er_dch_type 
-    left outer join ovstdiag o on o.vn = e.vn and o.diagtype='1'
-    left outer join kskdepartment k on k.depcode =v.main_dep 
-    left outer join patient p on p.hn=v.hn 
-    left outer join er_period ep on ep.er_period=e.er_period 
-    left outer join  doctor d on d.code= e.er_doctor 
-    left outer join  vn_stat vs on vs.vn= e.vn 
-where e.vstdate between $datestart and $dateend order by e.vn ";
-        
-        
-$sql2 = " select
+                vs.vn as vn,vs.item_money as item_money,e.*,
+                ert.name as emergency_name,erc.name as dch_name,
+                o.icd10 as icd10,v.hn,v.vsttime,v.spclty as spclty,
+                concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                ep.name as period_name,d.name as doctor_name,
+                k.department as name_department,
+                erv.er_emergency_level_name
 
-ert.name as emergen_type, count(distinct(e.vn))   as count_vn
+                from er_regist  e 											
+                    left outer join ovst v on v.vn=e.vn 
+                    left outer join er_emergency_type ert on ert.er_emergency_type=e.er_emergency_type 
+                    left outer join er_emergency_level erv on erv.er_emergency_level_id = e.er_emergency_level_id
+                    left outer join er_dch_type erc on erc.er_dch_type=e.er_dch_type 
+                    left outer join ovstdiag o on o.vn = e.vn and o.diagtype='1'
+                    left outer join kskdepartment k on k.depcode =v.main_dep 
+                    left outer join patient p on p.hn=v.hn 
+                    left outer join er_period ep on ep.er_period=e.er_period 
+                    left outer join  doctor d on d.code= e.er_doctor 
+                    left outer join  vn_stat vs on vs.vn= e.vn 
+                where e.vstdate between $datestart and $dateend order by e.vn ";
+
+
+        $sql2 = " select
+                ert.name as emergen_type, count(distinct(e.vn))   as count_vn            
+                from er_regist  e                       
+                left outer join er_emergency_type ert on ert.er_emergency_type=e.er_emergency_type 
+                where e.vstdate between $datestart and $dateend 
+                 group by   e.er_emergency_type
+                 order by count(distinct(e.vn)) desc ";
+
+
+        $sql3 = "select
+                erv.er_emergency_level_name as emergen_level, count(distinct(e.vn))   as count_vn           
+                from er_regist  e                       
+                left outer join er_emergency_level erv on erv.er_emergency_level_id = e.er_emergency_level_id
+                where e.vstdate between $datestart and $dateend 
+                 group by   e.er_emergency_level_id
+                 order by count(distinct(e.vn)) desc ";
+
+        $sql4 = "select
+                    'เวรดึก' as textname, count(distinct(e.vn))   as count_vn
+                   from er_regist  e                       
+
+                   left outer join ovst ov on ov.vn = e.vn
+
+
+                    where e.vstdate between $datestart and $dateend  and vsttime between '00:01:01' and '07:59:59'
+
+                    group by    textname
+
+                union
                 
-from er_regist  e                       
-left outer join er_emergency_type ert on ert.er_emergency_type=e.er_emergency_type 
-where e.vstdate between $datestart and $dateend 
- group by   e.er_emergency_type
- order by count(distinct(e.vn)) desc ";
+                select
+                    'เวรเช้า' as textname, count(distinct(e.vn))   as count_vn
+                    from er_regist  e                       
+
+                    left outer join ovst ov on ov.vn = e.vn
+
+                     where e.vstdate between $datestart and $dateend  and vsttime between '08:00:01' and '16:00:00'
+
+                     group by   textname
+
+                union
+
+                select
+                    'เวรบ่าย' as textname, count(distinct(e.vn))   as count_vn
+                    from er_regist  e                       
+
+                    left outer join ovst ov on ov.vn = e.vn
+
+                     where e.vstdate between $datestart and $dateend  and vsttime between '16:00:01' and '23:59:59'
+
+                     group by   textname
+";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
             $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
+            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll();
+            $rawData4 = \yii::$app->db->createCommand($sql4)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -195,25 +242,38 @@ where e.vstdate between $datestart and $dateend
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-        
-         $dataProvider2 = new \yii\data\ArrayDataProvider([
+
+        $dataProvider2 = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData2,
+            'pagination' => FALSE,
+        ]);
+
+        $dataProvider3 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData3,
+            'pagination' => FALSE,
+        ]);
+
+        $dataProvider4 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData4,
             'pagination' => FALSE,
         ]);
 
         return $this->render('report5', [
                     'dataProvider' => $dataProvider,
                     'dataProvider2' => $dataProvider2,
-                    'rawData2' => $rawData2,   
+                    'dataProvider3' => $dataProvider3,
+                    'dataProvider4' => $dataProvider4,
+                    'rawData2' => $rawData2,
+                    'rawData3' => $rawData3,
+                    'rawData4' => $rawData4,
                     'report_name' => $report_name,
                     'details' => $details,
                     'datestart' => $datestart,
                     'dateend' => $dateend,
         ]);
     }
-    
-    
-     public function actionReport6($datestart, $dateend, $details) {
+
+    public function actionReport6($datestart, $dateend, $details) {
 
         $report_name = "อันดับโรคที่พบบ่อยที่ห้องอุบัติเหตุฉุกเฉิน";
         $sql = " select o.icd10 as icd10,ic.name as icd_name,ic.tname,count(o.icd10) as count_all
@@ -244,29 +304,25 @@ limit 40 ";
         ]);
     }
 
+    public function actionReport7($rxtime_id, $datestart, $dateend, $details) {
 
-
-
-public function actionReport7($rxtime_id,$datestart,$dateend, $details) {
-      
         $rxtime = "";
         $work = "";
-        
-        if($rxtime_id !='') {
-            if($rxtime_id == 1) {
-              $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 16.00น. ถึง 24.00น.)";  
-              $rxtime = " '16:00:01' and '23:59:59' ";
+
+        if ($rxtime_id != '') {
+            if ($rxtime_id == 1) {
+                $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 16.00น. ถึง 24.00น.)";
+                $rxtime = " '16:00:01' and '23:59:59' ";
             } else if ($rxtime_id == 2) {
-               $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 20.00น. ถึง 24.00น.)"; 
-               $rxtime = " '20:00:01' and '23:59:59' ";     
+                $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 20.00น. ถึง 24.00น.)";
+                $rxtime = " '20:00:01' and '23:59:59' ";
             } else if ($rxtime_id == 3) {
-                $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 00.00น. ถึง 08.00น.)"; 
+                $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 00.00น. ถึง 08.00น.)";
                 $rxtime = " '00:00:01' and '07:59:59' ";
-                
             }
         }
-        
-               
+
+
         $sql = "SELECT
                     o.icode,d.name as drug_name,sum(o.qty) as sum_qty
 
@@ -287,8 +343,8 @@ public function actionReport7($rxtime_id,$datestart,$dateend, $details) {
                         )
                 GROUP BY  o.icode
                 ORDER BY  sum_qty  desc ";
-        
-      
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -300,16 +356,15 @@ public function actionReport7($rxtime_id,$datestart,$dateend, $details) {
             'pagination' => FALSE,
         ]);
 
-     
+
         return $this->render('report7', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-        ]); 
+        ]);
     }
 
-    
     public function actionReport8($datestart, $dateend, $details) {
 
         $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลา(16.00น.-07.59น.)ที่ห้องอุบัติเหตุฉุกเฉิน (เฉพาะวันหยุดราชการ)";
@@ -355,26 +410,141 @@ public function actionReport7($rxtime_id,$datestart,$dateend, $details) {
         ]);
     }
 
-    
-    
-    
-    
+    public function actionReport9($refer_type_id, $datestart, $dateend, $details) {
+
+        $report_name = "รายงานสรุปอันดับโรคส่ง Refer ที่ห้องอุบัติเหตุฉุกเฉิน";
+
+        $refer = '';
+
+        if ($refer_type_id == 'all') {
+            $refer = '';
+        } else if ($refer_type_id == 1) {
+            $refer = ' and ro.refer_type =  1 ';
+        } else if ($refer_type_id == 2) {
+            $refer = ' and ro.refer_type =  2 ';
+        } else if ($refer_type_id == 0) {
+            $refer = ' and ro.refer_type =  0 ';
+        }
+
+        $sql = "SELECT
+                    ro.pdx,count(distinct(ro.vn)) as count_vn
+                FROM referout ro
+                    left outer join ovst o on o.vn = ro.vn
+                    left outer join patient p on p.hn=ro.hn
+                    left outer join hospcode h on h.hospcode = ro.hospcode
+                    left outer join rfrcs r on r.rfrcs = ro.rfrcs
+                    left outer join refer_point_list rfp on rfp.name = ro.refer_point 
+                    left outer join kskdepartment ks on ks.depcode = ro.depcode
+                    left outer join doctor d on d.code = ro.doctor
+                    left outer join pttype pe on pe.pttype = o.pttype
+                    left outer join icd101 ic on ic.code = ro.pdx
+                    left outer join refer_type rt on rt.refer_type = ro.refer_type
+                    left outer join refer_response_type rp on rp.refer_response_type_id = ro.refer_response_type_id
+                    left outer join hospcode hp on hp.hospcode = ro.refer_hospcode
+
+                WHERE   ro.department = 'OPD' 
+                        and ro.refer_date between $datestart and $dateend 
+                            $refer
+                        and ro.depcode='009'
+                        and ro.pdx != ''
+                GROUP BY ro.pdx
+                ORDER BY count_vn DESC 
+                LIMIT 10 ";
+
+
+        $sql2 = "SELECT
+                    d.name as doctor_name,ro.pdx as pdx,ro.confirm_text,
+                    ro.refer_hospcode, concat(hp.hosptype,' ',hp.name) as refer_hospname,
+                    rp.refer_response_type_name,rt.refer_type_name,ro.department,ro.vn,
+                    ro.refer_number,ro.rfrcs,ro.refer_response_type_id,ro.hn,
+                    rfp.name as refer_point_name,ro.pre_diagnosis,d.name as doctor_name,
+                    ro.refer_number,ks.department as department_name,ro.other_text,ro.refer_date,
+                    o.vstdate,ro.refer_time,o.vsttime,concat(p.pname,p.fname,'  ',p.lname) as ptname,  
+                    concat(h.hosptype,' ',h.name) as hospname,pe.name as pttype_name,
+                    r.name as refername, ro.refer_point,ro.pre_diagnosis,ro.pdx as icd,
+                    ic.name as icd_name ,o.vstdate
+                FROM referout ro
+                    left outer join ovst o on o.vn = ro.vn
+                    left outer join patient p on p.hn=ro.hn
+                    left outer join hospcode h on h.hospcode = ro.hospcode
+                    left outer join rfrcs r on r.rfrcs = ro.rfrcs
+                    left outer join refer_point_list rfp on rfp.name = ro.refer_point 
+                    left outer join kskdepartment ks on ks.depcode = ro.depcode
+                    left outer join doctor d on d.code = ro.doctor
+                    left outer join pttype pe on pe.pttype = o.pttype
+                    left outer join icd101 ic on ic.code = ro.pdx
+                    left outer join refer_type rt on rt.refer_type = ro.refer_type
+                    left outer join refer_response_type rp on rp.refer_response_type_id = ro.refer_response_type_id
+                    left outer join hospcode hp on hp.hospcode = ro.refer_hospcode
+               
+                WHERE   
+                    ro.department = 'OPD' 
+                    and ro.refer_date between $datestart and $dateend  
+                        $refer
+                    and  ro.depcode='009' ";
+        
+        
+         $sql3 = "SELECT
+                    ro.pre_diagnosis,count(distinct(ro.vn)) as count_vn
+                FROM referout ro
+                    left outer join ovst o on o.vn = ro.vn
+                    left outer join patient p on p.hn=ro.hn
+                    left outer join hospcode h on h.hospcode = ro.hospcode
+                    left outer join rfrcs r on r.rfrcs = ro.rfrcs
+                    left outer join refer_point_list rfp on rfp.name = ro.refer_point 
+                    left outer join kskdepartment ks on ks.depcode = ro.depcode
+                    left outer join doctor d on d.code = ro.doctor
+                    left outer join pttype pe on pe.pttype = o.pttype
+                    left outer join icd101 ic on ic.code = ro.pdx
+                    left outer join refer_type rt on rt.refer_type = ro.refer_type
+                    left outer join refer_response_type rp on rp.refer_response_type_id = ro.refer_response_type_id
+                    left outer join hospcode hp on hp.hospcode = ro.refer_hospcode
+
+                WHERE   ro.department = 'OPD' 
+                        and ro.refer_date between $datestart and $dateend 
+                            $refer
+                        and ro.depcode='009'
+                        and ro.pre_diagnosis != ''
+                GROUP BY ro.pre_diagnosis
+                ORDER BY count_vn DESC 
+                LIMIT 10 ";
+         
+         
+              
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
+            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        $dataProvider2 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData2,
+            'pagination' => FALSE,
+        ]);
+        
+        $dataProvider3 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData3,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report9', [
+                    'dataProvider' => $dataProvider,
+                    'dataProvider2' => $dataProvider2,
+                    'dataProvider3' => $dataProvider3,
+                    'rawData' =>  $rawData,
+                    'rawData2' => $rawData2,
+                    'rawData3' => $rawData3,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
