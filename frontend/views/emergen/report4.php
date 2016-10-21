@@ -3,13 +3,16 @@
 /* @var $this yii\web\View */
 use kartik\grid\GridView;
 use yii\helpers\Html;
+use miloschuman\highcharts\Highcharts;
 
 $this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<?php
 
+
+
+<?php
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [

@@ -453,12 +453,13 @@ limit 40 ";
 
 
         $sql2 = "SELECT
-                    d.name as doctor_name,ro.pdx as pdx,ro.confirm_text,
+                    d.name as doctor_name,ro.pdx as pdx,if(ro.confirm_text!='',ro.confirm_text,'-') as confirm_text,
                     ro.refer_hospcode, concat(hp.hosptype,' ',hp.name) as refer_hospname,
                     rp.refer_response_type_name,rt.refer_type_name,ro.department,ro.vn,
                     ro.refer_number,ro.rfrcs,ro.refer_response_type_id,ro.hn,
                     rfp.name as refer_point_name,ro.pre_diagnosis,d.name as doctor_name,
-                    ro.refer_number,ks.department as department_name,ro.other_text,ro.refer_date,
+                    ro.refer_number,ks.department as department_name,ro.other_text,
+                    concat(DAY(ro.refer_date),'/',MONTH(ro.refer_date),'/',(YEAR(ro.refer_date)+543)) as refer_date,
                     o.vstdate,ro.refer_time,o.vsttime,concat(p.pname,p.fname,'  ',p.lname) as ptname,  
                     concat(h.hosptype,' ',h.name) as hospname,pe.name as pttype_name,
                     r.name as refername, ro.refer_point,ro.pre_diagnosis,ro.pdx as icd,
@@ -482,9 +483,9 @@ limit 40 ";
                     and ro.refer_date between $datestart and $dateend  
                         $refer
                     and  ro.depcode='009' ";
-        
-        
-         $sql3 = "SELECT
+
+
+        $sql3 = "SELECT
                     ro.pre_diagnosis,count(distinct(ro.vn)) as count_vn
                 FROM referout ro
                     left outer join ovst o on o.vn = ro.vn
@@ -508,9 +509,8 @@ limit 40 ";
                 GROUP BY ro.pre_diagnosis
                 ORDER BY count_vn DESC 
                 LIMIT 10 ";
-         
-         
-              
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
             $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
@@ -528,7 +528,7 @@ limit 40 ";
             'allModels' => $rawData2,
             'pagination' => FALSE,
         ]);
-        
+
         $dataProvider3 = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData3,
             'pagination' => FALSE,
@@ -538,13 +538,12 @@ limit 40 ";
                     'dataProvider' => $dataProvider,
                     'dataProvider2' => $dataProvider2,
                     'dataProvider3' => $dataProvider3,
-                    'rawData' =>  $rawData,
+                    'rawData' => $rawData,
                     'rawData2' => $rawData2,
                     'rawData3' => $rawData3,
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
     }
-
 
 }

@@ -136,6 +136,153 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     }
     
     
+     public function actionReport4($refer_type_id,$datestart, $dateend, $details) {
+       
+        $report_name = "รายงานสรุปอันดับโรคส่ง Refer ที่ผู้ป่วยใน(Ward)"; 
+        $refer = '';
+
+        if ($refer_type_id == 'all') {
+            $refer = '';
+        } else if ($refer_type_id == 1) {
+            $refer = ' and ro.refer_type =  1 ';
+        } else if ($refer_type_id == 2) {
+            $refer = ' and ro.refer_type =  2 ';
+        } else if ($refer_type_id == 0) {
+            $refer = ' and ro.refer_type =  0 ';
+        }
+        
+        $sql = "SELECT
+                    d.name as doctor_name,ro.pdx as pdx,
+                    if(ro.confirm_text!='',ro.confirm_text,'-') as confirm_text,
+                    ro.refer_hospcode, concat(hp.hosptype,' ',hp.name) as refer_hospname,
+                    rp.refer_response_type_name,rt.refer_type_name,ro.department,ro.vn,
+                    ro.refer_number,ro.rfrcs,ro.refer_response_type_id,ro.hn,
+                    rfp.name as refer_point_name,
+                    if(ro.pre_diagnosis!='',ro.pre_diagnosis,'-') as pre_diagnosis,
+                    d.name as doctor_name,
+                    ro.refer_number,ks.department as department_name,ro.other_text,
+                    concat(DAY(ro.refer_date),'/',MONTH(ro.refer_date),'/',(YEAR(ro.refer_date)+543)) as refer_date,
+                    o.regdate as vstdate,ro.refer_time,o.regtime as vsttime,
+                    concat(p.pname,p.fname,'  ',p.lname) as ptname,
+                    concat(h.hosptype,' ',h.name) as hospname,pe.name as pttype_name,  r.name as refername,
+                    ro.refer_point,ro.pdx as icd,ic.name as icd_name,
+                    o.regdate as vstdate
+
+                FROM referout ro
+
+                    left outer join ipt o on o.an = ro.vn
+                    left outer join patient p on p.hn=ro.hn
+                    left outer join hospcode h on h.hospcode = ro.hospcode
+                    left outer join rfrcs r on r.rfrcs = ro.rfrcs
+                    left outer join refer_point_list rfp on rfp.name = ro.refer_point 
+                    left outer join kskdepartment ks on ks.depcode = ro.depcode
+                    left outer join doctor d on d.code = ro.doctor
+                    left outer join pttype pe on pe.pttype = o.pttype
+                    left outer join icd101 ic on ic.code = ro.pdx
+                    left outer join refer_type rt on rt.refer_type = ro.refer_type
+                    left outer join refer_response_type rp on rp.refer_response_type_id = ro.refer_response_type_id
+                    left outer join hospcode hp on hp.hospcode = ro.refer_hospcode
+
+                WHERE   
+                    ro.department = 'IPD' 
+                    and ro.refer_date between $datestart AND $dateend  
+                        $refer
+                    and ro.depcode='003' ";
+        
+        
+        $sql2 = "SELECT
+                    ro.pdx,count(distinct(ro.vn)) as count_vn
+                FROM referout ro
+                    left outer join ipt o on o.an = ro.vn
+                    left outer join patient p on p.hn=ro.hn
+                    left outer join hospcode h on h.hospcode = ro.hospcode
+                    left outer join rfrcs r on r.rfrcs = ro.rfrcs
+                    left outer join refer_point_list rfp on rfp.name = ro.refer_point 
+                    left outer join kskdepartment ks on ks.depcode = ro.depcode
+                    left outer join doctor d on d.code = ro.doctor
+                    left outer join pttype pe on pe.pttype = o.pttype
+                    left outer join icd101 ic on ic.code = ro.pdx
+                    left outer join refer_type rt on rt.refer_type = ro.refer_type
+                    left outer join refer_response_type rp on rp.refer_response_type_id = ro.refer_response_type_id
+                    left outer join hospcode hp on hp.hospcode = ro.refer_hospcode
+
+                WHERE   
+                    ro.department = 'IPD' 
+                    and ro.pdx != ''
+                    and ro.refer_date between $datestart AND $dateend  
+                        $refer
+                    and ro.depcode='003'
+                    GROUP BY ro.pdx
+                    ORDER BY count_vn DESC 
+                    LIMIT 10 ";
+        
+        
+         $sql3 = "SELECT
+                    ro.pre_diagnosis,count(distinct(ro.vn)) as count_vn
+                FROM referout ro
+                    left outer join ipt o on o.an = ro.vn
+                    left outer join patient p on p.hn=ro.hn
+                    left outer join hospcode h on h.hospcode = ro.hospcode
+                    left outer join rfrcs r on r.rfrcs = ro.rfrcs
+                    left outer join refer_point_list rfp on rfp.name = ro.refer_point 
+                    left outer join kskdepartment ks on ks.depcode = ro.depcode
+                    left outer join doctor d on d.code = ro.doctor
+                    left outer join pttype pe on pe.pttype = o.pttype
+                    left outer join icd101 ic on ic.code = ro.pdx
+                    left outer join refer_type rt on rt.refer_type = ro.refer_type
+                    left outer join refer_response_type rp on rp.refer_response_type_id = ro.refer_response_type_id
+                    left outer join hospcode hp on hp.hospcode = ro.refer_hospcode
+
+                WHERE   
+                    ro.department = 'IPD' 
+                    and ro.refer_date between $datestart AND $dateend  
+                        $refer
+                    and ro.depcode='003'
+                    and ro.pre_diagnosis != ''
+                    GROUP BY ro.pre_diagnosis
+                    ORDER BY count_vn DESC 
+                    LIMIT 10 ";
+         
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
+            $rawData3 = \yii::$app->db->createCommand($sql3)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+        
+ 
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+        $dataProvider2 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData2,
+            'pagination' => FALSE,
+        ]);
+             
+        $dataProvider3 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData3,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report4', [
+                    'dataProvider' => $dataProvider,
+                    'dataProvider2' => $dataProvider2,
+                    'dataProvider3' => $dataProvider3,
+                    'rawData' => $rawData,
+                    'rawData2' => $rawData2,
+                    'rawData3' => $rawData3,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+    
+    
+    
     
    
 

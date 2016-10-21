@@ -24,24 +24,28 @@ $this->title = $report_name;
 
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
         <div id="chart"></div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div id="chart2"></div>
     </div>
 </div>
 
 
 <?php
-//เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
+
+
 $data = [];
-for ($i = 0; $i < count($rawData); $i++) {
+$sum = 0;
+foreach($rawData as $r){
     $data[] = [
-        'name' => $rawData[$i]['pdx'],
-        'y' => $rawData[$i]['count_vn'] * 1,
+        'name' => $r['pdx'],
+        'y' => intval($r['count_vn']),
     ];
+    $sum += $r['count_vn'];
 }
+
 
 
 $data3 = [];
@@ -58,11 +62,13 @@ $js_data3 = json_encode($data3);
 
 
 // chart
+
+// chart
 $this->registerJs(" 
     $(function () {
     $('#chart').highcharts({
         chart: {
-            type: 'column'
+            type: 'pie',
         },
          credits: {
             enabled: false
@@ -71,10 +77,14 @@ $this->registerJs("
             text: 'กราฟ 10 อันดับโรคที่ส่ง Refer ที่ห้องอุบัติเหตุฉุกเฉิน(แยกตามผลวินิจฉัยหลักจาก รพ.ต้นทาง)'
         },
         
+        tooltip: {
+            enabled: false,
+        },
+                         
          yAxis: {
             min: 0,
             title: {
-                text: 'จำนวนครั้งการส่ง Refer (ครั้ง)'
+                text: 'จำนวน'
             },
             
         },
@@ -89,20 +99,28 @@ $this->registerJs("
             series: {
                 borderWidth: 0,
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.y:.0f} ครั้ง',
                 }
             }
         },
         series: [{
-                name: 'รหัสโรค',
+                name: 'จำนวน',
                 colorByPoint: true,
                 data:$js_data
         }]
-     });
+     },  function(chart) { // on complete
+        var total = $sum;    
+        chart.renderer.text('', 20, 105)
+            .css({
+                color: '#4572A7',
+                fontSize: '16px'
+            })
+        .add();
+        });
     });
 ");
 // จบ chart
-
 
 ?>
 
