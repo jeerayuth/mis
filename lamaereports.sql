@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2016-10-14 09:16:08
+Date: 2016-10-26 15:52:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=260 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=263 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -231,3 +231,6 @@ INSERT INTO lamaereports VALUES ('225', '7', 'รายงานจำนวน�
 INSERT INTO lamaereports VALUES ('256', '1', 'รายงานตรวจสอบคนไข้นอกเขต รพ.ละแม แต่ลง Typearea เป็นคนในเขต', 'form5', 'report6', '2016-10-11', 'enable', 'medical', null);
 INSERT INTO lamaereports VALUES ('258', '9', 'รายงานสรุปหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ', 'form5', 'report1', '2016-10-13', 'enable', 'pcu', null);
 INSERT INTO lamaereports VALUES ('259', '9', 'รายงานสรุปประชากรอายุ >=35 ปี ในเขตรับผิดชอบ', 'form5', 'report3', '2016-10-13', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('260', '7', 'รายงานสรุปอันดับโรคส่ง Refer ที่ห้องอุบัติเหตุฉุกเฉิน', 'form10', 'report9', '2016-10-21', 'enable', 'emergen', null);
+INSERT INTO lamaereports VALUES ('261', '10', 'รายงานสรุปอันดับโรคส่ง Refer ที่ตึกผู้ป่วยใน', 'form10', 'report4', '2016-10-21', 'enable', 'ward', null);
+INSERT INTO lamaereports VALUES ('262', '1', 'รายงานตรวจสอบคนไข้ 1 CID แต่มีหลาย HN', 'form5', 'report7', '2016-10-26', 'enable', 'medical', null);
