@@ -24,10 +24,15 @@ $this->title = $report_name;
 
 
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-12">
         <div id="chart"></div>
     </div>
-    <div class="col-md-7">
+</div>
+
+<br/>
+
+  <div class="row">
+    <div class="col-md-12">
         <div id="chart2"></div>
     </div>
 </div>
@@ -37,15 +42,12 @@ $this->title = $report_name;
 
 
 $data = [];
-$sum = 0;
-foreach($rawData as $r){
+for ($i = 0; $i < count($rawData); $i++) {
     $data[] = [
-        'name' => $r['pdx'],
-        'y' => intval($r['count_vn']),
+        'name' => $rawData[$i]['pdx'],
+        'y' => $rawData[$i]['count_vn'] * 1,
     ];
-    $sum += $r['count_vn'];
 }
-
 
 
 $data3 = [];
@@ -68,23 +70,19 @@ $this->registerJs("
     $(function () {
     $('#chart').highcharts({
         chart: {
-            type: 'pie',
+            type: 'column'
         },
          credits: {
             enabled: false
         },
         title: {
-            text: 'กราฟ 10 อันดับโรคที่ส่ง Refer ที่ห้องอุบัติเหตุฉุกเฉิน(แยกตามผลวินิจฉัยหลักจาก รพ.ต้นทาง)'
+            text: 'กราฟ 50 อันดับโรคที่ส่ง Refer ที่ห้องอุบัติเหตุฉุกเฉิน(แยกตามผลวินิจฉัยหลักจาก รพ.ต้นทาง)'
         },
         
-        tooltip: {
-            enabled: false,
-        },
-                         
          yAxis: {
             min: 0,
             title: {
-                text: 'จำนวน'
+                text: 'จำนวนครั้งการส่ง Refer (ครั้ง)'
             },
             
         },
@@ -99,30 +97,23 @@ $this->registerJs("
             series: {
                 borderWidth: 0,
                 dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b>: {point.y:.0f} ครั้ง',
+                    enabled: true
                 }
             }
         },
         series: [{
-                name: 'จำนวน',
+                name: 'รหัสโรค',
                 colorByPoint: true,
                 data:$js_data
         }]
-     },  function(chart) { // on complete
-        var total = $sum;    
-        chart.renderer.text('', 20, 105)
-            .css({
-                color: '#4572A7',
-                fontSize: '16px'
-            })
-        .add();
-        });
+     });
     });
 ");
 // จบ chart
 
+
 ?>
+
 
 <br/>
 
@@ -142,7 +133,7 @@ $this->registerJs("
             enabled: false
         },
         title: {
-            text: 'กราฟ 10 อันดับโรคที่ส่ง Refer ที่ห้องอุบัติเหตุฉุกเฉิน(แยกตามผลวินิจฉัยเบื้องต้นจาก รพ.ต้นทาง)'
+            text: 'กราฟ 50 อันดับโรคที่ส่ง Refer ที่ห้องอุบัติเหตุฉุกเฉิน(แยกตามผลวินิจฉัยเบื้องต้นจาก รพ.ต้นทาง)'
         },
         
          yAxis: {

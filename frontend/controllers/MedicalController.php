@@ -290,5 +290,37 @@ ORDER BY v.vstdate ";
                     'details' => $details,
         ]);
     }
+    
+    
+    
+    public function actionReport7($details) {
+
+        $report_name = "รายงานตรวจสอบคนไข้ 1 CID แต่มีหลาย HN";
+
+        $sql = "SELECT 
+                    cid,hn,concat(pname,fname,'  ',lname) as pt_name, count(hn) as c_hn
+                FROM patient
+                GROUP BY cid
+                HAVING   count(hn) >=2 ";
+
+            
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report7', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
 
 }

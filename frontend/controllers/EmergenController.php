@@ -449,7 +449,7 @@ limit 40 ";
                         and ro.pdx != ''
                 GROUP BY ro.pdx
                 ORDER BY count_vn DESC 
-                LIMIT 10 ";
+                LIMIT 50 ";
 
 
         $sql2 = "SELECT
@@ -508,7 +508,7 @@ limit 40 ";
                         and ro.pre_diagnosis != ''
                 GROUP BY ro.pre_diagnosis
                 ORDER BY count_vn DESC 
-                LIMIT 10 ";
+                LIMIT 50 ";
 
 
         try {
