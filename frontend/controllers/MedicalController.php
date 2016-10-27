@@ -295,7 +295,7 @@ ORDER BY v.vstdate ";
     
     public function actionReport7($details) {
 
-        $report_name = "รายงานตรวจสอบคนไข้ 1 CID แต่มีหลาย HN";
+        $report_name = "รายงานตรวจสอบ => คนไข้ 1 CID แต่มีหลาย HN";
 
         $sql = "SELECT 
                     cid,hn,concat(pname,fname,'  ',lname) as pt_name, count(hn) as c_hn
@@ -322,5 +322,47 @@ ORDER BY v.vstdate ";
                     'details' => $details,
         ]);
     }
+    
+    
+    
+    public function actionReport8($details) {
+
+        $report_name = "รายงานตรวจสอบ => คำนำหน้ากับเพศ ไม่สัมพันธ์กัน";
+
+        $sql = "SELECT
+                p.cid,p.hn,p.pname,concat(p.fname,'  ',p.lname) as  pt_name,p.type_area ,
+                s.name as sex
+            FROM patient p
+            left JOIN sex s ON s.code = p.sex
+            left JOIN pname pn on pn.name = p.pname
+
+            WHERE   
+                if(p.sex = 1,pn.provis_code in ('002','004','005'),null) or if(p.sex = 2,pn.provis_code in ('001','003','832','831'),null)
+                ";
+
+            
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+
+        
+        return $this->render('report8', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+        
+        
+    }
+
 
 }
