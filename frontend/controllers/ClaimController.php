@@ -790,5 +790,49 @@ class ClaimController extends \yii\web\Controller {
      }
      
      
+     public function actionReport18($details) {
+
+        $report_name = "รายงานคนไข้ที่มีการบันทึก Typearea เป็น Type3 ในฝั่งข้อมูลประชากร(Person)";
+        $sql = "select 
+                    p.cid,p.hn,concat(p.pname,p.fname,p.lname) as pt_name,
+                    p.addrpart,p.moopart, t.full_name,p.hometel,person.house_regist_type_id,h.house_regist_type_name,
+                    (
+                        select count(distinct(o.vn)) from ovst o where o.hn = p.hn  and o.vstdate between '2015-10-01' and '2016-09-30'
+                    ) as count_vn_59,
+                    (
+                        select count(distinct(o.vn)) from ovst o where o.hn = p.hn  and o.vstdate between '2014-10-01' and '2015-09-30'
+                    ) as count_vn_58
+
+                    from person
+
+                    left outer join patient p on p.cid = person.cid
+                    left outer join house_regist_type h on h.house_regist_type_id = person.house_regist_type_id
+                    left outer join thaiaddress t on t.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+
+                    where person.house_regist_type_id = '3'  and person.cid != '' and p.cid != ''   and t.full_name != ''
+
+                    order by p.chwpart,p.amppart,p.tmbpart,p.moopart ";
+
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report18', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+     }
+     
+     
      
 }
