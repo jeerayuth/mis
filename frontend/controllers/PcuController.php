@@ -425,8 +425,11 @@ class PcuController extends \yii\web\Controller {
     
       public function actionReport13($details) {
 
-        $report_name = "รายงานตรวจสอบ => ";
-        $sql = "" ;
+        $report_name = "รายงานตรวจสอบ => สิทธิการรักษา ไม่มีใน pttype ในบัญชี 1 ทำให้ส่งออกไม่ได้";
+        $sql = "SELECT
+                cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id
+            FROM person
+            WHERE (pttype not in(SELECT pttype FROM pttype) or (pttype=' ' and pttype is null)) and (death='N' or death is NULL or death=' ')" ;
    
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();

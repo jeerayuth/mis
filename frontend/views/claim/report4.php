@@ -67,6 +67,26 @@ echo GridView::widget([
             'attribute' => 'licenseno',
             'header' => 'ทะเบียน'
         ],
+         [
+            'attribute' => 'v_drug',
+            'header' => 'ค่ายา'
+        ],
+         [
+            'attribute' => 'v_xray',
+            'header' => 'x-ray'
+        ],
+         [
+            'attribute' => 'v_lab',
+            'header' => 'Lab'
+        ],
+        [
+            'attribute' => 'v_icd9',
+                'header' => 'หัตถการ'
+        ],
+            [
+            'attribute' => 'v_other',
+                'header' => 'อื่นๆ'
+        ],
         [
             'attribute' => 'item_money',
             'header' => 'ค่าบริการ'

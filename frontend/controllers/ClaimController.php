@@ -115,7 +115,10 @@ class ClaimController extends \yii\web\Controller {
 
         $report_name = "รายงานประกันสังคมผู้ป่วยนอก";
         $sql = "SELECT concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                ,v.cid,s.name as sex,v.age_y,concat(ic.code,'  ',v.dx0,'  ',v.dx1,'  ',v.dx2,'  ',v.dx3,'  ',v.dx4,'  ',v.dx5) as icd10,concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money
+                ,v.cid,s.name as sex,v.age_y,concat(ic.code,'  ',v.dx0,'  ',v.dx1,'  ',v.dx2,'  ',v.dx3,'  ',v.dx4,'  ',v.dx5) as icd10,concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money,
+                v.inc12 as v_drug,v.inc04 as v_xray,v.inc01 as v_lab,
+                (v.inc06+v.inc07+v.inc13) as v_icd9,
+                (v.inc05+v.inc09+v.inc02+v.inc03+v.inc08+v.inc11+v.inc14+v.inc15+v.inc16+v.inc17) as v_other
             FROM vn_stat v
             left outer join patient p on p.hn=v.hn 
             left outer join ovst ov on ov.vn=v.vn 
