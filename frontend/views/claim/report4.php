@@ -36,21 +36,17 @@ echo GridView::widget([
         ],
           [
             'attribute' => 'vst_date',
-            'header' => 'รับบริการ'
+            'header' => 'วันที่รับบริการ'
+        ],
+           [
+            'attribute' => 'vst_time',
+            'header' => 'เวลารับบริการ'
         ],
           [
             'attribute' => 'patient_name',
             'header' => 'ชื่อ-สกุล'
         ],
         
-        [
-            'attribute' => 'sex',
-            'header' => 'เพศ'
-        ],
-        [
-            'attribute' => 'age_y',
-            'header' => 'อายุ(ปี)'
-        ],
         [
             'attribute' => 'icd10',
             'header' => 'การวินิจฉัย(ICD10)'
