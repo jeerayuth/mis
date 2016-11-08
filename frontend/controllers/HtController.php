@@ -1338,5 +1338,96 @@ ORDER BY pt.moopart,age_y ";
     }
 
     
+     public function actionReport12($datestart, $dateend, $details) {
+        $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน ตรวจสอบ BP >= 180';
+                  
+        $sql = "SELECT
+                        o.hn,concat(p.pname, p.fname,' ',p.lname) as pt_name,v.age_y,
+                        v.moopart,t.full_name as address,
+
+                        (
+                                  select count(op.vn) from opdscreen op  where op.hn = o.hn    and 
+                                  op.vstdate between  $datestart and $dateend   and op.bps >= 180
+
+                        ) as count_bps_180_up
+
+                    FROM ovst o
+                        left outer join clinicmember cm ON cm.hn=o.hn
+                        left outer join clinic_member_status cs on cs.clinic_member_status_id = cm.clinic_member_status_id
+                        left outer join provis_typedis pd on pd.code = cs.provis_typedis
+                        left outer join vn_stat v      ON v.vn = o.vn
+                        left outer join thaiaddress t  on t.addressid = v.aid
+                        left outer join patient p      ON p.hn = o.hn
+
+                    WHERE
+                         o.vstdate BETWEEN   $datestart and $dateend
+                        AND cm.hn in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                        AND cm.hn not in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                    GROUP  BY o.hn
+                    ORDER  BY count_bps_180_up DESC ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+            return $this->render('report12', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+        
+        
+         public function actionReport13($datestart, $dateend, $details) {
+        $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน ประวัติคัดกรอง BP';
+                  
+        $sql = "SELECT
+                        o.hn,o.vn,
+                        concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate,
+                        concat(p.pname, p.fname,' ',p.lname) as pt_name,v.age_y,
+                        v.moopart,t.full_name as address ,v.pdx,op.bps,op.bpd
+                    FROM ovst o
+                    left outer join clinicmember cm ON cm.hn=o.hn
+                    left outer join clinic_member_status cs on cs.clinic_member_status_id = cm.clinic_member_status_id
+                    left outer join provis_typedis pd on pd.code = cs.provis_typedis
+                    left outer join vn_stat v      ON v.vn = o.vn
+                    left outer join thaiaddress t  on t.addressid = v.aid
+                    left outer join patient p      ON p.hn = o.hn
+                    left outer join opdscreen op   ON op.vn = o.vn
+                    WHERE
+                        o.vstdate BETWEEN   $datestart and $dateend
+                       AND cm.hn in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                       AND cm.hn not in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                    GROUP  BY o.vn
+                    ORDER  BY  v.hn, v.vstdate ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+            return $this->render('report13', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+  
+  
+        
+        
     
 }
