@@ -1682,5 +1682,122 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
             ]);
         }  // จบตรวจสอบการเลือกประเภทคนไข้ในคลินิก
     }
+    
+    
+    
+    public function actionReport15($uclinic, $datestart, $dateend, $details) {
+        // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+        if ($uclinic != "") {
+            if ($uclinic == 1) {
+                $get_type = 'not';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานที่ไม่มีความดันโลหิตร่วม ตรวจสอบ BP >= 180';
+            } else if ($uclinic == 2) {
+                $get_type = '';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานที่มีความดันร่วม ตรวจสอบ BP >= 180';
+            }
+            
+            
+            $sql = "SELECT
+                        o.hn,concat(p.pname, p.fname,' ',p.lname) as pt_name,v.age_y,
+                        v.moopart,t.full_name as address,
+
+                        (
+                                  select count(op.vn) from opdscreen op  where op.hn = o.hn    and 
+                                  op.vstdate between  $datestart and $dateend   and op.bps >= 180
+
+                        ) as count_bps_180_up
+
+                    FROM ovst o
+                        left outer join clinicmember cm ON cm.hn=o.hn
+                        left outer join clinic_member_status cs on cs.clinic_member_status_id = cm.clinic_member_status_id
+                        left outer join provis_typedis pd on pd.code = cs.provis_typedis
+                        left outer join vn_stat v      ON v.vn = o.vn
+                        left outer join thaiaddress t  on t.addressid = v.aid
+                        left outer join patient p      ON p.hn = o.hn
+
+                    WHERE
+                         o.vstdate BETWEEN   $datestart and $dateend
+                        AND cm.hn in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                        AND cm.hn $get_type in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                    GROUP  BY o.hn
+                    ORDER  BY count_bps_180_up DESC ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+            return $this->render('report15', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+    
+    
+     public function actionReport16($uclinic, $datestart, $dateend, $details) {
+        // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+        if ($uclinic != "") {
+            if ($uclinic == 1) {
+                $get_type = 'not';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานที่ไม่มีความดันโลหิตร่วม ประวัติคัดกรอง BP';
+            } else if ($uclinic == 2) {
+                $get_type = '';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานที่มีความดันร่วม ประวัติคัดกรอง BP';
+            }
+                       
+            $sql = "SELECT
+                        o.hn,o.vn,
+                        concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate,
+                        concat(p.pname, p.fname,' ',p.lname) as pt_name,v.age_y,
+                        v.moopart,t.full_name as address ,v.pdx,op.bps,op.bpd
+                    FROM ovst o
+                    left outer join clinicmember cm ON cm.hn=o.hn
+                    left outer join clinic_member_status cs on cs.clinic_member_status_id = cm.clinic_member_status_id
+                    left outer join provis_typedis pd on pd.code = cs.provis_typedis
+                    left outer join vn_stat v      ON v.vn = o.vn
+                    left outer join thaiaddress t  on t.addressid = v.aid
+                    left outer join patient p      ON p.hn = o.hn
+                    left outer join opdscreen op   ON op.vn = o.vn
+                    WHERE
+                        o.vstdate BETWEEN   $datestart and $dateend
+                       AND cm.hn in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                       AND cm.hn $get_type in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                    GROUP  BY o.vn
+                    ORDER  BY  v.hn, v.vstdate ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+            return $this->render('report16', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+    
+    
+    
+    
+    
+
 
 }
