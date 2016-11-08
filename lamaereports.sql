@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2016-11-08 16:45:19
+Date: 2016-11-08 21:45:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=275 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=280 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -246,3 +246,8 @@ INSERT INTO lamaereports VALUES ('271', '1', 'รายงานตรวจส�
 INSERT INTO lamaereports VALUES ('272', '14', 'รายงานคนไข้ที่มีการบันทึก Typearea เป็น Type3 ในฝั่งข้อมูลประชากร(Person)', 'form5', 'report18', '2016-10-27', 'enable', 'claim', null);
 INSERT INTO lamaereports VALUES ('273', '9', 'รายงานตรวจสอบ => สิทธิการรักษา ไม่มีใน pttype ในบัญชี 1 ทำให้ส่งออกไม่ได้', 'form5', 'report13', '2016-10-27', 'enable', 'pcu', null);
 INSERT INTO lamaereports VALUES ('274', '7', 'รายงานผู้รับบริการหัตถการ เย็บแผลทั่วไป,excission,off norplant,ฝัง norplant,stitch off (ตัดไหม)', 'form1', 'report10', '2016-11-08', 'enable', 'emergen', null);
+INSERT INTO lamaereports VALUES ('275', '3', 'รายงานตรวจสอบการคัดกรองคนไข้ที่มี BPS >= 180 (แบบสรุป)', 'form3', 'report15', '2016-11-08', 'enable', 'dm', null);
+INSERT INTO lamaereports VALUES ('276', '3', 'รายงานประวัติการคัดกรอง BP', 'form3', 'report16', '2016-11-08', 'enable', 'dm', null);
+INSERT INTO lamaereports VALUES ('277', '4', 'รายงานตรวจสอบการคัดกรองคนไข้ที่มี BPS >= 180 (แบบสรุป)', 'form1', 'report12', '2016-11-08', 'enable', 'ht', null);
+INSERT INTO lamaereports VALUES ('278', '4', 'รายงานประวัติการคัดกรอง BP', 'form1', 'report13', '2016-11-08', 'enable', 'ht', null);
+INSERT INTO lamaereports VALUES ('279', '3', 'รายงานคนไข้ตรวจแลป FBS,DTX มากกว่าหรือเท่ากับ 180 ขึ้นไป', 'form3', 'report17', '2016-11-08', 'enable', 'dm', null);

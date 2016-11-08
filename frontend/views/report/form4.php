@@ -81,6 +81,7 @@ $this->title = 'MIS :: ระบบรายงานสารสนเทศ';
                                 <option value="4">Microalbumin</option>
                                 <option value="5">Lipid Profile</option>
                                 <option value="6">Creatinine</option>
+                              
                             </select> 
                         </div>
                     </div>
@@ -101,7 +102,7 @@ $this->title = 'MIS :: ระบบรายงานสารสนเทศ';
                         <div class="col-md-3 col-sm-3 col-xs-6 col-md-offset-3">
                             <select id="result_first" class="form-control">
                                 <option value="">ไม่ระบุผลข้อมูล</option>
-                                <?php for ($i = 1; $i <= 30; ++$i) : ?>
+                                <?php for ($i = 1; $i <= 180; ++$i) : ?>
                                     <option value="<?= $i ?>"><?= $i ?></option>
                                 <?php endfor; ?>                             
                             </select> 

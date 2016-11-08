@@ -1795,6 +1795,62 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
     }
     
     
+     public function actionReport17($uclinic, $datestart, $dateend, $details) {
+        // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+        if ($uclinic != "") {
+            if ($uclinic == 1) {
+                $get_type = 'not';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานที่ไม่มีความดันโลหิตร่วม ประวัติตรวจแลป FBS,DTX > 180 ขึ้นไป';
+            } else if ($uclinic == 2) {
+                $get_type = '';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานที่มีความดันร่วม  ประวัติตรวจแลป FBS,DTX > 180 ขึ้นไป';
+            }
+                       
+            $sql = "SELECT
+                        o.hn,o.vn,concat(p.pname, p.fname,' ',p.lname) as pt_name,v.age_y,
+                        concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,
+                        v.moopart,t.full_name as address,o.vstdate,v.pdx,li.lab_items_name,lo.lab_order_result
+
+                        FROM ovst o
+                            left outer join clinicmember c ON c.hn=o.hn
+                            left outer join clinic_member_status cs on cs.clinic_member_status_id = c.clinic_member_status_id
+                            left outer join provis_typedis pd on pd.code = cs.provis_typedis
+                            left outer join vn_stat v      ON v.vn = o.vn
+                            left outer join thaiaddress t  on t.addressid = v.aid
+                            left outer join patient p      ON p.hn = o.hn
+                            left outer join lab_head lh    ON lh.vn = v.vn
+                            left outer join lab_order lo   ON lo.lab_order_number = lh.lab_order_number
+                            left outer join lab_items li   ON li.lab_items_code = lo.lab_items_code
+                        WHERE lo.lab_items_code in ('3246','3001') AND lo.confirm = 'Y'
+
+                        AND o.vstdate BETWEEN  $datestart and $dateend                      
+                        AND c.hn in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                        AND c.hn $get_type in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                        AND lo.lab_order_result!=''
+                        AND lo.lab_order_result!='-' 
+                        AND lo.lab_order_result!='.'
+                        AND lo.lab_order_result >= 180
+                        ORDER  BY v.hn, v.vstdate ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+            return $this->render('report17', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
     
     
     
