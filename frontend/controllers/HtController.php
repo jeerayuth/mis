@@ -438,7 +438,6 @@ ORDER  BY v.aid, v.moopart, v.hn, v.vstdate ";
     public function actionReport6($datestart, $dateend, $details) {
         $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน CKD Diag (N181 - N185)';
 
-
         $sql = "select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
                 s.name as sex,
                 v.moopart,t.full_name as address, v.vstdate,
@@ -1278,5 +1277,66 @@ AND
         ]);
     }
 
-// จบตรวจสอบการเลือกประเภทคนไข้ในคลินิก
+    
+     public function actionReport11($datestart, $dateend, $details) {
+
+        $report_name = 'รายงานคนไข้ทะเบียนความดัน';
+
+        $sql = "         
+SELECT
+pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+concat( timestampdiff(year,pt.birthday,now()), ' ปี') as age_y,
+pt.cid,
+(
+   select cr.regdate from clinicmember cr where cr.hn = cm.hn and cr.clinic = 
+            (select sys_value from sys_var where sys_name='ht_clinic_code')  group by cr.hn
+) as regdate,
+
+(
+   select cr.begin_year from clinicmember cr where cr.hn = cm.hn and cr.clinic = 
+            (select sys_value from sys_var where sys_name='ht_clinic_code')  group by cr.hn
+) as begin_year,
+
+concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+pt.moopart
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+
+WHERE 
+    cm.hn in(
+                select hn from clinicmember 
+                    where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code') 
+                    and regdate between $datestart and $dateend      
+            )
+AND 
+    cm.hn  not  in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+GROUP BY pt.hn 
+ORDER BY pt.moopart,age_y ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report11', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+        ]);
+    }
+
+    
+    
 }

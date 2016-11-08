@@ -297,7 +297,7 @@ group by o.icode ";
     
      public function actionReport7($datestart, $dateend, $details) {
 
-        $report_name = "รายงานจ่ายยานอกเวลา 16.01น. - 07.59น.(ไม่รวมวันหยุด)";
+        $report_name = "รายงานจ่ายยานอกเวลา 16.01น. - 07.59น.(รวมวันหยุดราชการ)";
         $sql = "select
 
             o.vn,o.hn,
@@ -320,10 +320,10 @@ group by o.icode ";
 
             and o.vn is   not null
             
-            and o.vstdate not in
+          /*  and o.vstdate not in
             (
                 select holiday_date from holiday
-            )  
+            ) */  
             and o.icode like '1%'
              order by o.vn,o.vstdate ";
 

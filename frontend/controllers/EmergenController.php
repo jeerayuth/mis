@@ -545,5 +545,54 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
+    
+    
+    public function actionReport10($datestart, $dateend, $details) {
+
+         $report_name = "รายงานผู้รับบริการหัตถการ เย็บแผลทั่วไป,excission,off norplant,ฝัง norplant,stitch off (ตัดไหม)";
+         
+        $sql = "select er.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+            concat(DAY(er.vstdate),'/',MONTH(er.vstdate),'/',(YEAR(er.vstdate)+543)) as vstdate,
+                (
+                    select count(oper.er_oper_code) from  er_regist_oper oper  where oper.vn = er.vn
+                        and oper.er_oper_code in (355,643,62,63,552)
+                ) as count_oper_code ,
+                (
+                    select ec.name
+                       from  er_regist_oper opern
+                       left outer join  er_oper_code ec on ec.er_oper_code = opern.er_oper_code
+                       where opern.vn = er.vn
+                       and opern.er_oper_code in (355,643,62,63,552)
+                       limit 1
+                ) as oper_name
+
+                from er_regist er
+
+                left outer join vn_stat v on v.vn = er.vn
+                left outer join patient p on p.hn = v.hn
+
+                where er.vstdate between $datestart and $dateend    and
+                (
+                       select count(oper.er_oper_code) from  er_regist_oper oper  where oper.vn = er.vn
+                        and er_oper_code in (355,643,62,63,552)
+                ) >= 1 ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report10', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
 
 }
