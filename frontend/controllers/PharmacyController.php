@@ -303,7 +303,9 @@ group by o.icode ";
             o.vn,o.hn,
             concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate ,o.rxtime,
             concat(p.pname,p.fname,'  ',p.lname) as pt_name,v.age_y,c.bw as weight, c.cc as cc,v.pdx,
-            concat(v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5) as diag_second,o.icode,d.name as drug_name, nd.name as non_drug_name,o.qty,
+            concat(v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5) as diag_second,o.icode,
+            concat(d.name,' ',d.strength,' x ',d.packqty,' ',d.units) as drug_name,
+            nd.name as non_drug_name,o.qty,
             u.shortlist
 
             from opitemrece    o
