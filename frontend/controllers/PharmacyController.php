@@ -347,6 +347,56 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
+    
+    
+    public function actionReport8($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวน visit ที่จ่ายยานอกเวลา 16.01น. - 07.59น.(รวมวันหยุดราชการ)";
+        $sql = "SELECT
+                    'จำนวนครั้ง visit' as name,
+                    count(distinct(o.vn)) as count_visit
+
+                FROM opitemrece    o
+
+                left outer join patient p on p.hn = o.hn
+                left outer join vn_stat v on v.vn = o.vn
+                left outer join opdscreen c on c.vn = o.vn
+                left outer join drugitems d on d.icode = o.icode
+                left outer join nondrugitems nd on nd.icode = o.icode
+                left outer join drugusage u on u.drugusage = o.drugusage
+
+                WHERE o.vstdate between $datestart and $dateend
+                and (o.rxtime between '16:00:01' and '23:59:59' 
+                or o.rxtime between '00:00:01' and '07:59:59')
+
+                and o.vn is   not null
+
+              /*  and o.vstdate not in
+                (
+                    select holiday_date from holiday
+                ) */  
+                and o.icode like '1%'  ";
+ 
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report8', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
 
 
 }

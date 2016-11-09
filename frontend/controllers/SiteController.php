@@ -14,132 +14,141 @@ class SiteController extends \yii\web\Controller {
         $report_name3 = "กราฟสรุปคนไข้ทะเบียนคลินิกความดัน ภายใน อ.ละแม จ.ชุมพร";
         $report_name4 = "กราฟสรุปคนไข้ทะเบียนคลินิกถุงลมโป่งพอง ภายใน อ.ละแม จ.ชุมพร";
         $report_name5 = "กราฟสรุปคนไข้ทะเบียนคลินิกหอบหืด ภายใน อ.ละแม จ.ชุมพร";
-
         $report_name6 = "กราฟสรุปจำนวน visit คนไข้ OPD แยกรายเดือน ปีงบประมาณ 2559";
+        $report_name7 = "กราฟสรุปจำนวนผู้มารับบริการผู้ป่วยใน (Ward+LR) แยกรายเดือน ปีงบประมาณ 2559";
+        $report_name8 = "กราฟสรุปจำนวนรายงานสารสนเทศในระบบ HOSxP";
 
 
         // sql กราฟสรุปคนไข้ทะเบียนเบาหวาน ไม่มีความดันร่วม ภายใน อ.ละแม จ.ชุมพร
         $sql1 = "
-SELECT 
-th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
-FROM clinicmember  cm
-LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
-LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
-LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
-LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
-WHERE 
-    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
-AND 
-    cm.hn not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                SELECT 
+                th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
+                FROM clinicmember  cm
+                LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+                LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+                LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                WHERE 
+                    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                AND 
+                    cm.hn not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
 
-AND pd.code in('3','03')
-AND concat(pt.chwpart,pt.amppart) = '8605'
-GROUP BY th.addressid 
-ORDER BY count(distinct(cm.hn)) DESC  ";
+                AND pd.code in('3','03')
+                AND concat(pt.chwpart,pt.amppart) = '8605'
+                GROUP BY th.addressid 
+                ORDER BY count(distinct(cm.hn)) DESC  ";
 
 
         // sql กราฟสรุปคนไข้ทะเบียนคลินิกเบาหวานที่มีความดันร่วม ภายใน อ.ละแม จ.ชุมพร
         $sql2 = " SELECT 
-th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
-FROM clinicmember  cm
-LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
-LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
-LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
-LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
-WHERE 
-    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
-AND 
-    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                    th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
+                    FROM clinicmember  cm
+                    LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+                    LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+                    LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                    LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                    WHERE 
+                        cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                    AND 
+                        cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
 
-AND pd.code in('3','03')
-AND concat(pt.chwpart,pt.amppart) = '8605'
-GROUP BY th.addressid 
-ORDER BY count(distinct(cm.hn)) DESC  ";
+                    AND pd.code in('3','03')
+                    AND concat(pt.chwpart,pt.amppart) = '8605'
+                    GROUP BY th.addressid 
+                    ORDER BY count(distinct(cm.hn)) DESC  ";
 
 
         // sql กราฟสรุปคนไข้ทะเบียนคลินิกความดัน ภายใน อ.ละแม จ.ชุมพร
         $sql3 = "SELECT 
-th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
-FROM clinicmember  cm
-LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
-LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
-LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
-LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
-WHERE 
-    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
-AND 
-    cm.hn not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
+                FROM clinicmember  cm
+                LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+                LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+                LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                WHERE 
+                    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                AND 
+                    cm.hn not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
 
-AND pd.code in('3','03')
-AND concat(pt.chwpart,pt.amppart) = '8605'
-GROUP BY th.addressid 
-ORDER BY count(distinct(cm.hn)) DESC  ";
+                AND pd.code in('3','03')
+                AND concat(pt.chwpart,pt.amppart) = '8605'
+                GROUP BY th.addressid 
+                ORDER BY count(distinct(cm.hn)) DESC  ";
 
 
         // sql กราฟสรุปคนไข้ทะเบียนคลินิกถุงลมโป่งพอง ภายใน อ.ละแม จ.ชุมพร
         $sql4 = "SELECT 
-th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
-FROM clinicmember  cm
-LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
-LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
-LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
-LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
-WHERE 
-    cm.clinic = '005'
-    
-AND pd.code in('3','03')
-AND concat(pt.chwpart,pt.amppart) = '8605'
-GROUP BY th.addressid 
-ORDER BY count(distinct(cm.hn)) DESC  ";
+                th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
+                FROM clinicmember  cm
+                LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+                LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+                LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                WHERE 
+                    cm.clinic = '005'
+
+                AND pd.code in('3','03')
+                AND concat(pt.chwpart,pt.amppart) = '8605'
+                GROUP BY th.addressid 
+                ORDER BY count(distinct(cm.hn)) DESC  ";
 
 
 
         // sql กราฟสรุปคนไข้ทะเบียนคลินิกหอบหืด ภายใน อ.ละแม จ.ชุมพร
         $sql5 = "SELECT 
-th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
-FROM clinicmember  cm
-LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
-LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
-LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
-LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
-WHERE 
-    cm.clinic = '019'
-    
-AND pd.code in('3','03')
-AND concat(pt.chwpart,pt.amppart) = '8605'
-GROUP BY th.addressid 
-ORDER BY count(distinct(cm.hn)) DESC  ";
+                th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
+                FROM clinicmember  cm
+                LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+                LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+                LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                WHERE 
+                    cm.clinic = '019'
 
-        
-        
+                AND pd.code in('3','03')
+                AND concat(pt.chwpart,pt.amppart) = '8605'
+                GROUP BY th.addressid 
+                ORDER BY count(distinct(cm.hn)) DESC  ";
+
+
+
         // sql กราฟสรุปจำนวน visit คนไข้ OPD แยกรายเดือน ปีงบประมาณ 2559
-        $report_name6 = "กราฟสรุปจำนวนผู้มารับบริการผู้ป่วยนอก แยกรายเดือน ปีงบประมาณ 2559";
+        //$report_name6 = "กราฟสรุปจำนวนผู้มารับบริการผู้ป่วยนอก แยกรายเดือน ปีงบประมาณ 2559";
         $sql6 = "SELECT
 
-CONCAT(MONTH(v.vstdate),'-',YEAR(v.vstdate))  as vstmonth ,
-COUNT(v.vn) as count_vn_opd  
+        CONCAT(MONTH(v.vstdate),'-',YEAR(v.vstdate))  as vstmonth ,
+        COUNT(v.vn) as count_vn_opd  
 
-FROM vn_stat v
-WHERE  v.vstdate BETWEEN '2015-10-01' AND '2016-09-30'
-GROUP BY  CONCAT(YEAR(v.vstdate),'-',MONTH(v.vstdate))
-ORDER BY  v.vstdate ";
-        
-        
- // sql กราฟสรุปจำนวน visit คนไข้ IPD แยกรายเดือน ปีงบประมาณ 2559
-        $report_name7 = "กราฟสรุปจำนวนผู้มารับบริการผู้ป่วยใน (Ward+LR) แยกรายเดือน ปีงบประมาณ 2559";
+        FROM vn_stat v
+        WHERE  v.vstdate BETWEEN '2016-10-01' AND '2017-09-30'
+        GROUP BY  CONCAT(YEAR(v.vstdate),'-',MONTH(v.vstdate))
+        ORDER BY  v.vstdate ";
+
+
+        // sql กราฟสรุปจำนวน visit คนไข้ IPD แยกรายเดือน ปีงบประมาณ 2559
+        //$report_name7 = "กราฟสรุปจำนวนผู้มารับบริการผู้ป่วยใน (Ward+LR) แยกรายเดือน ปีงบประมาณ 2559";
         $sql7 = "SELECT
 
-CONCAT(MONTH(a.dchdate),'-',YEAR(a.dchdate))  as group_date ,
-COUNT(a.an) as count_an_ipd 
+                CONCAT(MONTH(a.dchdate),'-',YEAR(a.dchdate))  as group_date ,
+                COUNT(a.an) as count_an_ipd 
 
-FROM an_stat a
+                FROM an_stat a
 
-WHERE  a.dchdate BETWEEN '2015-10-01' AND '2016-09-30'
+                WHERE  a.dchdate BETWEEN '2016-10-01' AND '2017-09-30'
 
-group by  CONCAT(YEAR(a.dchdate),'-',MONTH(a.dchdate))
+                group by  CONCAT(YEAR(a.dchdate),'-',MONTH(a.dchdate))
 
-order by a.dchdate ";       
+                order by a.dchdate ";
 
+        // sql กราฟสรุปคนไข้ทะเบียนเบาหวาน ไม่มีความดันร่วม ภายใน อ.ละแม จ.ชุมพร
+        $sql8 = "SELECT  
+                    d.name,count(l.id) as count_report
+                FROM lamaereports l
+                    left outer join lamaedepartment d on d.id  = l.lamaedepartment_id
+                WHERE status = 'enable'
+                GROUP BY
+                    l.lamaedepartment_id";
 
         try {
             $rawData1 = \yii::$app->db->createCommand($sql1)->queryAll();
@@ -149,7 +158,7 @@ order by a.dchdate ";
             $rawData5 = \yii::$app->db->createCommand($sql5)->queryAll();
             $rawData6 = \yii::$app->db->createCommand($sql6)->queryAll();
             $rawData7 = \yii::$app->db->createCommand($sql7)->queryAll();
-            
+            $rawData8 = \yii::$app->db->createCommand($sql8)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -179,14 +188,19 @@ order by a.dchdate ";
             'allModels' => $rawData5,
             'pagination' => FALSE,
         ]);
-        
+
         $dataProvider6 = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData6,
             'pagination' => FALSE,
         ]);
-        
-         $dataProvider7 = new \yii\data\ArrayDataProvider([
+
+        $dataProvider7 = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData7,
+            'pagination' => FALSE,
+        ]);
+
+        $dataProvider8 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData8,
             'pagination' => FALSE,
         ]);
 
@@ -199,6 +213,7 @@ order by a.dchdate ";
                     'dataProvider5' => $dataProvider5,
                     'dataProvider6' => $dataProvider6,
                     'dataProvider7' => $dataProvider7,
+                    'dataProvider8' => $dataProvider8,
                     'rawData1' => $rawData1,
                     'rawData2' => $rawData2,
                     'rawData3' => $rawData3,
@@ -206,6 +221,7 @@ order by a.dchdate ";
                     'rawData5' => $rawData5,
                     'rawData6' => $rawData6,
                     'rawData7' => $rawData7,
+                    'rawData8' => $rawData8,
                     'report_name1' => $report_name1,
                     'report_name2' => $report_name2,
                     'report_name3' => $report_name3,
@@ -213,6 +229,7 @@ order by a.dchdate ";
                     'report_name5' => $report_name5,
                     'report_name6' => $report_name6,
                     'report_name7' => $report_name7,
+                    'report_name8' => $report_name8,
         ]);
     }
 

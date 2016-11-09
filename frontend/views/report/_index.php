@@ -61,11 +61,16 @@ $this->params['breadcrumbs'][] = $this->title;
         
          <tr>
             <th scope="row">10</th>
-            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 13, 'dep_name' => 'ผู้ป่วยใน']) ?>">กายภาพบำบัด <span class="glyphicon glyphicon-zoom-in"></span></a></td>
+            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 11, 'dep_name' => 'แพทย์แผนไทย']) ?>">แพทย์แผนไทย <span class="glyphicon glyphicon-zoom-in"></span></a></td>
+        </tr>
+        
+         <tr>
+            <th scope="row">11</th>
+            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 13, 'dep_name' => 'กายภาพบำบัด']) ?>">กายภาพบำบัด <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
         
           <tr>
-            <th scope="row">11</th>
+            <th scope="row">12</th>
             <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 9, 'dep_name' => 'เวชปฏิบัติครอบครัว']) ?>">เวชปฏิบัติครอบครัว <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
         

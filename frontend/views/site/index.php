@@ -28,10 +28,15 @@ $this->title = 'ระบบศูนย์ข้อมูลและสาร�
 </ul>
 -->
 
+<div class="row">
+    <div class="col-md-12">
+        <div id="chart8"></div>
+    </div>
+</div>
 
+<br/>
 
- 
-  <div class="row">
+<div class="row">
     <div class="col-md-6">
         <div id="chart6"></div>
     </div>
@@ -43,7 +48,7 @@ $this->title = 'ระบบศูนย์ข้อมูลและสาร�
 
 <br/>
 
-  <div class="row">
+<div class="row">
     <div class="col-md-6">
         <div id="chart1"></div>
     </div>
@@ -163,6 +168,17 @@ for ($i = 0; $i < count($rawData7); $i++) {
 }
 
 
+//เตรียมชุดข้อมูลไปใส่ให้กราฟ
+$data8 = [];
+$sum8  = 0;
+foreach ($rawData8 as $r) {
+    $data8[] = [
+        'name' => $r['name'],
+        'y' => intval($r['count_report']),
+    ];
+    $sum8 += $r['count_report'];
+}
+
 $js_data1 = json_encode($data1);
 $js_data2 = json_encode($data2);
 $js_data3 = json_encode($data3);
@@ -170,7 +186,7 @@ $js_data4 = json_encode($data4);
 $js_data5 = json_encode($data5);
 $js_data6 = json_encode($data6);
 $js_data7 = json_encode($data7);
-
+$js_data8 = json_encode($data8);
 
 
 // Chart1
@@ -554,15 +570,67 @@ $this->registerJs("
     });
 ");
 // จบ chart
-?>
 
 
 
-?>
+// Chart8
+$this->registerJs(" 
+    $(function () {
+    $('#chart8').highcharts({
+        chart: {
+            type: 'pie',
+        },
+         credits: {
+            enabled: false
+        },
+        title: {
+            text: '$report_name8'
+        },
+        
+        tooltip: {
+            enabled: false,
+        },
+                         
+         yAxis: {
+            min: 0,
+            title: {
+                text: 'จำนวน'
+            },
+            
+        },
+         xAxis: {
+            type: 'category'
+        },
+       legend: {
+            enabled: true
+        },
+
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.y:.0f} รายงาน',
+                }
+            }
+        },
+        series: [{
+                name: 'จำนวน',
+                colorByPoint: true,
+                data:$js_data8
+        }]
+     },  function(chart) { // on complete
+        var total = $sum8;    
+        chart.renderer.text('รวม: ' + total + ' รายงาน', 20, 105)
+            .css({
+                color: '#4572A7',
+                fontSize: '16px'
+            })
+        .add();
+        });
+    });
+");
+// จบ chart8
 
 
-
-
-
-
-?>
+?> 
