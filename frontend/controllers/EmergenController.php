@@ -594,5 +594,48 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
+    
+    
+    public function actionReport11($datestart, $dateend, $details) {
 
+        $report_name = "ตรวจแลป Hemoculture";
+         
+        $sql = "SELECT 
+                    lh.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    concat(DAY(lh.order_date),'/',MONTH(lh.order_date),'/',(YEAR(lh.order_date)+543)) as order_date,
+                    concat(DAY(lh.report_date),'/',MONTH(lh.report_date),'/',(YEAR(lh.report_date)+543)) as report_date,
+                lo.lab_order_result
+                FROM lab_head lh
+
+                left outer join lab_order   lo on lo.lab_order_number = lh.lab_order_number
+                left outer join patient pt on pt.hn = lh.hn
+                WHERE  
+                    lh.order_date between $datestart and $dateend
+                    and lo.lab_items_code = '3166' ";
+
+                
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report11', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
+    
+    
 }
