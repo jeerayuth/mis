@@ -70,6 +70,7 @@ $this->title = 'MIS :: ระบบรายงานสารสนเทศ';
                                 <option value="3">Diag J069</option>
                                 <option value="4">Diag A099</option>
                                 <option value="5">Diag K529</option>
+                                <option value="6">Diag A090</option>
                             </select> 
                         </div>
                     </div>

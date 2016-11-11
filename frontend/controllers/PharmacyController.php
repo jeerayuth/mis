@@ -79,6 +79,9 @@ ORDER BY  sum_cost DESC ";
             } else if ($diag_id == 5) {
                 $diag1 = 'K529';
                 $diag2 = 'K529';
+            } else if ($diag_id == 6) {
+                $diag1 = 'A090';
+                $diag2 = 'A090';
             }
         }
 
@@ -98,32 +101,32 @@ ORDER BY  sum_cost DESC ";
             IF(o.cost <> 0, o.cost*o.qty,d.unitcost*o.qty)
             ) as sum_cost
 
-FROM vn_stat  v
+            FROM vn_stat  v
 
-left outer join opitemrece o on o.vn = v.vn
-left outer join drugitems d on d.icode = o.icode
+            left outer join opitemrece o on o.vn = v.vn
+            left outer join drugitems d on d.icode = o.icode
 
-WHERE v.vstdate BETWEEN $datestart and $dateend   and
+            WHERE v.vstdate BETWEEN $datestart and $dateend   and
 
- (
-        (v.pdx between '$diag1' and '$diag2') or
-        (v.dx0 between '$diag1' and '$diag2') or
-        (v.dx1 between '$diag1' and '$diag2') or
-        (v.dx2 between '$diag1' and '$diag2') or
-        (v.dx3 between '$diag1' and '$diag2') or
-        (v.dx4 between '$diag1' and '$diag2') or
-        (v.dx5 between '$diag1' and '$diag2')
- )
+             (
+                    (v.pdx between '$diag1' and '$diag2') or
+                    (v.dx0 between '$diag1' and '$diag2') or
+                    (v.dx1 between '$diag1' and '$diag2') or
+                    (v.dx2 between '$diag1' and '$diag2') or
+                    (v.dx3 between '$diag1' and '$diag2') or
+                    (v.dx4 between '$diag1' and '$diag2') or
+                    (v.dx5 between '$diag1' and '$diag2')
+             )
 
- and o.icode in  ('1000028','1000030','1460566','1510007','1000034',
-'1460057','1460071','1430502','1460570','1000060','1520919','1520908',
-'1510026','1000082','1510027','1000084','1000085','1480609','1000140',
-'1520034','1000188','1460235','1440207','1000221','1000231','1000235',
-'1000233','1510065','1000267','1540028','1550007','1540017','1520919',
-'1560011','1580019','1590011','1550008')
+             and o.icode in  ('1000028','1000030','1460566','1510007','1000034',
+            '1460057','1460071','1430502','1460570','1000060','1520919','1520908',
+            '1510026','1000082','1510027','1000084','1000085','1480609','1000140',
+            '1520034','1000188','1460235','1440207','1000221','1000231','1000235',
+            '1000233','1510065','1000267','1540028','1550007','1540017','1520919',
+            '1560011','1580019','1590011','1550008')
 
-group by o.icode
-order by  sum_cost desc  ";
+            group by o.icode
+            order by  sum_cost desc  ";
 
 
         try {
