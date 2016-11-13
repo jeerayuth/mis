@@ -58,6 +58,7 @@ ORDER BY  sum_cost DESC ";
         ]);
     }
 
+    
     public function actionReport2($diag_id, $datestart, $dateend, $details) {
 
         $diag1 = '';
@@ -399,6 +400,152 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
+    
+    
+    
+    public function actionReport9($diag_id,$datestart, $dateend, $details) {
+        
+        $diag1 = '';
+        $diag2 = '';
+
+        if ($diag_id != '') {
+            if ($diag_id == 1) {
+                $diag1 = 'V01';
+                $diag2 = 'Y98';
+            } else if ($diag_id == 2) {
+                $diag1 = 'A00';
+                $diag2 = 'A69';
+            } else if ($diag_id == 3) {
+                $diag1 = 'J069';
+                $diag2 = 'J069';
+            } else if ($diag_id == 4) {
+                $diag1 = 'A099';
+                $diag2 = 'A099';
+            } else if ($diag_id == 5) {
+                $diag1 = 'K529';
+                $diag2 = 'K529';
+            } else if ($diag_id == 6) {
+                $diag1 = 'A090';
+                $diag2 = 'A090';
+            }
+        }
+        
+        
+        $report_name = "รายงานผู้มารับบริการแยกตามกลุ่มรหัสวินิจฉัยโรค";
+        $sql = "
+                SELECT
+                    'จำนวน visit ผู้ป่วยนอก (แต่ละ visit มีการสั่งใช้ยา Antibiotic)' as name, 
+                    count(distinct(v.vn)) as count_diag
+                FROM vn_stat v
+                left outer join opitemrece o on o.vn = v.vn
+                WHERE o.rxdate between $datestart and $dateend  AND
+                        (
+                            (v.pdx between '$diag1' and '$diag2') or
+                            (v.dx0 between '$diag1' and '$diag2') or
+                            (v.dx1 between '$diag1' and '$diag2') or
+                            (v.dx2 between '$diag1' and '$diag2') or
+                            (v.dx3 between '$diag1' and '$diag2') or
+                            (v.dx4 between '$diag1' and '$diag2') or
+                            (v.dx5 between '$diag1' and '$diag2')
+                        )
+
+                 AND o.icode in  ('1000028','1000030','1460566','1510007','1000034',
+                            '1460057','1460071','1430502','1460570','1000060','1520919','1520908',
+                            '1510026','1000082','1510027','1000084','1000085','1480609','1000140',
+                            '1520034','1000188','1460235','1440207','1000221','1000231','1000235',
+                            '1000233','1510065','1000267','1540028','1550007','1540017','1520919',
+                            '1560011','1580019','1590011','1550008')
+
+
+
+                UNION
+
+
+                SELECT
+                'จำนวน visit ผู้ป่วยนอก (แต่ละ visit ทั้งที่มีการสั่งใช้/ไม่สั่งใช้ยา Antibiotic)' as name, count(distinct(v.vn)) as count_diag
+                FROM vn_stat v
+                left outer join opitemrece o on o.vn = v.vn
+                WHERE v.vstdate between $datestart and $dateend    AND
+                            (
+                            (v.pdx between '$diag1' and '$diag2') or
+                            (v.dx0 between '$diag1' and '$diag2') or
+                            (v.dx1 between '$diag1' and '$diag2') or
+                            (v.dx2 between '$diag1' and '$diag2') or
+                            (v.dx3 between '$diag1' and '$diag2') or
+                            (v.dx4 between '$diag1' and '$diag2') or
+                            (v.dx5 between '$diag1' and '$diag2')
+                        )
+
+
+                UNION
+                
+
+
+                SELECT
+                'จำนวน admit ผู้ป่วยใน (แต่ละ admit มีการสั่งใช้ยา Antibiotic)' as name, count(distinct(a.an)) as count_diag
+                FROM an_stat a
+                left outer join opitemrece o on o.an = a.an
+                WHERE o.rxdate between $datestart and $dateend    AND
+                                (
+                                    (a.pdx between '$diag1' and '$diag2') or
+                                    (a.dx0 between '$diag1' and '$diag2') or
+                                    (a.dx1 between '$diag1' and '$diag2') or
+                                    (a.dx2 between '$diag1' and '$diag2') or
+                                    (a.dx3 between '$diag1' and '$diag2') or
+                                    (a.dx4 between '$diag1' and '$diag2') or
+                                    (a.dx5 between '$diag1' and '$diag2')
+                             )
+
+                 AND o.icode in  ('1000028','1000030','1460566','1510007','1000034',
+                            '1460057','1460071','1430502','1460570','1000060','1520919','1520908',
+                            '1510026','1000082','1510027','1000084','1000085','1480609','1000140',
+                            '1520034','1000188','1460235','1440207','1000221','1000231','1000235',
+                            '1000233','1510065','1000267','1540028','1550007','1540017','1520919',
+                            '1560011','1580019','1590011','1550008')
+
+
+
+                UNION
+
+
+
+                SELECT
+                'จำนวน admit ผู้ป่วยใน (แต่ละ admit  ทั้งที่มีการสั่งใช้/ไม่สั่งใช้ยา Antibiotic)' as name, count(distinct(a.an)) as count_diag
+                FROM an_stat a
+                left outer join opitemrece o on o.an = a.an
+                WHERE a.dchdate between $datestart and $dateend     AND
+                                 (
+                                    (a.pdx between '$diag1' and '$diag2') or
+                                    (a.dx0 between '$diag1' and '$diag2') or
+                                    (a.dx1 between '$diag1' and '$diag2') or
+                                    (a.dx2 between '$diag1' and '$diag2') or
+                                    (a.dx3 between '$diag1' and '$diag2') or
+                                    (a.dx4 between '$diag1' and '$diag2') or
+                                    (a.dx5 between '$diag1' and '$diag2')
+                             )    ";
+
+               
+
+     
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report9', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
 
 
 
