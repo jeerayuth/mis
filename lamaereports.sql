@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2016-11-10 11:15:25
+Date: 2016-11-15 10:49:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=284 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=292 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -255,3 +255,11 @@ INSERT INTO lamaereports VALUES ('280', '11', 'รายงานผู้มา
 INSERT INTO lamaereports VALUES ('281', '11', 'รายงานผู้มารับบริการที่มีการสั่งยาแพทย์แผนไทยแต่ไม่ได้ไปรับบริการที่แพทย์แผนไทย', 'form1', 'report3', '2016-11-09', 'enable', 'ttm', null);
 INSERT INTO lamaereports VALUES ('282', '8', 'รายงานจำนวน visit ที่จ่ายยานอกเวลา 16.01น.-07.59น. (รวมวันหยุดราชการ)', 'form1', 'report8', '2016-11-09', 'enable', 'pharmacy', null);
 INSERT INTO lamaereports VALUES ('283', '7', 'รายงานตรวจแลป Hemoculture', 'form1', 'report11', '2016-11-10', 'enable', 'emergen', null);
+INSERT INTO lamaereports VALUES ('284', '8', 'รายงานสรุปจำนวนผู้มารับบริการแยกตามกลุ่มรหัสวินิจฉัยโรค', 'form8', 'report9', '2016-11-11', 'enable', 'pharmacy', null);
+INSERT INTO lamaereports VALUES ('285', '9', 'รายงานตรวจสอบ => สิทธิการรักษา ในบัญชี 1 ว่าง', 'form5', 'report14', '2016-11-14', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('286', '9', 'รายงานตรวจสอบ => มีสัญชาติไทย แต่เลขที่บัตรประชาชน ขึ้นต้นด้วย 0 Type 1 , 3', 'form5', 'report15', '2016-11-14', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('287', '9', 'รายงานตรวจสอบ => คนที่มีบ้านเลขที่บ้าน แต่ไม่มีหลังคาเรือนในระบบ', 'form5', 'report16', '2016-11-14', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('288', '9', 'รายงานตรวจสอบ => คนต่างด้าว ไม่ลงประเภทคนต่างด้าวในบัญชี1', 'form5', 'report17', '2016-11-14', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('289', '9', 'รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังไม่จำหน่าย', 'form5', 'report18', '2016-11-14', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('290', '9', 'รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังมีชีวิตอยู่', 'form5', 'report19', '2016-11-15', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('291', '7', 'รายงานผู้ป่วยนอกทั้งหมด RE-VISIT ภายใน 48 ชั่วโมง', 'form1', 'report12', '2016-11-15', 'enable', 'emergen', null);

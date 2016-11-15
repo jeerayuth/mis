@@ -634,6 +634,56 @@ limit 40 ";
     }
     
     
+    public function actionReport12($datestart, $dateend, $details) {
+
+        $report_name = "รายงาน RE-Visit ผู้ป่วยนอก ภายใน 48 ชั่วโมง";
+         
+        $sql = "select
+                v.hn,
+                concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate
+                ,v.age_y,
+                concat(p.pname,p.fname,'  ',p.lname) as pt_name ,
+                v.pdx,v.dx0 ,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
+                v.old_diagnosis, v.lastvisit_hour
+                from vn_stat  v
+                left outer join patient p on p.hn = v.hn
+                left outer join spclty s on s.spclty = v.spclty
+                left OUTER join thaiaddress t on t.addressid=v.aid
+                left outer join sex se on se.code = p.sex
+
+                where v.old_diagnosis = 'Y'
+                and v.lastvisit_hour <= 48
+                and v.vstdate between $datestart and $dateend
+                and v.pdx<>' '
+
+                 /*and  v.vn  not in (select e.vn from er_regist e ) */
+
+                 /*group by v.hn */
+
+                order by v.hn,v.vstdate";
+
+                
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report12', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+   
+    
+    
     
     
     
