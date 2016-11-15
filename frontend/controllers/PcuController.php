@@ -452,6 +452,194 @@ class PcuController extends \yii\web\Controller {
         ]); 
     }
     
+    
+      public function actionReport14($details) {
+
+        $report_name = "รายงานตรวจสอบ => สิทธิการรักษา ในบัญชี 1 ว่าง";
+        $sql = "SELECT
+                cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id
+            FROM person
+            WHERE (pttype=' ' or pttype is null) " ;
+   
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report14', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
+    
+    
+    
+     public function actionReport15($details) {
+
+        $report_name = "รายงานตรวจสอบ => มีสัญชาติไทย แต่เลขที่บัตรประชาชน ขึ้นต้นด้วย 0 Type 1 , 3";
+        $sql = "SELECT
+                cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id
+            FROM person
+            WHERE nationality='99' and cid LIKE '0%' AND house_regist_type_id in(1,3) and (death='N' or death is NULL or death=' ') " ;
+   
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report15', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
+    
+    
+     public function actionReport16($details) {
+
+        $report_name = "รายงานตรวจสอบ => คนที่มีบ้านเลขที่บ้าน แต่ไม่มีหลังคาเรือนในระบบ";
+        $sql = "SELECT
+                cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id
+            FROM person
+            WHERE house_id not in(SELECT house_id FROM house) " ;
+   
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report16', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
+    
+    
+    
+     public function actionReport17($details) {
+
+        $report_name = "รายงานตรวจสอบ => คนต่างด้าว ไม่ลงประเภทคนต่างด้าวในบัญชี1";
+        $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id 
+                    FROM person p
+                    LEFT JOIN person_labor_type l on l.person_labor_type_id=p.person_labor_type_id
+                    WHERE p.nationality<>'99' and (p.person_discharge_id is NULL or  p.person_discharge_id=' ' or p.person_discharge_id='9')
+
+                    AND (p.person_labor_type_id=' ' or p.person_labor_type_id is null or p.person_labor_type_id not in(SELECT person_labor_type_id FROM person_labor_type)) " ;
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report17', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
+    
+    
+    public function actionReport18($details) {
+
+        $report_name = "รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังไม่จำหน่าย";
+        $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id 
+                FROM person 
+                WHERE death='Y' and (discharge_date is NULL or discharge_date=' ')
+                  " ;
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report18', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
+    
+    
+    
+     public function actionReport19($details) {
+
+        $report_name = "รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังมีชีวิตอยู่ ";
+        $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id 
+                FROM person 
+                WHERE death='Y' and person_discharge_id<>'1' ";
+                  
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report19', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
+    
+    
+    
+    
    
    
    
