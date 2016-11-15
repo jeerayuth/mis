@@ -654,10 +654,9 @@ limit 40 ";
                 where v.old_diagnosis = 'Y'
                 and v.lastvisit_hour <= 48
                 and v.vstdate between $datestart and $dateend
-                and v.pdx<>' '
+                and (v.pdx not like 'K%' and v.pdx not like'Z%' and v.pdx not like'U%' and v.pdx is not null and v.pdx<>' ')
 
                  /*and  v.vn  not in (select e.vn from er_regist e ) */
-
                  /*group by v.hn */
 
                 order by v.hn,v.vstdate";
