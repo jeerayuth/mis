@@ -573,11 +573,11 @@ class ClaimController extends \yii\web\Controller {
                     left outer join icd101 ic on ic.code=v.pdx
                     left outer join doctor dr on dr.code=ov.doctor
                     left outer join sex s on s.code=v.sex
-                WHERE  
+                WHERE
                     v.pcode='A2' and v.vstdate between $datestart and $dateend
                     and v.pttype in('11')
-                    and pdx !=''  and pdx is not null
-                GROUP BY v.vn order by v.vstdate,v.hn ";
+                GROUP BY v.vn 
+                ORDER BY v.vstdate,v.hn ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();

@@ -457,7 +457,6 @@ group by o.icode ";
                             '1560011','1580019','1590011','1550008')
 
 
-
                 UNION
 
 
@@ -479,7 +478,6 @@ group by o.icode ";
 
                 UNION
                 
-
 
                 SELECT
                 'จำนวน admit ผู้ป่วยใน (แต่ละ admit มีการสั่งใช้ยา Antibiotic)' as name, count(distinct(a.an)) as count_diag
@@ -547,6 +545,152 @@ group by o.icode ";
     }
 
 
+    
+    
+     public function actionReport10($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวน visit ที่ได้รับยา Glibenclamide";
+        $sql = "SELECT
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate
+                    ,v.vn,v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 , op.bw as bw,v.age_y ,
+                    'eGFR' as lab_items_name,
+                    (
+                        select
+                              lo.lab_order_result from lab_head lh
+                        left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                        where lh.vn = v.vn  and lo.lab_items_code = '3248' and lo.lab_order_result != ''
+                     ) as lab_order_result ,
+                    om.icode ,concat(d.name,' ',d.strength,' x ',d.packqty,' ',d.units) as drug_name,
+                    om.qty ,d.units
+                FROM vn_stat v
+                left outer join opdscreen op on op.vn = v.vn
+                left outer join patient pt on pt.hn = v.hn
+                left outer join opitemrece om on om.vn = v.vn
+                left outer join drugitems d on d.icode = om.icode
+
+                WHERE
+                v.vstdate between $datestart and $dateend
+                and om.icode in ('1460402')
+                ORDER BY v.vn,v.vstdate ";
+               
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report10', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+     public function actionReport11($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวน visit ที่ได้รับยา METFORMIN";
+        $sql = "SELECT
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate
+                    ,v.vn,v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 , op.bw as bw,v.age_y ,
+                    'eGFR' as lab_items_name,
+                    (
+                        select
+                              lo.lab_order_result from lab_head lh
+                        left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                        where lh.vn = v.vn  and lo.lab_items_code = '3248' and lo.lab_order_result != ''
+                     ) as lab_order_result ,
+                    om.icode ,concat(d.name,' ',d.strength,' x ',d.packqty,' ',d.units) as drug_name,
+                    om.qty ,d.units
+                FROM vn_stat v
+                left outer join opdscreen op on op.vn = v.vn
+                left outer join patient pt on pt.hn = v.hn
+                left outer join opitemrece om on om.vn = v.vn
+                left outer join drugitems d on d.icode = om.icode
+
+                WHERE
+                v.vstdate between $datestart and $dateend
+                and om.icode in ('1430101')
+                ORDER BY v.vn,v.vstdate ";
+        
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report11', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    public function actionReport12($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวน visit ที่ได้รับยา Diclofenac,Mefenamic,Ibuprofen";
+        $sql = "SELECT
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate
+                    ,v.vn,v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 , op.bw as bw,v.age_y ,
+                    'eGFR' as lab_items_name,
+                    (
+                        select
+                              lo.lab_order_result from lab_head lh
+                        left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                        where lh.vn = v.vn  and lo.lab_items_code = '3248' and lo.lab_order_result != ''
+                     ) as lab_order_result ,
+                    om.icode ,concat(d.name,' ',d.strength,' x ',d.packqty,' ',d.units) as drug_name,
+                    om.qty ,d.units
+                FROM vn_stat v
+                left outer join opdscreen op on op.vn = v.vn
+                left outer join patient pt on pt.hn = v.hn
+                left outer join opitemrece om on om.vn = v.vn
+                left outer join drugitems d on d.icode = om.icode
+
+                WHERE
+                v.vstdate between $datestart and $dateend
+                and om.icode in ('1460140','1000182','1000154')
+                ORDER BY v.vn,v.vstdate ";
+        
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report12', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
 
 
 }
