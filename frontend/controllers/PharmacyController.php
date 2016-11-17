@@ -667,7 +667,7 @@ group by o.icode ";
 
                 WHERE
                 v.vstdate between $datestart and $dateend
-                and om.icode in ('1460140','1000182','1000154')
+                and om.icode in ('1000110','1000182','1000154')
                 ORDER BY v.vn,v.vstdate ";
         
         
@@ -689,6 +689,90 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
+    
+    
+     public function actionReport13($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวน visit ที่ได้รับยา Diclofenac และ Mefenamic และIbuprofen ร่วมกัน";
+        $sql = "SELECT
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate
+                    ,v.vn,v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 , op.bw as bw,v.age_y ,
+                    'eGFR' as lab_items_name,
+                    (
+                        select
+                              lo.lab_order_result from lab_head lh
+                        left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                        where lh.vn = v.vn  and lo.lab_items_code = '3248' and lo.lab_order_result != ''
+                     ) as lab_order_result ,
+                    om.icode ,concat(d.name,' ',d.strength,' x ',d.packqty,' ',d.units) as drug_name,
+                    om.qty ,d.units
+                FROM vn_stat v
+                left outer join opdscreen op on op.vn = v.vn
+                left outer join patient pt on pt.hn = v.hn
+                left outer join opitemrece om on om.vn = v.vn
+                left outer join drugitems d on d.icode = om.icode
+
+                WHERE
+                v.vstdate between $datestart and $dateend
+                and (om.icode='1000110' and om.icode='1000182' and om.icode='1000154')
+                ORDER BY v.vn,v.vstdate ";
+        
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report13', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    public function actionReport14($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวนคนที่ได้รับยาในกลุ่มยาที่กำหนด";
+        $sql = "SELECT  
+                    o.icode,d.name as drug_name,count(distinct(o.hn))  as count_hn
+                FROM opitemrece  o
+                LEFT OUTER JOIN drugitems d on d.icode = o.icode
+                WHERE
+                    o.rxdate BETWEEN $datestart and $dateend
+                AND o.icode IN ('1430101','1460402','1000154','1000110','1000182')
+                GROUP BY o.icode ";
+        
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report14', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
     
     
 
