@@ -17,7 +17,7 @@ echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
         'heading' => $report_name,
-        'before' => 'รายงานรายชื่อหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ',
+        'before' => '',
         'type' => 'primary',
         'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
     ],

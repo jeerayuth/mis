@@ -34,9 +34,9 @@ $sum = 0;
 foreach ($rawData as $r) {
     $data[] = [
         'name' => $r['village_name'],
-        'y' => intval($r['age_min_30_70_sex_female']),
+        'y' => intval($r['age_min_sex_female']),
     ];
-    $sum += $r['age_min_30_70_sex_female'];
+    $sum += $r['age_min_sex_female'];
 }
 
 
@@ -134,13 +134,14 @@ echo GridView::widget([
             'header' => 'ชื่อหมู่บ้าน'
         ],
         [
-            'attribute' => 'age_min_30_70_sex_female',
+            'attribute' => 'age_min_sex_female',
             'header' => 'จำนวน(คน)',
             'format' => 'raw',
             'value' => function($model) {
                 $village_id = $model['village_id'];
-                $count_hn = $model['age_min_30_70_sex_female'];
-                return Html::a(Html::encode($count_hn), ['pcu/report2', 'village_id' => $village_id]);
+                $count_hn = $model['age_min_sex_female'];
+                $age_id = $_GET['age_id'];
+                return Html::a(Html::encode($count_hn), ['pcu/report2', 'village_id' => $village_id,'age_id'=> $age_id] );
             }
                 ]
             ]

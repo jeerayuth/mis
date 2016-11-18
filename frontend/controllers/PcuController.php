@@ -4,16 +4,31 @@ namespace frontend\controllers;
 
 class PcuController extends \yii\web\Controller {
  
-    public function actionReport1($details) {
+    public function actionReport1($details, $age_id) {
+        
+         if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
+             if ($age_id == 1) {
+                $age = '30 and 60';
+                $report_name = 'รายงานสรุปหญิงอายุ 30-60 ปี ในเขตรับผิดชอบ';  
+             } else if($age_id == 2) {
+                $age = '30 and 70';
+                $report_name = 'รายงานสรุปหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ';   
+             } 
+         }
 
-        $report_name = "รายงานสรุปหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ";
+         
         $sql = "SELECT
                     v.village_id,v.village_moo, v.village_name ,                 
                     (
-                      select count(p.cid) from person p where p.sex = '2'  and  timestampdiff(year,p.birthdate,curdate()) between  30 and 70  and p.village_id = v.village_id
-                    ) as age_min_30_70_sex_female
+                      select count(p.cid) from person p where p.sex = '2'  
+                      and  timestampdiff(year,p.birthdate,curdate()) between  $age 
+                      and p.village_id = v.village_id
+                    ) as age_min_sex_female
                 FROM village v
                 WHERE v.village_id != 1 ";
+        
+ 
+        
         
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -31,13 +46,27 @@ class PcuController extends \yii\web\Controller {
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
+                    'age_id' => $age_id,
+                  
         ]);
+        
+         
     }
     
-    public function actionReport2($village_id) {
+    public function actionReport2($village_id,$age_id) {
 
         
-        $report_name = "รายงานรายชื่อหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ";
+         if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
+             if ($age_id == 1) {
+                $age = '30 and 60';
+                $report_name = 'รายงานสรุปหญิงอายุ 30-60 ปี ในเขตรับผิดชอบ';  
+             } else if($age_id == 2) {
+                $age = '30 and 70';
+                $report_name = 'รายงานสรุปหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ';   
+             } 
+         }
+         
+       // $report_name = "รายงานรายชื่อหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ";
         $sql = "select
 
                 concat(p.pname,p.fname,'  ',p.lname) as pt_name ,v.village_moo,v.village_name,h.address,t.full_name,
@@ -50,13 +79,9 @@ class PcuController extends \yii\web\Controller {
                 left outer join house h on h.house_id = p.house_id
                 left outer join house_regist_type r on r.house_regist_type_id = p.house_regist_type_id
 
-                where p.sex = '2'  and  timestampdiff(year,p.birthdate,curdate()) between  30 and 70  and p.village_id = $village_id
-                order by timestampdiff(year,p.birthdate,curdate())
-
-";
-        
-        
-      
+                where p.sex = '2'  and  timestampdiff(year,p.birthdate,curdate()) between  $age  and p.village_id = $village_id
+                order by timestampdiff(year,p.birthdate,curdate()) ";
+    
         
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -638,8 +663,7 @@ class PcuController extends \yii\web\Controller {
     }
     
     
-    
-    
+   
    
    
    
