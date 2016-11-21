@@ -214,9 +214,10 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
                     and ro.depcode='003'
                     GROUP BY ro.pdx
                     ORDER BY count_vn DESC 
-                    LIMIT 10 ";
+                    LIMIT 30 ";
         
         
+        /* สรุปตามการวินิจฉัยโรคขั้นต้น */
          $sql3 = "SELECT
                     ro.pre_diagnosis,count(distinct(ro.vn)) as count_vn
                 FROM referout ro
@@ -241,7 +242,7 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
                     and ro.pre_diagnosis != ''
                     GROUP BY ro.pre_diagnosis
                     ORDER BY count_vn DESC 
-                    LIMIT 10 ";
+                    LIMIT 30 ";
          
         
         try {
