@@ -663,6 +663,157 @@ class PcuController extends \yii\web\Controller {
     }
     
     
+     public function actionReport20($datestart, $dateend,$details) {
+
+        $report_name = "รายงานอาการคล้ายไข้หวัดใหญ่ (ILI)";
+        $sql = "SELECT
+         concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+        (select count(n.vn) from vn_stat n where n.vstdate = v.vstdate) as count_all_visit ,
+
+        (
+                select count(a.vn)
+                       from vn_stat a
+                       where (
+                                    (a.pdx = 'j00' ) or
+                                    (a.dx0 = 'j00' ) or
+                                    (a.dx1 = 'j00' ) or
+                                    (a.dx2 = 'j00' ) or
+                                    (a.dx3 = 'j00' ) or
+                                    (a.dx4 = 'j00' ) or
+                                    (a.dx5 = 'j00' )
+
+                             ) and a.vstdate = v.vstdate)  as  count_j00 ,
+
+
+
+        (
+                select count(a.vn)
+                       from vn_stat a
+                       where (
+                                    (a.pdx between 'j020' and  'j029') or
+                                    (a.dx0 between 'j020' and  'j029') or
+                                    (a.dx1 between 'j020' and  'j029') or
+                                    (a.dx2 between 'j020' and  'j029') or
+                                    (a.dx3 between 'j020' and  'j029') or
+                                    (a.dx4 between 'j020' and  'j029') or
+                                    (a.dx5 between 'j020' and  'j029')
+
+                             ) and a.vstdate = v.vstdate) as count_j020_j029     ,
+
+
+
+        (
+                select count(a.vn)
+                       from vn_stat a
+                       where (
+                                    (a.pdx between 'j060' and  'j069') or
+                                    (a.dx0 between 'j060' and  'j069') or
+                                    (a.dx1 between 'j060' and  'j069') or
+                                    (a.dx2 between 'j060' and  'j069') or
+                                    (a.dx3 between 'j060' and  'j069') or
+                                    (a.dx4 between 'j060' and  'j069') or
+                                    (a.dx5 between 'j060' and  'j069')
+
+                             ) and a.vstdate = v.vstdate) as count_j060_j069 ,
+
+
+        (
+                select count(a.vn)
+                       from vn_stat a
+                       where (
+                                    (a.pdx ='j09') or
+                                    (a.dx0 ='j09') or
+                                    (a.dx1 ='j09') or
+                                    (a.dx2 ='j09') or
+                                    (a.dx3 ='j09') or
+                                    (a.dx4 ='j09') or
+                                    (a.dx5 ='j09')
+
+                             ) and a.vstdate = v.vstdate) as count_j09   ,
+
+
+        (
+                select count(a.vn)
+                       from vn_stat a
+                       where (
+                                    (a.pdx ='j10') or
+                                    (a.dx0 ='j10') or
+                                    (a.dx1 ='j10') or
+                                    (a.dx2 ='j10') or
+                                    (a.dx3 ='j10') or
+                                    (a.dx4 ='j10') or
+                                    (a.dx5 ='j10')
+
+                             ) and a.vstdate = v.vstdate) as count_j10  ,
+
+
+         (
+                select count(a.vn)
+                       from vn_stat a
+                       where (
+                                    (a.pdx ='j11') or
+                                    (a.dx0 ='j11') or
+                                    (a.dx1 ='j11') or
+                                    (a.dx2 ='j11') or
+                                    (a.dx3 ='j11') or
+                                    (a.dx4 ='j11') or
+                                    (a.dx5 ='j11')
+
+                             ) and a.vstdate = v.vstdate) as count_j11
+
+
+
+                 /*
+
+        (
+                select count(a.vn)
+                       from vn_stat a
+                       where (
+                                    (a.pdx between 'j120' and  'j189') or
+                                    (a.dx0 between 'j120' and  'j189') or
+                                    (a.dx1 between 'j120' and  'j189') or
+                                    (a.dx2 between 'j120' and  'j189') or
+                                    (a.dx3 between 'j120' and  'j189') or
+                                    (a.dx4 between 'j120' and  'j189') or
+                                    (a.dx5 between 'j120' and  'j189')
+
+                             ) and a.vstdate = v.vstdate) as count_j120_j189
+                 */
+
+
+        FROM vn_stat v
+
+        WHERE v.vstdate between $datestart  and $dateend
+
+        GROUP BY v.vstdate
+
+        ORDER BY v.vstdate ";
+                  
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report20', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
+    
+  
+    
+    
    
    
    
