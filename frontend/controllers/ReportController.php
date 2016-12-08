@@ -22,6 +22,9 @@ class ReportController extends \yii\web\Controller {
                 ' WHERE lamaedepartment_id=:dep_id ' .
                 ' AND status=:status ',
                 'params' => [':dep_id' => $dep_id, ':status' => 'enable'],
+                'pagination' => [
+                    'pageSize' => 100,
+                ],
             ]);
 
             // returns an array of data rows

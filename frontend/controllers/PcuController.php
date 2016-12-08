@@ -267,7 +267,9 @@ class PcuController extends \yii\web\Controller {
         $sql = "SELECT
             cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id
         FROM person
-        WHERE house_regist_type_id is null or house_regist_type_id=' ' ";
+        WHERE 
+            house_regist_type_id is null  
+            ";
    
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -814,6 +816,123 @@ class PcuController extends \yii\web\Controller {
     }
     
   
+     public function actionReport21($details) {
+
+        $report_name = "รายงานตรวจสอบ => สถานะสมณะ แต่คำนำหน้าไม่ใช่ สมณะ ";
+        $sql = "SELECT
+            p.cid,p.pname,concat(p.fname,'  ',p.lname) as person_name ,m.name , 
+            p.marrystatus , p.sex,p.house_regist_type_id, s.name as sex
+
+            FROM person p
+
+            JOIN pname n on n.name=p.pname
+            JOIN marrystatus m on m.code = p.marrystatus
+            JOIN sex s on s.code = p.sex
+            
+            WHERE  p.marrystatus = 6 and (death='N' or death is NULL or death=' ')
+            and n.provis_code not between 800 and 959 ";
+                  
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report21', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
+    
+    
+    
+    public function actionReport22($details) {
+
+        $report_name = "รายงานตรวจสอบ => คำนำหน้าชื่อเป็นพระ แต่สถานะไม่ใช่สมณะ ";
+        $sql = "SELECT
+            p.cid,p.pname,concat(p.fname,'  ',p.lname) as person_name ,m.name , 
+            p.marrystatus , s.name as sex
+
+            FROM person p
+
+            JOIN pname n on n.name=p.pname
+            JOIN marrystatus m on m.code = p.marrystatus
+            JOIN sex s on s.code = p.sex
+
+            WHERE  p.marrystatus != 6 and (death='N' or death is NULL or death=' ') 
+            and n.provis_code  between 800 and 959 ";
+                  
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report22', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
+    
+    
+    public function actionReport23($details) {
+
+        $report_name = "รายงานตรวจสอบ => ตรวจสอบสถานะเป็นพระ แต่ อายุ ไม่ถึง 20 ปี";
+        $sql = "SELECT
+                p.cid,p.pname,concat(p.fname,'  ',p.lname) as person_name ,
+                m.name , p.marrystatus , p.sex ,p.age_y,  s.name as sex
+
+                FROM person p
+
+                JOIN pname n on n.name=p.pname
+                JOIN marrystatus m on m.code = p.marrystatus
+                JOIN sex s on s.code = p.sex
+
+                WHERE  p.marrystatus = 6 and (death='N' or death is NULL or death=' ')
+                and n.provis_code  between 800 and 959  and n.provis_code != 832  
+                and n.provis_code != 863 and p.sex = 1 and p.age_y <= 19 ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        
+        return $this->render('report23', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                            
+        ]); 
+    }
     
     
    
