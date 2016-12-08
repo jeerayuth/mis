@@ -360,7 +360,103 @@ ORDER BY v.vstdate ";
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
+             
+    }
+    
+    
+    public function actionReport9($datestart, $dateend,$details) {
+
+        $report_name = "รายงานตรวจสอบ => ยืม-คืน Chart ผู้ป่วยใน";
+
+        $sql = "
+                SELECT
+                    'จำนวนที่ยังไม่คืน' as text,count(an) as count_an, '1' as type_id
+                FROM ipdrent  i  
+                WHERE rent_date BETWEEN $datestart AND $dateend and checkin = 'N'
+                and return_date is null
+
+                UNION
+
+                SELECT
+                    'จำนวนที่คืนแล้ว' as text,count(an) as count_an, '2' as type_id
+                FROM ipdrent  i  
+                WHERE rent_date BETWEEN $datestart AND $dateend and checkin = 'Y'
+                and return_date is not null ";
+
+            
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
         
+
+        
+        return $this->render('report9', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend
+        ]);
+        
+        
+    }
+    
+    
+    public function actionReport10($type_id,$datestart, $dateend) {
+
+        $report_name = "";
+        
+        if($type_id == 1) {
+            $report_name = "รายงานตรวจสอบ => ยืม-คืน Chart ผู้ป่วยใน (ยังไม่คืน)";
+             $sql = "
+                SELECT
+                    i.*
+                FROM ipdrent  i  
+                WHERE rent_date BETWEEN $datestart AND $dateend and checkin = 'N'
+                and return_date is null ";
+             
+        } else if ($type_id == 2) {
+            $report_name = "รายงานตรวจสอบ => ยืม-คืน Chart ผู้ป่วยใน (คืนแล้ว)";
+            $sql = "SELECT
+                    i.*
+                FROM ipdrent  i  
+                WHERE rent_date BETWEEN $datestart AND $dateend and checkin = 'Y'
+                and return_date is not null ";
+        }
+        
+        
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+
+        
+        return $this->render('report10', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+         
+ 
+        ]);
+        
+        
+      
         
     }
 
