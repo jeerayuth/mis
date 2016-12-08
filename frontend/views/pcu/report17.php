@@ -40,6 +40,14 @@ echo GridView::widget([
             'attribute' => 'house_regist_type_id',
             'header' => 'Typearea'
         ],
+        [
+            'attribute' => 'nationality_name',
+            'header' => 'nationality'
+        ],
+        [
+            'attribute' => 'person_labor_type_id',
+            'header' => 'ชนิดบุคคล'
+        ],
                      
     ]
 ])

@@ -357,7 +357,6 @@ left outer join sex s on s.code = pt.sex
 where
 
   v.vstdate between $datestart and $dateend
-
 and
   d.depression_screen_id !=0
 and 
@@ -459,8 +458,6 @@ order by v.aid, v.moopart, v.hn, cc.screen_date
 // จบ function
 
 
-
-
     public function actionReport6($uclinic, $datestart, $dateend, $details) {
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
@@ -527,8 +524,6 @@ order by v.aid, v.moopart, v.hn, cc.screen_date
     }
 
 // จบ function
-
-
     public function actionReport7($uclinic, $datestart, $dateend, $details, $operators = null, $result_first = null, $lab_items = null, $drug_items) {
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
@@ -644,8 +639,6 @@ $logics
     
 GROUP  BY o.hn
 ORDER  BY v.aid, v.moopart, v.hn, v.vstdate ";
-
-
 
 
             try {

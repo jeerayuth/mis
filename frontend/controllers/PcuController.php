@@ -573,9 +573,11 @@ class PcuController extends \yii\web\Controller {
      public function actionReport17($details) {
 
         $report_name = "รายงานตรวจสอบ => คนต่างด้าว ไม่ลงประเภทคนต่างด้าวในบัญชี1";
-        $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id 
+        $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id,
+                        n.name as nationality_name
                     FROM person p
                     LEFT JOIN person_labor_type l on l.person_labor_type_id=p.person_labor_type_id
+                    LEFT JOIN nationality n on n.nationality = p.nationality
                     WHERE p.nationality<>'99' and (p.person_discharge_id is NULL or  p.person_discharge_id=' ' or p.person_discharge_id='9')
 
                     AND (p.person_labor_type_id=' ' or p.person_labor_type_id is null or p.person_labor_type_id not in(SELECT person_labor_type_id FROM person_labor_type)) " ;

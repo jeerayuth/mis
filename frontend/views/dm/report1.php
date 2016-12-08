@@ -130,8 +130,9 @@ echo GridView::widget([
             'value' => function($model) use ($uclinic) {
                 $hosp_area = $model['hosp_area'];
                 $count_hn = $model['count_hn'];
-                return Html::a(Html::encode($count_hn), ['dm/report2', 'hosp_area' => $hosp_area, 'uclinic' => $uclinic]);
-            }
+                return Html::a(Html::encode($count_hn), 
+                    ['dm/report2', 'hosp_area' => $hosp_area, 'uclinic' => $uclinic],['target'=>'_blank']);
+                    }
                 ]
             ]
         ])
