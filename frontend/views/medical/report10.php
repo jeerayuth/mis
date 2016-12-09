@@ -9,6 +9,18 @@ $this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<?php
+
+    echo $type_id;
+    
+    
+    
+    if($type_id == 1) {
+        $return_date_name = 'วันครบกำหนดคืน';
+    } else if ($type_id == 2) {
+        $return_date_name = 'วันที่คืน';
+    }
+?>
 
 <?php
 
@@ -16,7 +28,7 @@ echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
         'heading' => $report_name,
-        'before' => 'details',
+        'before' => '',
         'type' => 'primary',
         'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
     ],
@@ -43,17 +55,11 @@ echo GridView::widget([
             'attribute' => 'rent_date',
             'header' => 'วันที่ยืม'
         ],
-         [
-            'attribute' => 'checkin',
-            'header' => 'สถานะการคืน'
-        ],
         [
             'attribute' => 'return_date',
-            'header' => 'วันที่คืน'
+            'header' => $return_date_name
         ],
-       
-      
-             
+                   
           
     ]
 ])

@@ -418,7 +418,7 @@ ORDER BY v.vstdate ";
             $report_name = "รายงานตรวจสอบ => ยืม-คืน Chart ผู้ป่วยใน (ยังไม่คืน)";
              $sql = "
                 SELECT
-                    i.*
+                    i.*, if(i.return_date is null,date_add(i.rent_date,interval 4 day),i.return_date) as return_date
                 FROM ipdrent  i  
                 WHERE rent_date BETWEEN $datestart AND $dateend and checkin = 'N'
                 and return_date is null ";
@@ -451,7 +451,7 @@ ORDER BY v.vstdate ";
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
-         
+                    'type_id' => $type_id,
  
         ]);
         

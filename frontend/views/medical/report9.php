@@ -119,12 +119,12 @@ echo GridView::widget([
         ['class' => 'yii\grid\SerialColumn'],
         [
             'attribute' => 'text',
-            'header' => ''
+            'header' => 'ยืม-คืน Chart ผู้ป่วยใน'
         ],
       
         [
             'attribute' => 'count_an',
-            'header' => 'จำนวนคนไข้(คน)',
+            'header' => 'จำนวนครั้งที่ยืม',
             'format' => 'raw',
             'value' => function($model) use ($datestart,$dateend) {
                 $hosp_area = $model['text'];
