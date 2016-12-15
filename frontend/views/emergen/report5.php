@@ -314,6 +314,14 @@ echo GridView::widget([
             'header' => 'เวลาที่มา'
         ],
         [
+            'attribute' => 'spclty_name',
+            'header' => 'ประเภทคลินิก'
+        ],
+         [
+            'attribute' => 'er_pt_type_name',
+            'header' => 'ประเภทผู้ป่วย'
+        ],     
+        [
             'attribute' => 'emergency_name',
             'header' => 'ความเร่งด่วน'
         ],
@@ -332,6 +340,11 @@ echo GridView::widget([
         [
             'attribute' => 'item_money',
             'header' => 'ค่าบริการ'
+        ],
+        
+         [
+            'attribute' => 'pttype_name',
+            'header' => 'สิทธิ์การรักษา'
         ],
     ]
 ])

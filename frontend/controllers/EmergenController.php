@@ -160,9 +160,13 @@ er.vn in
                 concat(p.pname,p.fname,'  ',p.lname) as pt_name,
                 ep.name as period_name,d.name as doctor_name,
                 k.department as name_department,
-                erv.er_emergency_level_name
+                erv.er_emergency_level_name,
+                vs.pttype,
+                ptt.name as pttype_name,
+                SUBSTR(erp.name,3,200) as er_pt_type_name,
+                spt.name as spclty_name
 
-                from er_regist  e 											
+                from er_regist  e 
                     left outer join ovst v on v.vn=e.vn 
                     left outer join er_emergency_type ert on ert.er_emergency_type=e.er_emergency_type 
                     left outer join er_emergency_level erv on erv.er_emergency_level_id = e.er_emergency_level_id
@@ -171,8 +175,12 @@ er.vn in
                     left outer join kskdepartment k on k.depcode =v.main_dep 
                     left outer join patient p on p.hn=v.hn 
                     left outer join er_period ep on ep.er_period=e.er_period 
-                    left outer join  doctor d on d.code= e.er_doctor 
-                    left outer join  vn_stat vs on vs.vn= e.vn 
+                    left outer join doctor d on d.code= e.er_doctor 
+                    left outer join vn_stat vs on vs.vn= e.vn 
+                    left outer join pttype ptt on ptt.pttype = vs.pttype
+                    left outer join er_pt_type erp on erp.er_pt_type = e.er_pt_type
+                    left outer join spclty spt on spt.spclty = v.spclty
+                    
                 where e.vstdate between $datestart and $dateend order by e.vn ";
 
 
