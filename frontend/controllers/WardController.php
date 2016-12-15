@@ -284,7 +284,96 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     
     
     
+     public function actionReport5($datestart, $dateend, $details) {
+       
+        $report_name = "รายงานผู้ป่วย admit ความดันโลหิตสูง";
+        $sql = "SELECT 
+                    ov.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    a.an,
+                    concat(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) regdate, 
+                    concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) dchdate,  
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,
+                    a.dx4,a.dx5,op.bps,op.bpd
+                FROM ovst ov
+                left outer join an_stat a on a.an = ov.an
+                left outer join opdscreen op on op.vn = ov.vn
+                left outer join patient pt on pt.hn = ov.hn
+                WHERE    
+                    a.dchdate between $datestart  AND $dateend  AND 
+                    ov.an != ''   and op.bps >= 180
+
+                and (   a.pdx = 'I10' or 
+                        a.dx0 = 'I10' or 
+                        a.dx1 = 'I10' or 
+                        a.dx2 = 'I10' or 
+                        a.dx3 = 'I10' or 
+                        a.dx4 = 'I10' or 
+                        a.dx5 = 'I10' )
+                GROUP BY ov.an ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report5', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+    
     
    
+     public function actionReport6($datestart, $dateend, $details) {
+       
+        $report_name = "รายงานผู้ป่วย admit sepsis";
+        $sql = "SELECT 
+                    a.hn,a.an,
+                    concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    concat(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) regdate, 
+                    concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) dchdate,
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5
+
+                FROM an_stat  a
+                    left outer join patient p on p.hn = a.hn
+                WHERE 
+                    a.dchdate between $datestart  AND $dateend
+                    AND (
+                        (a.pdx between 'a400' and 'a419' or a.pdx in ('r572','r651'))  or
+                        (a.dx0 between 'a400' and 'a419' or a.dx0 in ('r572','r651'))  or
+                        (a.dx1 between 'a400' and 'a419' or a.dx1 in ('r572','r651'))  or
+                        (a.dx2 between 'a400' and 'a419' or a.dx2 in ('r572','r651'))  or
+                        (a.dx3 between 'a400' and 'a419' or a.dx3 in ('r572','r651'))  or
+                        (a.dx4 between 'a400' and 'a419' or a.dx4 in ('r572','r651'))  or
+                        (a.dx5 between 'a400' and 'a419' or a.dx5 in ('r572','r651'))
+
+                      )
+
+                GROUP BY a.an ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report6', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
 
 }
