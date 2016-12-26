@@ -37,6 +37,14 @@ echo GridView::widget([
             'header' => 'ชื่อ-สกุล'
         ],
         [
+            'attribute' => 'birthdate',
+            'header' => 'วันเกิด'
+        ],
+        [
+            'attribute' => 'age_y',
+            'header' => 'อายุ (ปี)'
+        ],
+        [
             'attribute' => 'house_regist_type_id',
             'header' => 'Typearea'
         ],
