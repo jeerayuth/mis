@@ -79,6 +79,51 @@ class AncController extends \yii\web\Controller {
                     'details' => $details,
         ]);
     }
+    
+    
+    public function actionReport3($datestart, $dateend, $details) {
+
+        $report_name = "รายงานหญิงตั้งครรภ์ทุกรายได้รับการคัดกรองภาวะเสี่ยงและพบภาวะเสี่ยง";
+
+        $sql = "SELECT
+                    a.person_anc_id,a.person_id,
+                    a.person_anc_no,
+                    concat(DAY(a.anc_register_date),'/',MONTH(a.anc_register_date),'/',(YEAR(a.anc_register_date)+543)) as anc_register_date ,
+                    a.anc_register_staff,
+                    ps.cid,
+                    concat(ps.pname,ps.fname,'  ',ps.lname) as person_name,
+                    p.person_anc_classifying_item_id, p.check_value,
+                    p.update_datetime
+                FROM person_anc   a
+                    left outer join person_anc_classifying p on p.person_anc_id = a.person_anc_id
+                    left outer join person ps on ps.person_id = a.person_id
+                WHERE p.update_datetime  between  $datestart and $dateend and p.check_value = 'Y'       
+                GROUP BY a.person_id ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report3', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
+    
+    
 
 
 }
