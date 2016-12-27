@@ -1,0 +1,84 @@
+<?php
+
+namespace frontend\controllers;
+
+class AncController extends \yii\web\Controller {
+    
+    public function actionReport1($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวนครั้งหญิงตั้งครรภ์ ได้รับยา Triferdine";
+
+        $sql = "SELECT 
+                    v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    v.age_y,v.pdx,
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate, 
+                    o.icode , d.name
+                FROM vn_stat v
+                    left outer join opitemrece o on o.vn = v.vn
+                    left outer join drugitems d on d.icode = o.icode
+                    left outer join patient p on p.hn = v.hn
+                WHERE 
+                    v.vstdate between $datestart and $dateend and
+                    v.pdx in ('Z340','Z349')  and o.icode = '1550014'
+                GROUP BY v.vn ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report1', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    public function actionReport2($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวนครั้งหญิงตั้งครรภ์ ที่มีผลแลป hematocrit < 33%";
+
+        $sql = "SELECT
+                    v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    v.age_y,v.pdx,
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,
+                    li.lab_items_name,lo.lab_order_result
+                FROM vn_stat v
+                    left outer join patient p on p.hn = v.hn
+                    left outer join lab_head lh on lh.vn = v.vn
+                    left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                    left outer join lab_items li on li.lab_items_code = lo.lab_items_code
+                WHERE 
+                    v.vstdate between $datestart and $dateend and
+                    v.pdx in ('Z340','Z349')   and (lo.lab_items_code = '2098' and lo.lab_order_result < 33)
+                GROUP BY v.vn ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report2', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+
+}
