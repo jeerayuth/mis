@@ -34,9 +34,19 @@ if ($lab_item == 3248) {
     if ($uclinic != "") {
         // รายงานจำนวนคนไข้คลินิคเบาหวานที่ไม่มีความดันโลหิตร่วมได้รับการตรวจแลป gfr
         if ($uclinic == 1) {
-            $get_type = "not";
+            $get_type = " AND c.hn  not   in (
+                    select hn from clinicmember cl 
+                    left outer join clinic_member_status cs on cs.clinic_member_status_id = cl.clinic_member_status_id
+                    left outer join provis_typedis pd on pd.code = cs.provis_typedis
+                    where cl.clinic=(select sys_value from sys_var where sys_name='ht_clinic_code' )) ";
         } else if ($uclinic == 2) {
             //รายงานจำนวนคนไข้คลินิคเบาหวานที่มีความดันร่วมได้รับการตรวจแลป gfr
+            $get_type = " AND c.hn    in (
+                    select hn from clinicmember cl 
+                    left outer join clinic_member_status cs on cs.clinic_member_status_id = cl.clinic_member_status_id
+                    left outer join provis_typedis pd on pd.code = cs.provis_typedis
+                    where cl.clinic=(select sys_value from sys_var where sys_name='ht_clinic_code' )) ";
+        } else if ($uclinic == 3) {
             $get_type = "";
         }
     }
@@ -71,16 +81,10 @@ WHERE lo.lab_items_code in ('3248') AND lo.confirm = 'Y'
 
 AND o.vstdate BETWEEN   $datestart and $dateend
 
-/* AND c.clinic =  (select sys_value from sys_var where sys_name='dm_clinic_code') */
 AND c.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
 
-AND c.hn  $get_type   in (
-                    select hn from clinicmember cl 
-                    left outer join clinic_member_status cs on cs.clinic_member_status_id = cl.clinic_member_status_id
-                    left outer join provis_typedis pd on pd.code = cs.provis_typedis
-                    where cl.clinic=(select sys_value from sys_var where sys_name='ht_clinic_code' )) 
+$get_type
     
-
 AND lo.lab_order_result!=''
 AND lo.lab_order_result!='-' 
 AND lo.lab_order_result!='.'

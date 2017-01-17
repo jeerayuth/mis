@@ -98,7 +98,8 @@ class AncController extends \yii\web\Controller {
                     left outer join person_anc_classifying p on p.person_anc_id = a.person_anc_id
                     left outer join person ps on ps.person_id = a.person_id
                 WHERE p.update_datetime  between  $datestart and $dateend and p.check_value = 'Y'       
-                GROUP BY a.person_id ";
+                GROUP BY a.person_id
+                ORDER BY p.update_datetime ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -120,6 +121,44 @@ class AncController extends \yii\web\Controller {
     }
     
     
+    public function actionReport4($datestart, $dateend, $details) {
+
+        $report_name = "รายงานจำนวนครั้งหญิงตั้งครรภ์ ได้รับการตรวจแลป hematocrit,vdrl,anti-hiv,HBsAg,OF,DCIP";
+
+        $sql = "SELECT
+                    v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    v.age_y,v.pdx,
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,
+                    li.lab_items_name,lo.lab_order_result
+                FROM vn_stat v
+                    left outer join patient p on p.hn = v.hn
+                    left outer join lab_head lh on lh.vn = v.vn
+                    left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                    left outer join lab_items li on li.lab_items_code = lo.lab_items_code
+                WHERE 
+                    v.vstdate between $datestart and $dateend and
+                    v.pdx in ('Z340','Z349')   and 
+                    lo.lab_items_code  in ('2098','2146','2178','2174','2126','2128')
+                ORDER BY v.vn ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report4', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
     
     
     

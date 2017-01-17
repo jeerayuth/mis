@@ -530,6 +530,7 @@ order by v.aid, v.moopart, v.hn, cc.screen_date
         $logics = "";
         $get_labs = "";
         $get_drugs = "";
+        $get_type = "";
 
         if ($drug_items != "") {
             if ($drug_items == 1) {
@@ -569,7 +570,7 @@ order by v.aid, v.moopart, v.hn, cc.screen_date
                 $get_type = "  AND c.hn   in (
                     select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";
             } else if ($uclinic == 3) {
-                $get_type = '';
+                $get_type = "";
                 $report_name = 'รายงานจำนวนคนไข้ในคลินิคเบาหวานทั้งหมดได้รับการตรวจแลป';
             }
 

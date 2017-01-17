@@ -459,8 +459,8 @@ class PcuController extends \yii\web\Controller {
                 timestampdiff(year,birthdate,curdate()) as age_y
             FROM person
             WHERE (  pttype not in(SELECT pttype FROM pttype) or 
-                    (pttype=' ' and pttype is null)) and 
-                    (death='N' or death is NULL or death=' ')" ;
+                    (pttype='' and pttype is null)) and 
+                    (death='N' or death is NULL or death='')" ;
    
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -492,7 +492,7 @@ class PcuController extends \yii\web\Controller {
                 concat(DAY(birthdate),'/',MONTH(birthdate),'/',(YEAR(birthdate)+543)) as birthdate,
                 timestampdiff(year,birthdate,curdate()) as age_y
             FROM person
-            WHERE (pttype=' ' or pttype is null) " ;
+            WHERE (pttype='' or pttype is null) " ;
    
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
