@@ -3,20 +3,20 @@
 namespace frontend\controllers;
 
 class PcuController extends \yii\web\Controller {
- 
-    public function actionReport1($details, $age_id) {
-        
-         if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
-             if ($age_id == 1) {
-                $age = '30 and 60';
-                $report_name = 'รายงานสรุปหญิงอายุ 30-60 ปี ในเขตรับผิดชอบ';  
-             } else if($age_id == 2) {
-                $age = '30 and 70';
-                $report_name = 'รายงานสรุปหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ';   
-             } 
-         }
 
-         
+    public function actionReport1($details, $age_id) {
+
+        if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
+            if ($age_id == 1) {
+                $age = '30 and 60';
+                $report_name = 'รายงานสรุปหญิงอายุ 30-60 ปี ในเขตรับผิดชอบ';
+            } else if ($age_id == 2) {
+                $age = '30 and 70';
+                $report_name = 'รายงานสรุปหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ';
+            }
+        }
+
+
         $sql = "SELECT
                     v.village_id,v.village_moo, v.village_name ,                 
                     (
@@ -26,10 +26,10 @@ class PcuController extends \yii\web\Controller {
                     ) as age_min_sex_female
                 FROM village v
                 WHERE v.village_id != 1 ";
-        
- 
-        
-        
+
+
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -47,26 +47,23 @@ class PcuController extends \yii\web\Controller {
                     'report_name' => $report_name,
                     'details' => $details,
                     'age_id' => $age_id,
-                  
         ]);
-        
-         
     }
-    
-    public function actionReport2($village_id,$age_id) {
 
-        
-         if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
-             if ($age_id == 1) {
+    public function actionReport2($village_id, $age_id) {
+
+
+        if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
+            if ($age_id == 1) {
                 $age = '30 and 60';
-                $report_name = 'รายงานสรุปหญิงอายุ 30-60 ปี ในเขตรับผิดชอบ';  
-             } else if($age_id == 2) {
+                $report_name = 'รายงานสรุปหญิงอายุ 30-60 ปี ในเขตรับผิดชอบ';
+            } else if ($age_id == 2) {
                 $age = '30 and 70';
-                $report_name = 'รายงานสรุปหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ';   
-             } 
-         }
-         
-       // $report_name = "รายงานรายชื่อหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ";
+                $report_name = 'รายงานสรุปหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ';
+            }
+        }
+
+        // $report_name = "รายงานรายชื่อหญิงอายุ 30-70 ปี ในเขตรับผิดชอบ";
         $sql = "select
 
                 concat(p.pname,p.fname,'  ',p.lname) as pt_name ,v.village_moo,v.village_name,h.address,t.full_name,
@@ -81,8 +78,8 @@ class PcuController extends \yii\web\Controller {
 
                 where p.sex = '2'  and  timestampdiff(year,p.birthdate,curdate()) between  $age  and p.village_id = $village_id
                 order by timestampdiff(year,p.birthdate,curdate()) ";
-    
-        
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -99,11 +96,10 @@ class PcuController extends \yii\web\Controller {
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'village_id' => $village_id,
-                    
-        ]); 
+        ]);
     }
 
-      public function actionReport3($details) {
+    public function actionReport3($details) {
 
         $report_name = "รายงานสรุปประชากรอายุ >=35 ปี ในเขตรับผิดชอบ";
         $sql = "SELECT
@@ -113,13 +109,13 @@ class PcuController extends \yii\web\Controller {
                     ) as age_min_35
                 FROM village v
                 WHERE v.village_id != 1 ";
-     
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-  
+
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
@@ -132,11 +128,10 @@ class PcuController extends \yii\web\Controller {
                     'details' => $details,
         ]);
     }
-    
-    
+
     public function actionReport4($village_id) {
 
-        
+
         $report_name = "รายงานสรุปประชากรอายุ >=35 ปี ในเขตรับผิดชอบ";
         $sql = "select
 
@@ -154,10 +149,10 @@ class PcuController extends \yii\web\Controller {
                 order by timestampdiff(year,p.birthdate,curdate())
 
 ";
-        
-        
-      
-        
+
+
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -174,14 +169,12 @@ class PcuController extends \yii\web\Controller {
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'village_id' => $village_id,
-                    
-        ]); 
+        ]);
     }
-    
-    
+
     public function actionReport5($details) {
 
-        
+
         $report_name = "รายงานตรวจสอบ => ผู้ป่วยที่อยู่ใน เวชระเบียน Patient แต่ไม่มีในบัญชี 1 Person";
         $sql = "SELECT 
                     cid,hn,concat(pname,fname,'  ',lname) as pt_name,type_area,
@@ -197,10 +190,10 @@ class PcuController extends \yii\web\Controller {
 
                 ORDER BY
                         patient.chwpart, patient.amppart, patient.tmbpart, patient.moopart ";
-        
-        
-      
-        
+
+
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -212,19 +205,17 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report5', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
+
     public function actionReport6($details) {
-     
+
         $report_name = "รายงานตรวจสอบ => ในบัญชี1 Type(1,2) แต่ในเวชระเบียนลงที่อยู่นอกเขต";
         $sql = "SELECT 
                     p.cid,p.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,p.type_area,
@@ -237,7 +228,7 @@ class PcuController extends \yii\web\Controller {
                     (p.death<>'Y' or p.death=' ' or p.death is NULL)
                     and CONCAT(p.chwpart,p.amppart,p.tmbpart,LPAD(moopart,2,0)) not in 
                     (SELECT village_code FROM village)";
-   
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -249,20 +240,18 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report6', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-      public function actionReport7($details) {
 
-        
+    public function actionReport7($details) {
+
+
         $report_name = "รายงานตรวจสอบ => ผู้ป่วย TypeAreaในบัญชี 1 เป็นค่าว่าง";
         $sql = "SELECT
             cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id
@@ -270,7 +259,7 @@ class PcuController extends \yii\web\Controller {
         WHERE 
             house_regist_type_id is null  
             ";
-   
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -282,20 +271,18 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report7', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
+
     public function actionReport8($details) {
 
-        
+
         $report_name = "รายงานตรวจสอบ => สถานะในครอบครัว 1 = เจ้าบ้าน  , 2 = ผู้อาศัย ในบัญชี 1 ว่าง";
         $sql = "SELECT
             cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id
@@ -303,7 +290,7 @@ class PcuController extends \yii\web\Controller {
         WHERE 
             person.person_house_position_id is null or 
             person.person_house_position_id not in(1,2) ";
-   
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -315,19 +302,16 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report8', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-    
-     public function actionReport9($details) {
+
+    public function actionReport9($details) {
 
         $report_name = "รายงานตรวจสอบ => การศึกษาว่าง ในบัญชี 1 เป็นค่าว่าง";
         $sql = "SELECT
@@ -335,7 +319,7 @@ class PcuController extends \yii\web\Controller {
             FROM person
                 WHERE (education=' '  or education is NULL) or 
                 education not in(SELECT education FROM education) ";
-   
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -347,18 +331,16 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report9', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-     public function actionReport10($details) {
+
+    public function actionReport10($details) {
 
         $report_name = "รายงานตรวจสอบ =>การศึกษา อายุ 6-12 ปี ไม่ใช่ชั้นประถม ในบัญชี 1 มีผลกับ HDC";
         $sql = "SELECT
@@ -366,7 +348,7 @@ class PcuController extends \yii\web\Controller {
                 FROM person
                 WHERE age_y BETWEEN 6 and 12 and education != 
                     (SELECT education FROM education WHERE provis_code=2) ";
-   
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -378,17 +360,15 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report10', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-   
-   
+
     public function actionReport11($details) {
 
         $report_name = "รายงานตรวจสอบ => อาชีพว่าง ในบัญชี 1 เป็นค่าว่าง";
@@ -397,7 +377,7 @@ class PcuController extends \yii\web\Controller {
         FROM person
         WHERE (occupation=' ' or occupation is null) or
                 occupation not in(SELECT occupation FROM occupation) ";
-   
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -409,25 +389,23 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report11', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-     public function actionReport12($details) {
+
+    public function actionReport12($details) {
 
         $report_name = "รายงานตรวจสอบ => คำนำหน้าชื่อว่าง ในบัญชี 1 เป็นค่าว่าง";
         $sql = "SELECT 
                     cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id 
                 FROM person 
-                WHERE (pname=' '  or pname is null) " ;
-   
+                WHERE (pname=' '  or pname is null) ";
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -439,18 +417,16 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report12', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-      public function actionReport13($details) {
+
+    public function actionReport13($details) {
 
         $report_name = "รายงานตรวจสอบ => สิทธิการรักษา ไม่มีใน pttype ในบัญชี 1 ทำให้ส่งออกไม่ได้";
         $sql = "SELECT
@@ -460,8 +436,8 @@ class PcuController extends \yii\web\Controller {
             FROM person
             WHERE (  pttype not in(SELECT pttype FROM pttype) or 
                     (pttype='' and pttype is null)) and 
-                    (death='N' or death is NULL or death='')" ;
-   
+                    (death='N' or death is NULL or death='')";
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -473,18 +449,16 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report13', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-      public function actionReport14($details) {
+
+    public function actionReport14($details) {
 
         $report_name = "รายงานตรวจสอบ => สิทธิการรักษา ในบัญชี 1 ว่าง";
         $sql = "SELECT
@@ -492,8 +466,8 @@ class PcuController extends \yii\web\Controller {
                 concat(DAY(birthdate),'/',MONTH(birthdate),'/',(YEAR(birthdate)+543)) as birthdate,
                 timestampdiff(year,birthdate,curdate()) as age_y
             FROM person
-            WHERE (pttype='' or pttype is null) " ;
-   
+            WHERE (pttype='' or pttype is null) ";
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -505,26 +479,23 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report14', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-    
-     public function actionReport15($details) {
+
+    public function actionReport15($details) {
 
         $report_name = "รายงานตรวจสอบ => มีสัญชาติไทย แต่เลขที่บัตรประชาชน ขึ้นต้นด้วย 0 Type 1 , 3";
         $sql = "SELECT
                 cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id
             FROM person
-            WHERE nationality='99' and cid LIKE '0%' AND house_regist_type_id in(1,3) and (death='N' or death is NULL or death=' ') " ;
-   
+            WHERE nationality='99' and cid LIKE '0%' AND house_regist_type_id in(1,3) and (death='N' or death is NULL or death=' ') ";
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -536,25 +507,23 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report15', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-     public function actionReport16($details) {
+
+    public function actionReport16($details) {
 
         $report_name = "รายงานตรวจสอบ => คนที่มีบ้านเลขที่บ้าน แต่ไม่มีหลังคาเรือนในระบบ";
         $sql = "SELECT
                 cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id
             FROM person
-            WHERE house_id not in(SELECT house_id FROM house) " ;
-   
+            WHERE house_id not in(SELECT house_id FROM house) ";
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -566,19 +535,16 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report16', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-    
-     public function actionReport17($details) {
+
+    public function actionReport17($details) {
 
         $report_name = "รายงานตรวจสอบ => คนต่างด้าว ไม่ลงประเภทคนต่างด้าวในบัญชี1";
         $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id,
@@ -588,7 +554,7 @@ class PcuController extends \yii\web\Controller {
                     LEFT JOIN nationality n on n.nationality = p.nationality
                     WHERE p.nationality<>'99' and (p.person_discharge_id is NULL or  p.person_discharge_id=' ' or p.person_discharge_id='9')
 
-                    AND (p.person_labor_type_id=' ' or p.person_labor_type_id is null or p.person_labor_type_id not in(SELECT person_labor_type_id FROM person_labor_type)) " ;
+                    AND (p.person_labor_type_id=' ' or p.person_labor_type_id is null or p.person_labor_type_id not in(SELECT person_labor_type_id FROM person_labor_type)) ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -601,24 +567,22 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report17', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
+
     public function actionReport18($details) {
 
         $report_name = "รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังไม่จำหน่าย";
         $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id 
                 FROM person 
                 WHERE death='Y' and (discharge_date is NULL or discharge_date=' ')
-                  " ;
+                  ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -631,25 +595,22 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report18', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-    
-     public function actionReport19($details) {
+
+    public function actionReport19($details) {
 
         $report_name = "รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังมีชีวิตอยู่ ";
         $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id 
                 FROM person 
                 WHERE death='Y' and person_discharge_id<>'1' ";
-                  
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -662,18 +623,16 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report19', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-     public function actionReport20($datestart, $dateend,$details) {
+
+    public function actionReport20($datestart, $dateend, $details) {
 
         $report_name = "รายงานอาการคล้ายไข้หวัดใหญ่ (ILI)";
         $sql = "SELECT
@@ -798,7 +757,7 @@ class PcuController extends \yii\web\Controller {
         GROUP BY v.vstdate
 
         ORDER BY v.vstdate ";
-                  
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -811,18 +770,16 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report20', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-  
-     public function actionReport21($details) {
+
+    public function actionReport21($details) {
 
         $report_name = "รายงานตรวจสอบ => สถานะสมณะ แต่คำนำหน้าไม่ใช่ สมณะ ";
         $sql = "SELECT
@@ -837,7 +794,7 @@ class PcuController extends \yii\web\Controller {
             
             WHERE  p.marrystatus = 6 and (death='N' or death is NULL or death=' ')
             and n.provis_code not between 800 and 959 ";
-                  
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -850,18 +807,15 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report21', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-    
+
     public function actionReport22($details) {
 
         $report_name = "รายงานตรวจสอบ => คำนำหน้าชื่อเป็นพระ แต่สถานะไม่ใช่สมณะ ";
@@ -877,7 +831,7 @@ class PcuController extends \yii\web\Controller {
 
             WHERE  p.marrystatus != 6 and (death='N' or death is NULL or death=' ') 
             and n.provis_code  between 800 and 959 ";
-                  
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -890,17 +844,15 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report22', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
+
     public function actionReport23($details) {
 
         $report_name = "รายงานตรวจสอบ => ตรวจสอบสถานะเป็นพระ แต่ อายุ ไม่ถึง 20 ปี";
@@ -930,20 +882,321 @@ class PcuController extends \yii\web\Controller {
             'pagination' => FALSE,
         ]);
 
-        
+
         return $this->render('report23', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                            
-        ]); 
+        ]);
     }
-    
-    
-   
-   
-   
-   
+
+    public function actionReport24($details, $begin_year) {
+
+        $report_name = "รายงานสรุปผลการคัดกรองโรคเรื้อรังในชุมชนรับผิดชอบ";
+        $sql = "SELECT
+                        '1' AS options,
+                        'DM กลุ่มเสี่ยงสูง' AS title,
+                        COUNT(p1.person_dm_screen_status_id) AS count_hn
+
+                  FROM person_dmht_screen_summary p1
+                  WHERE
+                            p1.bdg_year = $begin_year
+                        AND p1.status_active='Y'
+                        AND p1.person_dm_screen_status_id = 2
+
+                  UNION
+
+                  SELECT
+                        '2' AS options,
+                        'DM กลุ่มสงสัยรายใหม่' AS title,
+                        COUNT(p1.person_dm_screen_status_id) AS count_hn
+
+                  FROM person_dmht_screen_summary p1
+                  WHERE
+                            p1.bdg_year = $begin_year
+                        AND p1.status_active='Y'
+                        AND p1.person_dm_screen_status_id = 3
+
+
+                  UNION
+
+                  SELECT
+                        '3' AS options,
+                        'HT กลุ่มเสี่ยงสูง' AS title,
+                        COUNT(p1.person_ht_screen_status_id) AS count_hn
+
+                  FROM person_dmht_screen_summary p1
+                  WHERE
+                            p1.bdg_year = $begin_year
+                        AND p1.status_active='Y'
+                        AND p1.person_ht_screen_status_id = 3
+
+
+                  UNION
+
+                  SELECT
+                        '4' AS options,
+                        'HT กลุ่มสงสัยรายใหม่' AS title,
+                        COUNT(p1.person_ht_screen_status_id) AS count_hn
+
+                  FROM person_dmht_screen_summary p1
+                  WHERE
+                            p1.bdg_year = $begin_year
+                        AND p1.status_active='Y'
+                        AND p1.person_ht_screen_status_id = 4
+
+                  UNION
+
+                  SELECT
+                        '5' AS options,
+                        'DM กลุ่มเสี่ยงสูงและ HT กลุ่มเสี่ยงสูง' AS title,
+                        COUNT(p1.person_dm_screen_status_id) AS count_hn
+
+                  FROM person_dmht_screen_summary p1
+                  WHERE
+                            p1.bdg_year = $begin_year
+                        AND p1.status_active='Y'
+                        AND p1.person_dm_screen_status_id = 2
+                        AND p1.person_ht_screen_status_id = 3
+
+
+                  UNION
+
+
+                  SELECT
+                        '6' AS options,
+                        'Stroke กลุ่มเสี่ยง(หญิง>=55ปี,ชาย>=45ปี)' AS title,
+                        COUNT(p1.person_stroke_screen_status_id) AS count_hn
+
+                  FROM person_dmht_screen_summary p1
+                       LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
+                  WHERE
+                            p1.bdg_year = $begin_year
+                        AND p1.status_active='Y'
+                        AND p1.person_stroke_screen_status_id = 2
+                        AND
+                           (
+                               (p2.sex = 1 and p2.age_y >= 45) OR
+                               (p2.sex = 2 and p2.age_y >= 55)
+                           )
+
+
+                  UNION
+
+                  SELECT
+                        '7' AS options,
+                        'Obesity กลุ่มเสี่ยง' AS title,
+                        COUNT(p1.person_obesity_screen_status_id) AS count_hn
+
+                  FROM person_dmht_screen_summary p1
+                  WHERE
+                            p1.bdg_year = $begin_year
+                        AND p1.status_active='Y'
+                        AND p1.person_obesity_screen_status_id = 2 ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report24', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                    'begin_year' => $begin_year,
+        ]);
+    }
+
+    public function actionReport25($title, $options, $begin_year) {
+
+        if ($options != '') {
+            switch ($options) {
+                case 1 :
+                    $sql = "SELECT
+                                p1.cid,concat(p2.pname,p2.fname,'  ',p2.lname) as person_name,
+                                p2.age_y,h1.address,v.village_moo,v.village_name,s.name as sex,
+                                p1.person_dm_screen_status_id,p1.bdg_year,
+                                ph.bmi
+                            FROM person_dmht_screen_summary p1
+                            LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
+                            LEFT OUTER JOIN house h1 on h1.house_id = p2.house_id
+                            LEFT OUTER JOIN village v on v.village_id = h1.village_id
+                            LEFT OUTER JOIN sex s on s.code = p2.sex
+                            LEFT OUTER JOIN person_dmht_risk_screen_head ph ON ph.person_dmht_screen_summary_id = p1.person_dmht_screen_summary_id
+                            WHERE
+                                 p1.bdg_year = $begin_year
+                                 AND p1.status_active='Y'
+                                 AND p1.person_dm_screen_status_id = 2
+                            ORDER BY 
+                                 v.village_moo ,p2.sex ";
+                            
+
+                    break;
+
+                case 2 :
+                    $sql = "SELECT
+                                p1.cid,concat(p2.pname,p2.fname,'  ',p2.lname) as person_name,
+                                p2.age_y,h1.address,v.village_moo,v.village_name,s.name as sex,
+                                p1.person_dm_screen_status_id,p1.bdg_year,
+                                ph.bmi
+                            FROM person_dmht_screen_summary p1
+                            LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
+                            LEFT OUTER JOIN house h1 on h1.house_id = p2.house_id
+                            LEFT OUTER JOIN village v on v.village_id = h1.village_id
+                            LEFT OUTER JOIN sex s on s.code = p2.sex
+                            LEFT OUTER JOIN person_dmht_risk_screen_head ph ON ph.person_dmht_screen_summary_id = p1.person_dmht_screen_summary_id
+                            WHERE
+                                 p1.bdg_year = $begin_year
+                                 AND p1.status_active='Y'
+                                 AND p1.person_dm_screen_status_id = 3
+                            ORDER BY 
+                                 v.village_moo ,p2.sex ";
+
+                    break;
+
+                case 3 :
+                    $sql = "SELECT
+                                p1.cid,concat(p2.pname,p2.fname,'  ',p2.lname) as person_name,
+                                p2.age_y,h1.address,v.village_moo,v.village_name,s.name as sex,
+                                p1.person_ht_screen_status_id,p1.bdg_year,
+                                ph.bmi
+                            FROM person_dmht_screen_summary p1
+                            LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
+                            LEFT OUTER JOIN house h1 on h1.house_id = p2.house_id
+                            LEFT OUTER JOIN village v on v.village_id = h1.village_id
+                            LEFT OUTER JOIN sex s on s.code = p2.sex
+                            LEFT OUTER JOIN person_dmht_risk_screen_head ph ON ph.person_dmht_screen_summary_id = p1.person_dmht_screen_summary_id
+                            WHERE
+                                 p1.bdg_year = $begin_year
+                                 AND p1.status_active='Y'
+                                 AND p1.person_ht_screen_status_id = 3
+                            ORDER BY 
+                                 v.village_moo ,p2.sex ";
+
+                    break;
+
+                case 4 :
+                    $sql = "SELECT
+                                p1.cid,concat(p2.pname,p2.fname,'  ',p2.lname) as person_name,
+                                p2.age_y,h1.address,v.village_moo,v.village_name,s.name as sex,
+                                p1.person_ht_screen_status_id,p1.bdg_year,
+                                ph.bmi
+                            FROM person_dmht_screen_summary p1
+                            LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
+                            LEFT OUTER JOIN house h1 on h1.house_id = p2.house_id
+                            LEFT OUTER JOIN village v on v.village_id = h1.village_id
+                            LEFT OUTER JOIN sex s on s.code = p2.sex
+                            LEFT OUTER JOIN person_dmht_risk_screen_head ph ON ph.person_dmht_screen_summary_id = p1.person_dmht_screen_summary_id
+                            WHERE
+                                 p1.bdg_year = $begin_year
+                                 AND p1.status_active='Y'
+                                 AND p1.person_ht_screen_status_id = 4
+                            ORDER BY 
+                                 v.village_moo ,p2.sex ";
+
+                    break;
+
+                case 5 :
+                    $sql = "SELECT
+                                p1.cid,concat(p2.pname,p2.fname,'  ',p2.lname) as person_name,
+                                p2.age_y,h1.address,v.village_moo,v.village_name,s.name as sex,
+                                p1.person_ht_screen_status_id,p1.bdg_year,
+                                ph.bmi
+                            FROM person_dmht_screen_summary p1
+                            LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
+                            LEFT OUTER JOIN house h1 on h1.house_id = p2.house_id
+                            LEFT OUTER JOIN village v on v.village_id = h1.village_id
+                            LEFT OUTER JOIN sex s on s.code = p2.sex
+                            LEFT OUTER JOIN person_dmht_risk_screen_head ph ON ph.person_dmht_screen_summary_id = p1.person_dmht_screen_summary_id
+                            WHERE
+                                 p1.bdg_year = $begin_year
+                                 AND p1.status_active='Y'
+                                 AND p1.person_dm_screen_status_id = 2
+                                 AND p1.person_ht_screen_status_id = 3
+                            ORDER BY 
+                                 v.village_moo ,p2.sex";
+
+                    break;
+
+                case 6 :
+                    $sql = "SELECT
+                                p1.cid,concat(p2.pname,p2.fname,'  ',p2.lname) as person_name,
+                                p2.age_y,h1.address,v.village_moo,v.village_name,s.name as sex,
+                                p1.person_ht_screen_status_id,p1.bdg_year,
+                                ph.bmi
+                            FROM person_dmht_screen_summary p1
+                            LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
+                            LEFT OUTER JOIN house h1 on h1.house_id = p2.house_id
+                            LEFT OUTER JOIN village v on v.village_id = h1.village_id
+                            LEFT OUTER JOIN sex s on s.code = p2.sex
+                            LEFT OUTER JOIN person_dmht_risk_screen_head ph ON ph.person_dmht_screen_summary_id = p1.person_dmht_screen_summary_id
+                            WHERE
+                                 p1.bdg_year = $begin_year
+                                 AND p1.status_active='Y'
+                                 AND p1.person_stroke_screen_status_id = 2
+                                 AND
+                                    (
+                                        (p2.sex = 1 and p2.age_y >= 45) OR
+                                        (p2.sex = 2 and p2.age_y >= 55)
+                                    )
+
+                            ORDER BY 
+                                 v.village_moo ,p2.sex ";
+
+                    break;
+
+                case 7 :
+                    $sql = "SELECT
+                                p1.cid,concat(p2.pname,p2.fname,'  ',p2.lname) as person_name,
+                                p2.age_y,h1.address,v.village_moo,v.village_name,s.name as sex,
+                                p1.person_ht_screen_status_id,p1.bdg_year,
+                                ph.bmi
+                            FROM person_dmht_screen_summary p1
+                            LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
+                            LEFT OUTER JOIN house h1 on h1.house_id = p2.house_id
+                            LEFT OUTER JOIN village v on v.village_id = h1.village_id
+                            LEFT OUTER JOIN sex s on s.code = p2.sex
+                            LEFT OUTER JOIN person_dmht_risk_screen_head ph ON ph.person_dmht_screen_summary_id = p1.person_dmht_screen_summary_id
+                            WHERE
+                                 p1.bdg_year = $begin_year
+                                 AND p1.status_active='Y'
+                                 AND p1.person_obesity_screen_status_id = 2
+                            ORDER BY 
+                                 v.village_moo ,p2.sex ";
+
+                    break;
+                   
+               
+            }
+            
+             try {
+                    $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+                } catch (\yii\db\Exception $e) {
+                    throw new \yii\web\ConflictHttpException('sql error');
+                }
+
+                $dataProvider = new \yii\data\ArrayDataProvider([
+                    'allModels' => $rawData,
+                    'pagination' => FALSE,
+                ]);
+
+                return $this->render('report25', [
+                            'dataProvider' => $dataProvider,
+                            'rawData' => $rawData,
+                            'report_name' => $title,
+                            'begin_year' => $begin_year,
+                ]);
+            
+
+        }
+    }
 
 }

@@ -226,8 +226,7 @@ GROUP BY th.addressid
             }
             
             
-            
-
+           
             $sql = "         
 SELECT
 pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
