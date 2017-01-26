@@ -1035,6 +1035,7 @@ class PcuController extends \yii\web\Controller {
                                  p1.bdg_year = $begin_year
                                  AND p1.status_active='Y'
                                  AND p1.person_dm_screen_status_id = 2
+                            GROUP BY p2.cid     
                             ORDER BY 
                                  v.village_moo ,p2.sex ";
                             
@@ -1057,6 +1058,7 @@ class PcuController extends \yii\web\Controller {
                                  p1.bdg_year = $begin_year
                                  AND p1.status_active='Y'
                                  AND p1.person_dm_screen_status_id = 3
+                            GROUP BY p2.cid      
                             ORDER BY 
                                  v.village_moo ,p2.sex ";
 
@@ -1078,6 +1080,7 @@ class PcuController extends \yii\web\Controller {
                                  p1.bdg_year = $begin_year
                                  AND p1.status_active='Y'
                                  AND p1.person_ht_screen_status_id = 3
+                            GROUP BY p2.cid      
                             ORDER BY 
                                  v.village_moo ,p2.sex ";
 
@@ -1099,6 +1102,7 @@ class PcuController extends \yii\web\Controller {
                                  p1.bdg_year = $begin_year
                                  AND p1.status_active='Y'
                                  AND p1.person_ht_screen_status_id = 4
+                            GROUP BY p2.cid      
                             ORDER BY 
                                  v.village_moo ,p2.sex ";
 
@@ -1121,6 +1125,7 @@ class PcuController extends \yii\web\Controller {
                                  AND p1.status_active='Y'
                                  AND p1.person_dm_screen_status_id = 2
                                  AND p1.person_ht_screen_status_id = 3
+                            GROUP BY p2.cid      
                             ORDER BY 
                                  v.village_moo ,p2.sex";
 
@@ -1147,7 +1152,7 @@ class PcuController extends \yii\web\Controller {
                                         (p2.sex = 1 and p2.age_y >= 45) OR
                                         (p2.sex = 2 and p2.age_y >= 55)
                                     )
-
+                            GROUP BY p2.cid
                             ORDER BY 
                                  v.village_moo ,p2.sex ";
 
@@ -1169,6 +1174,7 @@ class PcuController extends \yii\web\Controller {
                                  p1.bdg_year = $begin_year
                                  AND p1.status_active='Y'
                                  AND p1.person_obesity_screen_status_id = 2
+                            GROUP BY p2.cid      
                             ORDER BY 
                                  v.village_moo ,p2.sex ";
 

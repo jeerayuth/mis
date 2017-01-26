@@ -46,6 +46,8 @@ $this->title = 'MIS :: ระบบรายงานสารสนเทศ';
                         <div class="col-md-3 col-sm-3 col-xs-6 col-md-offset-3">
                             <select id="year" class="form-control">
                                 <option value="">กรุณาเลือกปีงบประมาณ</option>
+                                <option value="2555">2555</option>
+                                <option value="2556">2556</option>
                                 <option value="2557">2557</option>
                                 <option value="2558">2558</option>
                                 <option value="2559">2559</option>
