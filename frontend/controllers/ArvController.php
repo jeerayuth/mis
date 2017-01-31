@@ -33,6 +33,7 @@ class ArvController extends \yii\web\Controller {
               (v.dx4 = 'b24') or
               (v.dx5 = 'b24')
         )
+        AND o.icode NOT LIKE '3%'
 
         ORDER BY v.hn,v.vn,v.vstdate  ";
 

@@ -62,10 +62,7 @@ echo GridView::widget([
             'attribute' => 'drug_name',
             'header' => 'ชื่อยา'
         ],
-        [
-            'attribute' => 'non_drug_name',
-            'header' => 'เวชภัณฑ์และอื่นๆที่ไม่ใช่ยา'
-        ],
+      
         [
             'attribute' => 'qty',
             'header' => 'จำนวนสั่งใช้'
