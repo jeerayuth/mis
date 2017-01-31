@@ -53,7 +53,7 @@ $this->registerJs("
             enabled: false
         },
         title: {
-            text: '$report_name'
+            text: '$report_name' + '  ปีงบประมาณ ' + $begin_year
         },
         
          yAxis: {
@@ -98,7 +98,7 @@ $this->registerJs("
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
-        'heading' => $report_name,
+        'heading' => $report_name .' ปีงบประมาณ '. $begin_year,
         'before' => $details,
         'type' => 'primary',
         'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')

@@ -15,7 +15,7 @@ $this->title = $report_name;
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
-        'heading' => $report_name,
+        'heading' => $report_name .' ปีงบประมาณ '. $begin_year,
         'before' => '',
         'type' => 'primary',
         'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
