@@ -454,10 +454,46 @@ ORDER BY v.vstdate ";
                     'type_id' => $type_id,
  
         ]);
+                
+    }
+    
+    
+    
+    public function actionReport11($pttype,$datestart, $dateend,$details) {
+    
+            $report_name = "รายงานผู้มารับบริการ(OPD) แยกตามสิทธิ์การรักษา";
+             $sql = "SELECT
+                        concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate_thai,
+                        v.vn,v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        se.name as sex_name,v.age_y,v.pttype,pp.name as pttype_name ,
+                        v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5
+                  FROM vn_stat  v
+                  LEFT OUTER JOIN patient pt ON pt.hn = v.hn
+                  LEFT OUTER JOIN pttype pp ON pp.pttype = v.pttype
+                  LEFT OUTER JOIN sex se ON se.code = v.sex
+
+                  WHERE v.vstdate BETWEEN $datestart AND $dateend AND v.pttype=$pttype ";
+                
         
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
         
-      
+
         
+        return $this->render('report11', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
     }
 
 
