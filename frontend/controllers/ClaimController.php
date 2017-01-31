@@ -836,6 +836,43 @@ class ClaimController extends \yii\web\Controller {
         ]);
      }
      
+     public function actionReport19($datestart, $dateend, $details) {
+
+        $report_name = "รายงานผู้ป่วย OPD ในเขตตำบลละแม (หมู่1-7,9,10,12,14) มีรหัสวินิจฉัยหลัก เป็น z515";
+        $sql = " 
+                SELECT
+                       concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate_thai,
+                       v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                       v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
+                       v.moopart,th.full_name,v.income
+                FROM vn_stat v
+                LEFT OUTER JOIN patient pt on pt.hn = v.hn
+                LEFT OUTER JOIN thaiaddress th on th.addressid = v.aid
+                WHERE
+                      v.vstdate BETWEEN $datestart AND $dateend AND v.pdx = 'z515' AND
+                      v.aid = '860501' AND v.moopart IN (1,2,3,4,5,6,7,9,10,12,14)
+                ORDER BY v.aid,v.moopart  ";
+                               
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report19', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+     }
+     
+     
      
      
 }
