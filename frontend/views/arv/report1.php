@@ -62,6 +62,10 @@ echo GridView::widget([
             'attribute' => 'drug_name',
             'header' => 'ชื่อยา'
         ],
+        [
+            'attribute' => 'shortlist',
+            'header' => 'วิธีใช้ยา'
+        ],
       
         [
             'attribute' => 'qty',

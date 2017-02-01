@@ -14,11 +14,13 @@ class ArvController extends \yii\web\Controller {
                     concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                     v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
                     o.icode,concat(d.name,'(',d.units,')') as drug_name ,nd.name as non_drug_name,
-                    o.qty
+                    o.qty,
+                    du.shortlist
 
         FROM vn_stat v
         LEFT OUTER JOIN opitemrece o on o.vn = v.vn
         LEFT OUTER JOIN drugitems d on d.icode = o.icode
+        LEFT OUTER JOIN drugusage du on du.drugusage = o.drugusage
         LEFT OUTER JOIN nondrugitems nd on nd.icode = o.icode
         LEFT OUTER JOIN patient pt on pt.hn = v.hn
 
