@@ -40,6 +40,7 @@ class ReportController extends \yii\web\Controller {
         $point = null;
         $ctrl = null;
         $txt = null;
+        
 
 
         switch ($form_id) {

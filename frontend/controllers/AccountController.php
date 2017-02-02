@@ -2,11 +2,20 @@
 
 namespace frontend\controllers;
 
-class AccountController extends \yii\web\Controller {
-    /* รายงานมูลค่าการใช้ยาปฏิชีวนะ */
+use Yii;
+use frontend\components\CommonController;
 
+class AccountController extends CommonController {
+    /* รายงานมูลค่าการใช้ยาปฏิชีวนะ */
+    public $dep_controller = 'account';
+   
     public function actionReport1($datestart, $dateend, $details) {
 
+        print $this->SaveLog($this->dep_controller, 'report1', 'admin');
+        
+        
+        
+        
         $report_name = "รายงานผู้ป่วยค้างชำระ";
         $sql = "SELECT
             concat(DAY(r.arrear_date),'/',MONTH(r.arrear_date),'/',(YEAR(r.arrear_date)+543)) as arrear_date_thai,
