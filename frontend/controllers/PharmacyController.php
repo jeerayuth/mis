@@ -2,10 +2,15 @@
 
 namespace frontend\controllers;
 
-class PharmacyController extends \yii\web\Controller {
-    /* รายงานมูลค่าการใช้ยาปฏิชีวนะ */
+use Yii;
+use frontend\components\CommonController;
+
+class PharmacyController extends CommonController {
+    public $dep_controller = 'pharmacy';
 
     public function actionReport1($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานมูลค่าการใช้ยาปฏิชีวนะ";
         $sql = "SELECT
@@ -60,6 +65,9 @@ ORDER BY  sum_cost DESC ";
 
     
     public function actionReport2($diag_id, $datestart, $dateend, $details) {
+        
+                // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $diag1 = '';
         $diag2 = '';
@@ -150,10 +158,14 @@ ORDER BY  sum_cost DESC ";
     }
 
     public function actionReport3($diag_id, $datestart, $dateend, $details) {
-        
+                // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
     }
 
     public function actionReport4($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
+        
         $report_name = "รายงาน High  Alert Drug";
         $sql = "SELECT
                 o.vstdate,o.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
@@ -196,6 +208,9 @@ ORDER BY  sum_cost DESC ";
     }
 
     public function actionReport5($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
+        
         $report_name = "รายงานผลการใช้ยาปฏิชีวนะ ในผู้ป่วยติดเชื้อดื้อยา";
         $report_name2 = "กราฟสรุปจำนวนครั้งการสั่งใช้ใช้ยาปฏิชีวนะ ในผู้ป่วยติดเชื้อดื้อยา";
         $report_name3 = "กราฟสรุปจำนวนครั้งการ Admit ที่มีการสั่งใช้ยาปฏิชีวนะ ในผู้ป่วยติดเชื้อดื้อยา";
@@ -266,6 +281,8 @@ group by o.icode ";
     
     
     public function actionReport6($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
         $report_name = "รายงาน 100 อันดับมูลค่าการใช้ยาตามราคาทุน";
         $sql = "SELECT s.icode,s.name as drug_name,s.units as drug_unit,s.unitprice,s.unitcost,sum(o.qty) as count_use,
@@ -300,6 +317,8 @@ group by o.icode ";
     
     
      public function actionReport7($datestart, $dateend, $details) {
+                 // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
         $report_name = "รายงานจ่ายยานอกเวลา 16.01น. - 07.59น.(รวมวันหยุดราชการ)";
         $sql = "select
@@ -354,6 +373,8 @@ group by o.icode ";
     
     
     public function actionReport8($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่จ่ายยานอกเวลา 16.01น. - 07.59น.(รวมวันหยุดราชการ)";
         $sql = "SELECT
@@ -404,6 +425,8 @@ group by o.icode ";
     
     
     public function actionReport9($diag_id,$datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
         
         $diag1 = '';
         $diag2 = '';
@@ -548,6 +571,8 @@ group by o.icode ";
     
     
      public function actionReport10($datestart, $dateend, $details) {
+                 // save log
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่ได้รับยา Glibenclamide";
         $sql = "SELECT
@@ -595,6 +620,8 @@ group by o.icode ";
     
     
      public function actionReport11($datestart, $dateend, $details) {
+                 // save log
+        $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่ได้รับยา METFORMIN";
         $sql = "SELECT
@@ -644,6 +671,8 @@ group by o.icode ";
     
     
     public function actionReport12($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่ได้รับยา Diclofenac,Mefenamic,Ibuprofen";
         $sql = "SELECT
@@ -692,6 +721,8 @@ group by o.icode ";
     
     
      public function actionReport13($datestart, $dateend, $details) {
+                 // save log
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่ได้รับยา Diclofenac และ Mefenamic และIbuprofen ร่วมกัน";
         $sql = "SELECT
@@ -740,6 +771,8 @@ group by o.icode ";
     
     
     public function actionReport14($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
 
         $report_name = "รายงานจำนวนคนที่ได้รับยาในกลุ่มยาที่กำหนด";
         $sql = "SELECT  

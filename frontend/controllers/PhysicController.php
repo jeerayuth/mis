@@ -1,11 +1,15 @@
 <?php
 
 namespace frontend\controllers;
+use Yii;
+use frontend\components\CommonController;
 
-class PhysicController extends \yii\web\Controller {
-    /* รายงานมูลค่าการใช้ยาปฏิชีวนะ */
+class PhysicController extends CommonController {
+    public $dep_controller = 'physic';
 
     public function actionReport1($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานจำนวนหัตถการงานกายภาพบำบัด";
         $sql = "SELECT 
@@ -39,6 +43,8 @@ class PhysicController extends \yii\web\Controller {
 
      
     public function actionReport2($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "รายงานสรุปจำนวนการรับบริการงานกายภาพบำบัด";
         $sql = "SELECT

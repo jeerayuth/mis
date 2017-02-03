@@ -2,9 +2,17 @@
 
 namespace frontend\controllers;
 
-class PcuController extends \yii\web\Controller {
+use Yii;
+use frontend\components\CommonController;
+
+class PcuController extends CommonController {
+    
+    public $dep_controller = 'pcu';
 
     public function actionReport1($details, $age_id) {
+        
+         // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
             if ($age_id == 1) {
@@ -51,6 +59,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport2($village_id, $age_id) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
 
         if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
@@ -100,6 +110,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport3($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
         $report_name = "รายงานสรุปประชากรอายุ >=35 ปี ในเขตรับผิดชอบ";
         $sql = "SELECT
@@ -130,6 +142,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport4($village_id) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
 
         $report_name = "รายงานสรุปประชากรอายุ >=35 ปี ในเขตรับผิดชอบ";
@@ -173,6 +187,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport5($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
 
         $report_name = "รายงานตรวจสอบ => ผู้ป่วยที่อยู่ใน เวชระเบียน Patient แต่ไม่มีในบัญชี 1 Person";
@@ -215,6 +231,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport6($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => ในบัญชี1 Type(1,2) แต่ในเวชระเบียนลงที่อยู่นอกเขต";
         $sql = "SELECT 
@@ -250,6 +268,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport7($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
 
         $report_name = "รายงานตรวจสอบ => ผู้ป่วย TypeAreaในบัญชี 1 เป็นค่าว่าง";
@@ -281,6 +301,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport8($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
 
         $report_name = "รายงานตรวจสอบ => สถานะในครอบครัว 1 = เจ้าบ้าน  , 2 = ผู้อาศัย ในบัญชี 1 ว่าง";
@@ -312,6 +334,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport9($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => การศึกษาว่าง ในบัญชี 1 เป็นค่าว่าง";
         $sql = "SELECT
@@ -341,6 +365,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport10($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ =>การศึกษา อายุ 6-12 ปี ไม่ใช่ชั้นประถม ในบัญชี 1 มีผลกับ HDC";
         $sql = "SELECT
@@ -370,6 +396,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport11($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => อาชีพว่าง ในบัญชี 1 เป็นค่าว่าง";
         $sql = "SELECT
@@ -399,6 +427,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport12($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คำนำหน้าชื่อว่าง ในบัญชี 1 เป็นค่าว่าง";
         $sql = "SELECT 
@@ -427,6 +457,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport13($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => สิทธิการรักษา ไม่มีใน pttype ในบัญชี 1 ทำให้ส่งออกไม่ได้";
         $sql = "SELECT
@@ -459,6 +491,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport14($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => สิทธิการรักษา ในบัญชี 1 ว่าง";
         $sql = "SELECT
@@ -489,6 +523,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport15($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report15', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => มีสัญชาติไทย แต่เลขที่บัตรประชาชน ขึ้นต้นด้วย 0 Type 1 , 3";
         $sql = "SELECT
@@ -517,6 +553,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport16($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report16', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คนที่มีบ้านเลขที่บ้าน แต่ไม่มีหลังคาเรือนในระบบ";
         $sql = "SELECT
@@ -545,6 +583,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport17($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คนต่างด้าว ไม่ลงประเภทคนต่างด้าวในบัญชี1";
         $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id,
@@ -577,6 +617,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport18($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report18', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังไม่จำหน่าย";
         $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id 
@@ -605,6 +647,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport19($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report19', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังมีชีวิตอยู่ ";
         $sql = "SELECT cid,concat(pname,fname,' ',lname) as person_name, house_regist_type_id 
@@ -633,6 +677,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport20($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report20', $this->getSession());
 
         $report_name = "รายงานอาการคล้ายไข้หวัดใหญ่ (ILI)";
         $sql = "SELECT
@@ -780,6 +826,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport21($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => สถานะสมณะ แต่คำนำหน้าไม่ใช่ สมณะ ";
         $sql = "SELECT
@@ -817,6 +865,9 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport22($details) {
+        
+         // save log
+        $this->SaveLog($this->dep_controller, 'report22', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คำนำหน้าชื่อเป็นพระ แต่สถานะไม่ใช่สมณะ ";
         $sql = "SELECT
@@ -854,6 +905,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport23($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report23', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => ตรวจสอบสถานะเป็นพระ แต่ อายุ ไม่ถึง 20 ปี";
         $sql = "SELECT
@@ -892,6 +945,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport24($details, $begin_year) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report24', $this->getSession());
 
         $report_name = "รายงานสรุปผลการคัดกรองโรคเรื้อรังในชุมชนรับผิดชอบ";
         $sql = "SELECT
@@ -1016,6 +1071,8 @@ class PcuController extends \yii\web\Controller {
     }
 
     public function actionReport25($title, $options, $begin_year) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report25', $this->getSession());
 
         if ($options != '') {
             switch ($options) {

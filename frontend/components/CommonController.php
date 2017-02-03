@@ -22,5 +22,10 @@ class CommonController extends \yii\web\Controller {
         $model->save();
              
     }
+    
+    public function getSession() {
+        $session = Yii::$app->session;    
+        return $session->get('loginname');
+    }
 
 }

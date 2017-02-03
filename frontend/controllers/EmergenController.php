@@ -2,10 +2,17 @@
 
 namespace frontend\controllers;
 
-class EmergenController extends \yii\web\Controller {
-    /* รายงานสรุปทะเบียนหอบหืดแยกตามที่อยู่ */
+use Yii;
+use frontend\components\CommonController;
+
+class EmergenController extends CommonController {
+    public $dep_controller = 'emergen';
 
     public function actionReport1($datestart, $dateend, $details) {
+        
+            // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
+        
 
         $report_name = "รายงานจำนวนครั้งในการใช้ยา TRCS";
         $sql = "SELECT
@@ -41,6 +48,9 @@ ORDER BY total_usage DESC ";
     }
 
     public function actionReport2($datestart, $dateend, $details) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
+        
 
         $report_name = "รายงานจำนวนครั้งในการใช้ยา PCEC";
         $sql = "SELECT
@@ -79,6 +89,9 @@ ORDER BY total_usage DESC ";
     }
 
     public function actionReport3($datestart, $dateend, $details) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
+        
 
         $report_name = "รายงานจำนวนครั้งในการใช้ยา TETANUS";
         $sql = "SELECT
@@ -113,6 +126,9 @@ ORDER BY total_usage DESC ";
     }
 
     public function actionReport4($datestart, $dateend, $details) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
+        
 
         $report_name = "รายงานป้องกันและแก้ไขปัญหาอุบัติเหตุทางถนน";
         $sql = "select pt.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,er.vstdate
@@ -150,6 +166,9 @@ er.vn in
     }
 
     public function actionReport5($datestart, $dateend, $details) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
+        
 
         $report_name = "รายงานผู้ป่วยที่รับบริการที่ห้องฉุกเฉิน";
         $sql = "select 
@@ -282,6 +301,9 @@ er.vn in
     }
 
     public function actionReport6($datestart, $dateend, $details) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
+        
 
         $report_name = "อันดับโรคที่พบบ่อยที่ห้องอุบัติเหตุฉุกเฉิน";
         $sql = " select o.icd10 as icd10,ic.name as icd_name,ic.tname,count(o.icd10) as count_all
@@ -314,6 +336,10 @@ limit 40 ";
 
     public function actionReport7($rxtime_id, $datestart, $dateend, $details) {
 
+            // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
+        
+        
         $rxtime = "";
         $work = "";
 
@@ -374,7 +400,9 @@ limit 40 ";
     }
 
     public function actionReport8($datestart, $dateend, $details) {
-
+    // save log
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
+        
         $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลา(16.00น.-07.59น.)ที่ห้องอุบัติเหตุฉุกเฉิน (เฉพาะวันหยุดราชการ)";
         $sql = "SELECT
                     o.icode,d.name as drug_name,sum(o.qty) as sum_qty
@@ -420,6 +448,10 @@ limit 40 ";
 
     public function actionReport9($refer_type_id, $datestart, $dateend, $details) {
 
+            // save log
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
+        
+        
         $report_name = "รายงานสรุปอันดับโรคส่ง Refer ที่ห้องอุบัติเหตุฉุกเฉิน";
 
         $refer = '';
@@ -556,6 +588,9 @@ limit 40 ";
     
     
     public function actionReport10($datestart, $dateend, $details) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
+        
 
          $report_name = "รายงานผู้รับบริการหัตถการ เย็บแผลทั่วไป,excission,off norplant,ฝัง norplant,stitch off (ตัดไหม)";
          
@@ -605,6 +640,9 @@ limit 40 ";
     
     
     public function actionReport11($datestart, $dateend, $details) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
+        
 
         $report_name = "ตรวจแลป Hemoculture";
          
@@ -643,6 +681,9 @@ limit 40 ";
     
     
     public function actionReport12($datestart, $dateend, $details) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
+        
 
         $report_name = "รายงาน RE-Visit ผู้ป่วยนอกทั้งหมด ภายใน 48 ชั่วโมง";
          
@@ -692,6 +733,9 @@ limit 40 ";
     
     
      public function actionReport13($datestart, $dateend, $details) {
+             // save log
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
+        
 
         $report_name = "รายงานคนไข้ diag head injury รับบริการที่งานอุบัติเหตุฉุกเฉิน";
          

@@ -1,10 +1,16 @@
 <?php
 
 namespace frontend\controllers;
+use Yii;
+use frontend\components\CommonController;
 
-class TtmController extends \yii\web\Controller {
+class TtmController extends CommonController {
+    
+    public $dep_controller = 'ttm';
 
     public function actionReport1($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานจำนวนหัตถการงานแพทย์แผนไทย";
         $sql = "SELECT
@@ -46,6 +52,8 @@ class TtmController extends \yii\web\Controller {
 
      
     public function actionReport2($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "รายงานสรุปจำนวนการรับบริการงานแพทย์แผนไทย";
         $sql = "SELECT 
@@ -81,6 +89,8 @@ class TtmController extends \yii\web\Controller {
     
     
     public function actionReport3($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
         $report_name = "รายงานผู้มารับบริการที่มีการสั่งยาแพทย์แผนไทยแต่ไม่ได้ไปรับบริการที่แพทย์แผนไทย";
         $sql = "SELECT

@@ -2,10 +2,16 @@
 
 namespace frontend\controllers;
 
-class HtController extends \yii\web\Controller {
-    /* รายงานสรุปทะเบียนความดันแยกตามที่อยู่ */
+use Yii;
+use frontend\components\CommonController;
+
+class HtController extends CommonController{
+    public $dep_controller = 'ht';
 
     public function actionReport1() {
+        
+                // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ทะเบียนความดันแยกตามที่อยู่ในแต่ละสถานบริการ(คน)";
 
@@ -174,6 +180,8 @@ GROUP BY th.addressid
     /* รายงานสรุปทะเบียนความดันแบบ(แสดงรายชื่อคนไข้) */
 
     public function actionReport2($hosp_area) {
+                        // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ทะเบียนความดันแยกตามที่อยู่";
         $hosp_area_condition = "";
@@ -238,6 +246,8 @@ ORDER BY pt.moopart,age_y ";
     }
 
     public function actionReport3($datestart, $dateend, $details) {
+                        // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
         $report_name = "รายงานจำนวนคนไข้คลินิกความดันโลหิตสูง ได้รับการคัดกรองการสูบบุหรี่-ดื่มสุรา";
 
@@ -289,6 +299,8 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
 
 
     public function actionReport4($datestart, $dateend, $details) {
+                        // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
         $report_name = 'รายงานจำนวนคนไข้คลินิกความดันโลหิตสูง ได้รับการคัดกรองภาวะโรคซึมเศร้า';
 
@@ -345,6 +357,8 @@ order by v.aid, v.moopart, v.hn, v.vstdate";
 
 
     public function actionReport5($datestart, $dateend, $details, $operators = null, $result_first = null, $lab_items = null) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         $logics = "";
         $get_labs = "";
@@ -436,6 +450,9 @@ ORDER  BY v.aid, v.moopart, v.hn, v.vstdate ";
 
 
     public function actionReport6($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
+        
         $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน CKD Diag (N181 - N185)';
 
         $sql = "select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
@@ -1040,6 +1057,8 @@ GROUP BY v.hn ";
 // จบ function
 
     public function actionReport7($details) {
+                        // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
         $report_name = 'รายงานคนไข้ทะเบียนความดัน + โรคหัวใจ';
 
@@ -1089,6 +1108,8 @@ ORDER BY pt.moopart,age_y ";
 // จบ function
 
     public function actionReport8($details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
         $report_name = 'รายงานคนไข้ทะเบียนความดัน + หลอดเลือดสมอง';
 
@@ -1137,6 +1158,8 @@ ORDER BY pt.moopart,age_y ";
 // จบ function
 
     public function actionReport9($datestart, $dateend, $details) {
+                        // save log
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
 
         $report_name = 'รายงานคนไข้ทะเบียนความดันรายใหม่(ตามวันที่ลงทะเบียน)';
 
@@ -1196,6 +1219,8 @@ ORDER BY pt.moopart,age_y ";
     }
 
     public function actionReport10($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
 
         $report_name = 'รายงาน CVD-RISK คนไข้ความดัน';
 
@@ -1279,6 +1304,8 @@ AND
 
     
      public function actionReport11($datestart, $dateend, $details) {
+                         // save log
+        $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
 
         $report_name = 'รายงานคนไข้ทะเบียนความดัน';
 
@@ -1339,6 +1366,9 @@ ORDER BY pt.moopart,age_y ";
 
     
      public function actionReport12($datestart, $dateend, $details) {
+                         // save log
+        $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
+        
         $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน ตรวจสอบ BP >= 180';
                   
         $sql = "SELECT
@@ -1386,6 +1416,9 @@ ORDER BY pt.moopart,age_y ";
         
         
          public function actionReport13($datestart, $dateend, $details) {
+                             // save log
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
+        
         $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน ประวัติคัดกรอง BP';
                   
         $sql = "SELECT

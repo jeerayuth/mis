@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2016-12-27 16:18:23
+Date: 2017-02-03 11:18:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=310 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=316 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -281,3 +281,9 @@ INSERT INTO lamaereports VALUES ('306', '15', 'รายงานจำนวน
 INSERT INTO lamaereports VALUES ('307', '16', 'รายงานจำนวนครั้งหญิงตั้งครรภ์ ได้รับยา Triferdine', 'form1', 'report1', '2016-12-27', 'enable', 'anc', null);
 INSERT INTO lamaereports VALUES ('308', '16', 'รายงานจำนวนครั้งหญิงตั้งครรภ์ ที่มีผลแลป hematocrit < 33%', 'form1', 'report2', '2016-12-27', 'enable', 'anc', null);
 INSERT INTO lamaereports VALUES ('309', '16', 'รายงานหญิงตั้งครรภ์ทุกรายได้รับการคัดกรองภาวะเสี่ยงและพบภาวะเสี่ยง', 'form1', 'report3', '2016-12-27', 'enable', 'anc', null);
+INSERT INTO lamaereports VALUES ('310', '16', 'รายงานจำนวนครั้งหญิงตั้งครรภ์ ได้รับการตรวจแลป hematocrit,vdrl,anti-hiv,HBsAg,OF,DCIP', 'form1', 'report4', '2016-12-28', 'enable', 'anc', null);
+INSERT INTO lamaereports VALUES ('311', '17', 'รายงานผู้ป่วยค้างชำระ', 'form1', 'report1', '2017-01-25', 'enable', 'account', null);
+INSERT INTO lamaereports VALUES ('312', '9', 'รายงานสรุปผลการคัดกรองโรคเรื้อรังในชุมชนรับผิดชอบ', 'form12', 'report24', '2017-01-25', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('313', '18', 'รายงานผู้ป่วยที่มีรหัสวินิจฉัย B24', 'form1', 'report1', '2017-01-31', 'enable', 'arv', null);
+INSERT INTO lamaereports VALUES ('314', '1', 'รายงานผู้มารับบริการ(OPD) แยกตามสิทธิ์การรักษา', 'form13', 'report11', '2017-01-31', 'enable', 'medical', null);
+INSERT INTO lamaereports VALUES ('315', '14', 'รายงานผู้ป่วย OPD ในเขตตำบลละแม (หมู่1-7,9,10,12,14) มีรหัสวินิจฉัยหลัก เป็น z515', 'form1', 'report19', '2017-01-31', 'enable', 'claim', null);

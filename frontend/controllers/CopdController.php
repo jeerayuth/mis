@@ -2,10 +2,17 @@
 
 namespace frontend\controllers;
 
-class CopdController extends \yii\web\Controller {
-    /* รายงานสรุปทะเบียนถุงลมโป่งพองแยกตามที่อยู่ */
+use Yii;
+use frontend\components\CommonController;
+
+class CopdController extends CommonController {
+    public $dep_controller = 'copd';
 
     public function actionReport1() {
+        
+        // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
+        
 
         $report_name = "รายงานสรุปคนไข้ทะเบียนถุงลมโป่งพองแยกตามที่อยู่";
         $sql = "         
@@ -43,6 +50,9 @@ ORDER BY count(distinct(cm.hn)) DESC ";
     /* รายงานสรุปทะเบียนถุงลมโป่งพองแบบ(แสดงรายชื่อคนไข้) */
 
     public function actionReport2($addressid) {
+        
+        // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ทะเบียนถุงลมโป่งพองแยกตามที่อยู่";
 
@@ -86,6 +96,10 @@ ORDER BY pt.moopart,age_y
 
     
     public function actionReport3($datestart, $dateend, $details) {
+        
+                // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
+
 
         $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง ได้รับการคัดกรองการสูบบุหรี่-ดื่มสุรา";
 
@@ -133,6 +147,10 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
     
     
        public function actionReport4($datestart, $dateend, $details) {
+           
+                           // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
+
 
         $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง ได้รับบริการที่ห้องฉุกเฉิน";
 
@@ -182,6 +200,9 @@ order by v.aid, v.moopart, v.hn, v.vstdate ";
     
     
        public function actionReport5($datestart, $dateend, $details) {
+                           // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
+
 
         $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง ได้รับการ Admit";
 
@@ -227,7 +248,10 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
     
     
        public function actionReport6($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
+        
         $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง Re-visit ภายใน 48 ชั่วโมง ที่ OPD";
 
         $sql = "select
@@ -275,6 +299,9 @@ order by v.aid, v.moopart, v.hn, v.vstdate ";
      
     
        public function actionReport7($datestart, $dateend, $details) {
+                           // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
+
 
         $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง Re-visit ภายใน 48 ชั่วโมง ที่ ER";
 
@@ -328,7 +355,9 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
     
     
     public function actionReport8($datestart, $dateend, $details, $item = null) {
-        
+                        // save log
+            $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
+     
             $report_name = 'รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง แยกกลุ่มผู้ป่วยตาม GOLD 11';
       
             $sql = "SELECT  n.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name, n.plain_text,n.note_datetime,n.note_staff

@@ -1,11 +1,15 @@
 <?php
 
 namespace frontend\controllers;
+use Yii;
+use frontend\components\CommonController;
 
-class TbController extends \yii\web\Controller {
-    /* รายงานมูลค่าการใช้ยาปฏิชีวนะ */
+class TbController extends CommonController {
+      public $dep_controller = 'tb';
 
     public function actionReport1($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานจำนวนครั้งการคัดกรองวัณโรค";
 

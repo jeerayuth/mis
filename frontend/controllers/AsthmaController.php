@@ -2,10 +2,16 @@
 
 namespace frontend\controllers;
 
-class AsthmaController extends \yii\web\Controller {
-    /* รายงานสรุปทะเบียนหอบหืดแยกตามที่อยู่ */
+use Yii;
+use frontend\components\CommonController;
+
+
+class AsthmaController extends CommonController {
+    public $dep_controller = 'asthma';
 
     public function actionReport1() {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ทะเบียนคลินิกหอบหืดแยกตามที่อยู่";
         $sql = "         
@@ -42,6 +48,8 @@ ORDER BY count(distinct(cm.hn)) DESC ";
 
     /* รายงานสรุปคนไข้ทะเบียนคลินิกหอบหืดแยกตามที่อยู่ (แสดงรายชื่อคนไข้) */
     public function actionReport2($addressid) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ทะเบียนคลินิกหอบหืดแยกตามที่อยู่";
 
@@ -86,6 +94,8 @@ ORDER BY pt.moopart,age_y
     
     
     public function actionReport3($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
         $report_name = "รายงานจำนวนคนไข้คลินิกหอบหืด ได้รับการคัดกรองการสูบบุหรี่-ดื่มสุรา";
 
@@ -132,6 +142,8 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
     
     
      public function actionReport4($datestart, $dateend, $details) {
+                         // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
         $report_name = "รายงานจำนวนคนไข้คลินิกหอบหืด ได้รับบริการที่ห้องฉุกเฉิน";
 
@@ -179,6 +191,8 @@ order by v.aid, v.moopart, v.hn, v.vstdate ";
     
        
        public function actionReport5($datestart, $dateend, $details) {
+                           // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
         $report_name = "รายงานจำนวนคนไข้คลินิกหอบหืด ได้รับการ Admit";
 
@@ -221,6 +235,8 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
     
      
        public function actionReport6($datestart, $dateend, $details) {
+                                      // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
         $report_name = "รายงานจำนวนคนไข้คลินิกหอบหืด Re-visit ภายใน 48 ชั่วโมง ที่ OPD";
 
@@ -270,6 +286,9 @@ order by v.aid, v.moopart, v.hn, v.vstdate ";
     
     
        public function actionReport7($datestart, $dateend, $details) {
+                                                 // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
+
 
         $report_name = "รายงานจำนวนคนไข้คลินิกหอบหืด Re-visit ภายใน 48 ชั่วโมง ที่ ER";
 
@@ -322,6 +341,9 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
     
     
        public function actionReport8($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
+
 
         $report_name = "รายงานจำนวนคนไข้คลินิกหอบหืด Re-admit ภายใน 28 วัน";
                

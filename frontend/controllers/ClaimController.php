@@ -2,9 +2,15 @@
 
 namespace frontend\controllers;
 
-class ClaimController extends \yii\web\Controller {
+use Yii;
+use frontend\components\CommonController;
+
+class ClaimController extends CommonController {
+    public $dep_controller = 'claim';
 
     public function actionReport1($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานจำนวนคนไข้จ่ายค่าธรรมเนียม 30 บาท(เฉพาะสิทธิ์ 89,52,56)";
         $sql = "SELECT
@@ -40,6 +46,8 @@ class ClaimController extends \yii\web\Controller {
     
     
     public function actionReport2($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "จำนวนคนไข้ตามสิทธิ์ UC ทั้งหมด";
         $sql = "SELECT
@@ -74,6 +82,8 @@ class ClaimController extends \yii\web\Controller {
     }
     
     public function actionReport3($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
         $report_name = "รายงานพม่า (ที่มีรหัสวินิจฉัยหลักเป็น Z008,Z000)";
         $sql = "SELECT  v.vn,v.hn,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,v.hospmain ,p.cid,p.pname,concat(p.fname,'  ',p.lname) as pt_name,p.birthday ,p.nationality ,
@@ -112,6 +122,8 @@ class ClaimController extends \yii\web\Controller {
     
     
     public function actionReport4($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
         $report_name = "รายงานประกันสังคมผู้ป่วยนอก";
         $sql = "SELECT concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
@@ -151,6 +163,8 @@ class ClaimController extends \yii\web\Controller {
     
     
       public function actionReport5($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
         $report_name = "รายงานประกันสังคมผู้ป่วยใน";
         $sql = " SELECT 
@@ -191,6 +205,8 @@ class ClaimController extends \yii\web\Controller {
     
     
      public function actionReport6($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
         $report_name = "ประกันสังคมผู้ป่วยนอก สุราษฎร์ธานี";
         $sql = "SELECT concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
@@ -229,6 +245,8 @@ class ClaimController extends \yii\web\Controller {
     
     
      public function actionReport7($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
         $report_name = "ประกันสังคมชุมพร เรื้อรัง";
         $sql = "SELECT
@@ -407,6 +425,8 @@ class ClaimController extends \yii\web\Controller {
     
     
      public function actionReport8($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
         $report_name = "ประกันสังคมทันตกรรม";
         $sql = "select p.cid,d.hn,d.vn,concat(DAY(d.vstdate),'/',MONTH(d.vstdate),'/',(YEAR(d.vstdate)+543)) as vst_date,concat(p.pname,p.fname,'  ',p.lname) as patient_name,p.fname as FName,p.lname as LName,
@@ -441,6 +461,8 @@ class ClaimController extends \yii\web\Controller {
      
      
       public function actionReport9($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
 
         $report_name = "ประกันสังคม ANC ผู้ป่วยนอก";
         $sql = "SELECT 
@@ -482,6 +504,8 @@ class ClaimController extends \yii\web\Controller {
      
      
      public function actionReport10($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
 
         $report_name = "สิทธิ์บัตรประกันสุขภาพถ้วนหน้า(UC) มีท,ไม่มีท เขตรอยต่อ(รวมผลวินิจฉัย E100 - E119 และ I10)";
         $sql = "SELECT 
@@ -519,6 +543,8 @@ class ClaimController extends \yii\web\Controller {
      
      
       public function actionReport11($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
 
         $report_name = "รายงานสิทธิ์บัตรประกันสุขภาพถ้วนหน้า(UC) มีท,ไม่มีท เขตรอยต่อ (ผลวินิจฉัย E100 - E119,I10)";
         $sql = "select 
@@ -561,6 +587,8 @@ class ClaimController extends \yii\web\Controller {
      }
      
       public function actionReport12($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
 
         $report_name = "รายงานคนไข้ที่ใช้สิทธิ์โครงการจ่ายตรง (ผู้ป่วยนอก)";
         $sql = "
@@ -599,6 +627,8 @@ class ClaimController extends \yii\web\Controller {
      
      
       public function actionReport13($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
 
         $report_name = "รายงานคนไข้ที่ใช้สิทธิ์ อปท.เข้าโครงการจ่ายตรง (ผู้ป่วยนอก)";
         $sql = "SELECT 
@@ -637,6 +667,8 @@ class ClaimController extends \yii\web\Controller {
      
      
       public function actionReport14($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
 
         $report_name = "รายงาน คนไข้ ที่ใช้สิทธิ์ โครงการจ่ายตรง (ผู้ป่วยใน)";
         $sql = "SELECT
@@ -676,6 +708,8 @@ class ClaimController extends \yii\web\Controller {
      
      
         public function actionReport15($datestart, $dateend, $details) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report15', $this->getSession());
 
         $report_name = "E-Claim ผู้ป่วยนอก สิทธิ์ 56(UC นอกเขตต่างจังหวัดไม่มีท),57(UC ท นอกเขตต่างจังหวัดมี ท)";
         $sql = "SELECT
@@ -715,6 +749,8 @@ class ClaimController extends \yii\web\Controller {
      
      
       public function actionReport16($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report16', $this->getSession());
 
         $report_name = "รายงานตรวจสอบข้อมูลประกันสังคมผู้ป่วยนอก (ที่ยังไม่ลง diag หลัก)";
         $sql = "SELECT
@@ -755,6 +791,8 @@ class ClaimController extends \yii\web\Controller {
      
      
      public function actionReport17($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
 
         $report_name = "รายงานตรวจสอบสิทธิ์บัตรประกันสุขภาพถ้วนหน้า(UC) มีท,ไม่มีท เขตรอยต่อ (ที่ยังไม่ได้ลง diag)";
         $sql = "
@@ -794,6 +832,8 @@ class ClaimController extends \yii\web\Controller {
      
      
      public function actionReport18($details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report18', $this->getSession());
 
         $report_name = "รายงานคนไข้ที่มีการบันทึก Typearea เป็น Type3 ในฝั่งข้อมูลประชากร(Person)";
         $sql = "select 
@@ -837,6 +877,8 @@ class ClaimController extends \yii\web\Controller {
      }
      
      public function actionReport19($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report19', $this->getSession());
 
         $report_name = "รายงานผู้ป่วย OPD ในเขตตำบลละแม (หมู่1-7,9,10,12,14) มีรหัสวินิจฉัยหลัก เป็น z515";
         $sql = " 

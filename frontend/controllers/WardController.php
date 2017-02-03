@@ -1,10 +1,17 @@
 <?php
 
 namespace frontend\controllers;
+use Yii;
+use frontend\components\CommonController;
 
-class WardController extends \yii\web\Controller {
+class WardController extends CommonController {
+    public $dep_controller = 'ward';
 
     public function actionReport1($datestart, $dateend, $details) {
+             // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
+        
+        
         $count_day = (strtotime($dateend) - strtotime($datestart)) / ( 60 * 60 * 24 ) +1;
   
         $report_name = " รายงานผู้ป่วยใน รง.505";
@@ -46,6 +53,9 @@ class WardController extends \yii\web\Controller {
     
     
      public function actionReport2($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
+        
        
         $report_name = "คนไข้ IPD RE-ADMIT ภายใน 28 วัน ด้วยโรคเดิม";
         $sql = "select q3.hn,concat(patient.pname,patient.fname,'  ',patient.lname) as ptname,q3.AN_new ,q3.regdate_AN_New ,q3.dcdate_AN_New ,q3.AN_Old as AN_old
@@ -89,6 +99,9 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     
     
      public function actionReport3($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
+        
        
         $report_name = "รายงานอันดับโรคคนไข้ IPD RE-ADMIT ภายใน 28 วัน ด้วยโรคเดิม";
         $sql = "select q3.icd10_1,icd.name as icd_name,count(q3.icd10_1)   as count_icd
@@ -137,6 +150,10 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     
     
      public function actionReport4($refer_type_id,$datestart, $dateend, $details) {
+         
+              // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
+        
        
         $report_name = "รายงานสรุปอันดับโรคส่ง Refer ที่ผู้ป่วยใน(Ward)"; 
         $refer = '';
@@ -285,6 +302,10 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     
     
      public function actionReport5($datestart, $dateend, $details) {
+         
+              // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
+        
        
         $report_name = "รายงานผู้ป่วย admit ความดันโลหิตสูง";
         $sql = "SELECT 
@@ -332,6 +353,9 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     
    
      public function actionReport6($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
+        
        
         $report_name = "รายงานผู้ป่วย admit sepsis";
         $sql = "SELECT 

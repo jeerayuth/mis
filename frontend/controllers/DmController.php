@@ -2,10 +2,14 @@
 
 namespace frontend\controllers;
 
-class DmController extends \yii\web\Controller {
-    /* รายงานสรุปทะเบียนเบาหวานแยกตามที่อยู่ */
+use Yii;
+use frontend\components\CommonController;
+
+class DmController extends CommonController {
+    public $dep_controller = 'dm';
 
     public function actionReport1($uclinic) {
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         if ($uclinic != "") { // เริ่มต้นตรวจสอบประเภทคนไข้ในคลินิก
             // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
@@ -193,6 +197,7 @@ GROUP BY th.addressid
     /* รายงานสรุปทะเบียนเบาหวานแบบ(แสดงรายชื่อคนไข้) */
 
     public function actionReport2($hosp_area, $uclinic) {
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         $get_type = "";
@@ -273,6 +278,7 @@ ORDER BY pt.moopart,age_y
     }
 
     public function actionReport3($uclinic, $datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -327,6 +333,8 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
     }
 
     public function actionReport4($uclinic, $datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
+        
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -390,6 +398,7 @@ order by v.aid, v.moopart, v.hn, v.vstdate";
 
 
     public function actionReport5($uclinic, $datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -458,6 +467,7 @@ order by v.aid, v.moopart, v.hn, cc.screen_date
 
 
     public function actionReport6($uclinic, $datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -524,6 +534,8 @@ order by v.aid, v.moopart, v.hn, cc.screen_date
 
 // จบ function
     public function actionReport7($uclinic, $datestart, $dateend, $details, $operators = null, $result_first = null, $lab_items = null, $drug_items) {
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
+        
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         $logics = "";
@@ -671,6 +683,7 @@ ORDER  BY v.aid, v.moopart, v.hn, v.vstdate ";
 
 
     public function actionReport8($uclinic, $datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -735,6 +748,7 @@ ORDER BY v.aid, v.moopart, v.hn, v.vstdate";
 // จบ function
 
     public function actionReport9($uclinic, $datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -799,6 +813,7 @@ ORDER BY v.aid, v.moopart, v.hn, v.vstdate";
 
 
     public function actionReport10($uclinic, $datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -1402,6 +1417,7 @@ GROUP BY v.hn ";
 // จบ function
 
     public function actionReport11($uclinic, $details) {
+         $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -1460,6 +1476,7 @@ ORDER BY pt.moopart,age_y ";
     }
 
     public function actionReport12($uclinic, $details) {
+         $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -1518,6 +1535,7 @@ ORDER BY pt.moopart,age_y ";
     }
 
     public function actionReport13($uclinic, $datestart, $dateend, $details) {
+         $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -1587,6 +1605,7 @@ ORDER BY pt.moopart,age_y ";
     }
 
     public function actionReport14($uclinic, $datestart, $dateend, $details) {
+         $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -1678,6 +1697,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
     
     
     public function actionReport15($uclinic, $datestart, $dateend, $details) {
+         $this->SaveLog($this->dep_controller, 'report15', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -1736,6 +1756,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
     
     
      public function actionReport16($uclinic, $datestart, $dateend, $details) {
+          $this->SaveLog($this->dep_controller, 'report16', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -1789,6 +1810,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
     
     
      public function actionReport17($uclinic, $datestart, $dateend, $details) {
+          $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {
@@ -1847,6 +1869,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
     
     
      public function actionReport18($uclinic, $datestart, $dateend, $details) {
+          $this->SaveLog($this->dep_controller, 'report18', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
         if ($uclinic != "") {

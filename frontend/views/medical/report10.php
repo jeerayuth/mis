@@ -11,9 +11,7 @@ $this->title = $report_name;
 
 <?php
 
-    echo $type_id;
-    
-    
+
     
     if($type_id == 1) {
         $return_date_name = 'วันครบกำหนดคืน';
@@ -49,7 +47,11 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'rent_user',
-            'header' => 'ผู้ยืม'
+            'header' => 'login ผู้ยืม'
+        ],
+        [
+            'attribute' => 'user_fullname',
+            'header' => 'ชื่อผู้ยืม'
         ],
          [
             'attribute' => 'rent_date',

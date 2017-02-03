@@ -1,11 +1,16 @@
 <?php
 
 namespace frontend\controllers;
+use Yii;
+use frontend\components\CommonController;
 
-class ArvController extends \yii\web\Controller {
-    /* รายงานมูลค่าการใช้ยาปฏิชีวนะ */
+class ArvController extends CommonController {
+    public $dep_controller = 'arv';
 
     public function actionReport1($datestart, $dateend, $details) {
+        
+        // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานผู้ป่วยที่มีรหัสวินิจฉัย B24";
         $sql = "SELECT

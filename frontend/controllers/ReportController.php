@@ -15,15 +15,20 @@ class ReportController extends \yii\web\Controller {
     public function actionGrid($dep_id = null, $dep_name = null) {
 
         if (!empty($dep_id)) {
-
             $dataProvider = new SqlDataProvider([
-                'sql' => 'SELECT * ' .
-                ' FROM lamaereports ' .
-                ' WHERE lamaedepartment_id=:dep_id ' .
-                ' AND status=:status ',
+                'sql' => 'SELECT lr.*,(
+                            SELECT 
+                                count(lg.id) 
+                            FROM lamaereportslog lg   
+                            WHERE 
+                                lg.controller = lr.controller and lg.report = lr.pointer
+                            ) AS count_view ' .
+                ' FROM lamaereports lr ' .
+                ' WHERE lr.lamaedepartment_id=:dep_id ' .
+                ' AND lr.status=:status ',
                 'params' => [':dep_id' => $dep_id, ':status' => 'enable'],
                 'pagination' => [
-                    'pageSize' => 100,
+                    'pageSize' => 200,
                 ],
             ]);
 

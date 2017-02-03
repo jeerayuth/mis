@@ -6,15 +6,13 @@ use Yii;
 use frontend\components\CommonController;
 
 class AccountController extends CommonController {
-    /* รายงานมูลค่าการใช้ยาปฏิชีวนะ */
+    
     public $dep_controller = 'account';
-   
+ 
     public function actionReport1($datestart, $dateend, $details) {
-
-        print $this->SaveLog($this->dep_controller, 'report1', 'admin');
-        
-        
-        
+       
+        // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
         
         $report_name = "รายงานผู้ป่วยค้างชำระ";
         $sql = "SELECT

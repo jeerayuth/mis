@@ -2,9 +2,16 @@
 
 namespace frontend\controllers;
 
-class AncController extends \yii\web\Controller {
+use Yii;
+use frontend\components\CommonController;
+
+class AncController extends CommonController {
+    
+    public $dep_controller = 'anc';
     
     public function actionReport1($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานจำนวนครั้งหญิงตั้งครรภ์ ได้รับยา Triferdine";
 
@@ -43,6 +50,8 @@ class AncController extends \yii\web\Controller {
     
     
     public function actionReport2($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "รายงานจำนวนครั้งหญิงตั้งครรภ์ ที่มีผลแลป hematocrit < 33%";
 
@@ -82,6 +91,8 @@ class AncController extends \yii\web\Controller {
     
     
     public function actionReport3($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
         $report_name = "รายงานหญิงตั้งครรภ์ทุกรายได้รับการคัดกรองภาวะเสี่ยงและพบภาวะเสี่ยง";
 
@@ -122,6 +133,8 @@ class AncController extends \yii\web\Controller {
     
     
     public function actionReport4($datestart, $dateend, $details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
         $report_name = "รายงานจำนวนครั้งหญิงตั้งครรภ์ ได้รับการตรวจแลป hematocrit,vdrl,anti-hiv,HBsAg,OF,DCIP";
 

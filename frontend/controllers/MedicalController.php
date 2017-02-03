@@ -2,10 +2,15 @@
 
 namespace frontend\controllers;
 
-class MedicalController extends \yii\web\Controller {
-    /*  รายงานสรุปคนไข้ OPD แยกรายเดือน */
+use Yii;
+use frontend\components\CommonController;
+
+class MedicalController extends CommonController {
+    public $dep_controller = 'medical';
 
     public function actionReport1($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ OPD แยกรายเดือน";
 
@@ -52,6 +57,8 @@ ORDER BY  v.vstdate ";
     }
 
     public function actionReport2($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ IPD (IPD+LR) แยกรายเดือน";
 
@@ -101,6 +108,8 @@ order by a.dchdate ";
     }
 
     public function actionReport3($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
         $report_name = "รายงานทะเบียนผู้เสียชีวิต";
 
@@ -137,6 +146,8 @@ where d.death_date between $datestart and $dateend ";
     }
 
     public function actionReport4($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ RW ที่มีค่าว่าง (Null)";
 
@@ -172,6 +183,8 @@ order by v.vstdate ";
     }
 
     public function actionReport5($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
         $report_name = "รายงานตรวจสอบเวชระเบียนผู้ป่วยนอก";
 
@@ -261,6 +274,8 @@ ORDER BY v.vstdate ";
     }
     
     public function actionReport6($details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
         $report_name = "รายงานตรวจสอบคนไข้นอกเขต รพ.ละแม แต่ลง Typearea เป็นคนในเขต";
 
@@ -294,6 +309,8 @@ ORDER BY v.vstdate ";
     
     
     public function actionReport7($details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คนไข้ 1 CID แต่มีหลาย HN";
 
@@ -326,6 +343,8 @@ ORDER BY v.vstdate ";
     
     
     public function actionReport8($details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คำนำหน้ากับเพศ ไม่สัมพันธ์กัน";
 
@@ -365,6 +384,8 @@ ORDER BY v.vstdate ";
     
     
     public function actionReport9($datestart, $dateend,$details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => ยืม-คืน Chart ผู้ป่วยใน";
 
@@ -411,6 +432,8 @@ ORDER BY v.vstdate ";
     
     
     public function actionReport10($type_id,$datestart, $dateend) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
 
         $report_name = "";
         
@@ -418,16 +441,19 @@ ORDER BY v.vstdate ";
             $report_name = "รายงานตรวจสอบ => ยืม-คืน Chart ผู้ป่วยใน (ยังไม่คืน)";
              $sql = "
                 SELECT
-                    i.*, if(i.return_date is null,date_add(i.rent_date,interval 4 day),i.return_date) as return_date
+                    i.*, if(i.return_date is null,date_add(i.rent_date,interval 4 day),i.return_date) as return_date,
+                    o.name as user_fullname
                 FROM ipdrent  i  
+                LEFT OUTER JOIN opduser o ON o.loginname = i.rent_user
                 WHERE rent_date BETWEEN $datestart AND $dateend and checkin = 'N'
                 and return_date is null ";
              
         } else if ($type_id == 2) {
             $report_name = "รายงานตรวจสอบ => ยืม-คืน Chart ผู้ป่วยใน (คืนแล้ว)";
             $sql = "SELECT
-                    i.*
+                    i.*,o.name as user_fullname
                 FROM ipdrent  i  
+                LEFT OUTER JOIN opduser o ON o.loginname = i.rent_user
                 WHERE rent_date BETWEEN $datestart AND $dateend and checkin = 'Y'
                 and return_date is not null ";
         }
@@ -460,6 +486,8 @@ ORDER BY v.vstdate ";
     
     
     public function actionReport11($pttype,$datestart, $dateend,$details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
     
             $report_name = "รายงานผู้มารับบริการ(OPD) แยกตามสิทธิ์การรักษา";
              $sql = "SELECT

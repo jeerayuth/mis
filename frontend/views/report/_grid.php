@@ -28,8 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td><?= $count = $count + 1; ?></td>
                 <td>
                     <a><?= $item['name']; ?></a>
+                   
                     <br />
-                    <small>ปรับปรุงล่าสุด <?php echo $item['created']; ?></small>
+                    <small> <i>(จำนวนผู้เข้าใช้งานทั้งหมด &nbsp;<b><u><?= $item['count_view']; ?></u></b> ครั้ง)</i> เริ่มเก็บสถิติเมื่อ 2017-02-03 ปรับปรุงรายงานล่าสุด <?php echo $item['created']; ?></small>
+                    
                 </td>
 
                 <td>
