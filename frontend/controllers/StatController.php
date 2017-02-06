@@ -7,17 +7,19 @@ use frontend\components\CommonController;
 
 class StatController extends CommonController {
 
-    //public $dep_controller = 'stat';
+    public function actionReport1($controller, $pointer,$report_name) {
+   
+        $report_name = "สถิติการใช้งานรายงาน";
 
-    public function actionReport1($datestart, $dateend, $details) {
-        // save log
-        //$this->SaveLog($this->dep_controller, 'report1', $this->getSession());
+        $sql = "SELECT
+                    lg.controller,lg.report,lg.username,op.name as fullname,
+                    COUNT(lg.username) AS count_use
+                FROM lamaereportslog lg
+                LEFT OUTER JOIN opduser op ON op.loginname = lg.username
+                WHERE 
+                    lg.controller = '$controller' AND report= '$pointer'
+                GROUP BY lg.username ";
 
-        $report_name = "สถิติการใช้งานระบบสารสนเทศ";
-
-        $sql = "";
-
-       
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -28,13 +30,12 @@ class StatController extends CommonController {
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-        
-     
+         
         return $this->render('report1', [
                     'dataProvider' => $dataProvider,       
                     'rawData' => $rawData,  
                     'report_name' => $report_name,
-                    'details' => $details,
+                    //'details' => $details,
         ]);
     }
 
