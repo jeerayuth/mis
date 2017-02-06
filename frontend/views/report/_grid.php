@@ -15,9 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <thead>
         <tr>
             <th style="width: 1%">ลำดับ</th>
-            <th style="width: 65%">ชื่อรายงาน</th>
+            <th style="width: 70%">ชื่อรายงาน</th>
 
-            <th style="width: 30%"></th>
+            <th style="width: 25%"></th>
         </tr>
     </thead>
     <tbody>
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </td>
 
                 <td>
-                    <a target="_blank" href="index.php?r=stat/report1&controller=<?php echo $item['controller'];?>&pointer=<?php echo $item['pointer']; ?>&report_name=<?php echo $item['name']; ?>&details=<?php echo $item['details']; ?>" type="button" class="btn btn-success btn-xs" data-toggle="modal" ><i class="fa fa-search"></i> สถิติการใช้งาน </a> 
+                    <a target="_blank" href="index.php?r=stat/report1&controller=<?php echo $item['controller'];?>&pointer=<?php echo $item['pointer']; ?>&report_name=<?php echo $item['name']; ?>&details=<?php echo $item['details']; ?>" type="button" class="btn btn-success btn-xs" data-toggle="modal" ><i class="fa fa-search"></i> สถิติ </a> 
                     <a href="index.php?r=report/form&controller=<?php echo $item['controller'];?>&form_id=<?php echo $item['form']; ?>&pointer=<?php echo $item['pointer']; ?>&report_name=<?php echo $item['name']; ?>&details=<?php echo $item['details']; ?>" type="button" class="btn btn-primary btn-xs" data-toggle="modal" ><i class="fa fa-search"></i> ดูรายงาน </a>
                     
                 </td>
