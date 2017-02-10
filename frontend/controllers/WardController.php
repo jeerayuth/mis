@@ -10,8 +10,7 @@ class WardController extends CommonController {
     public function actionReport1($datestart, $dateend, $details) {
              // save log
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
-        
-        
+              
         $count_day = (strtotime($dateend) - strtotime($datestart)) / ( 60 * 60 * 24 ) +1;
   
         $report_name = " รายงานผู้ป่วยใน รง.505";

@@ -5,12 +5,13 @@ namespace frontend\controllers;
 use Yii;
 use frontend\components\CommonController;
 
-class HtController extends CommonController{
+class HtController extends CommonController {
+
     public $dep_controller = 'ht';
 
     public function actionReport1() {
-        
-                // save log
+
+        // save log
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ทะเบียนความดันแยกตามที่อยู่ในแต่ละสถานบริการ(คน)";
@@ -180,7 +181,7 @@ GROUP BY th.addressid
     /* รายงานสรุปทะเบียนความดันแบบ(แสดงรายชื่อคนไข้) */
 
     public function actionReport2($hosp_area) {
-                        // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ทะเบียนความดันแยกตามที่อยู่";
@@ -246,7 +247,7 @@ ORDER BY pt.moopart,age_y ";
     }
 
     public function actionReport3($datestart, $dateend, $details) {
-                        // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
         $report_name = "รายงานจำนวนคนไข้คลินิกความดันโลหิตสูง ได้รับการคัดกรองการสูบบุหรี่-ดื่มสุรา";
@@ -299,7 +300,7 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
 
 
     public function actionReport4($datestart, $dateend, $details) {
-                        // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
         $report_name = 'รายงานจำนวนคนไข้คลินิกความดันโลหิตสูง ได้รับการคัดกรองภาวะโรคซึมเศร้า';
@@ -374,7 +375,7 @@ order by v.aid, v.moopart, v.hn, v.vstdate";
                 $get_labs = '2070,3005,3006,2071,3007,2072,3008'; // Lipid Profile      
             } else if ($lab_items == 4) {
                 $get_labs = 3001; // Glucose(FPG)      
-            }else if ($lab_items == 5) {
+            } else if ($lab_items == 5) {
                 $get_labs = 3003; // Creatinine     
             }
         }
@@ -452,7 +453,7 @@ ORDER  BY v.aid, v.moopart, v.hn, v.vstdate ";
     public function actionReport6($datestart, $dateend, $details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
-        
+
         $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน CKD Diag (N181 - N185)';
 
         $sql = "select v.hn,o.an, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,v.age_y as age_y,
@@ -1057,7 +1058,7 @@ GROUP BY v.hn ";
 // จบ function
 
     public function actionReport7($details) {
-                        // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
         $report_name = 'รายงานคนไข้ทะเบียนความดัน + โรคหัวใจ';
@@ -1158,7 +1159,7 @@ ORDER BY pt.moopart,age_y ";
 // จบ function
 
     public function actionReport9($datestart, $dateend, $details) {
-                        // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
 
         $report_name = 'รายงานคนไข้ทะเบียนความดันรายใหม่(ตามวันที่ลงทะเบียน)';
@@ -1219,7 +1220,7 @@ ORDER BY pt.moopart,age_y ";
     }
 
     public function actionReport10($datestart, $dateend, $details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
 
         $report_name = 'รายงาน CVD-RISK คนไข้ความดัน';
@@ -1302,9 +1303,8 @@ AND
         ]);
     }
 
-    
-     public function actionReport11($datestart, $dateend, $details) {
-                         // save log
+    public function actionReport11($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
 
         $report_name = 'รายงานคนไข้ทะเบียนความดัน';
@@ -1364,13 +1364,12 @@ ORDER BY pt.moopart,age_y ";
         ]);
     }
 
-    
-     public function actionReport12($datestart, $dateend, $details) {
-                         // save log
+    public function actionReport12($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
-        
+
         $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน ตรวจสอบ BP >= 180';
-                  
+
         $sql = "SELECT
                         o.hn,concat(p.pname, p.fname,' ',p.lname) as pt_name,v.age_y,
                         v.moopart,t.full_name as address,
@@ -1396,31 +1395,30 @@ ORDER BY pt.moopart,age_y ";
                     GROUP  BY o.hn
                     ORDER  BY count_bps_180_up DESC ";
 
-            try {
-                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-            } catch (\yii\db\Exception $e) {
-                throw new \yii\web\ConflictHttpException('sql error');
-            }
-
-            $dataProvider = new \yii\data\ArrayDataProvider([
-                'allModels' => $rawData,
-                'pagination' => False,
-            ]);
-
-            return $this->render('report12', [
-                        'dataProvider' => $dataProvider,
-                        'report_name' => $report_name,
-                        'details' => $details,
-            ]);
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
         }
-        
-        
-         public function actionReport13($datestart, $dateend, $details) {
-                             // save log
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+        return $this->render('report12', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+    public function actionReport13($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
-        
+
         $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน ประวัติคัดกรอง BP';
-                  
+
         $sql = "SELECT
                         o.hn,o.vn,
                         concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate,
@@ -1441,26 +1439,100 @@ ORDER BY pt.moopart,age_y ";
                     GROUP  BY o.vn
                     ORDER  BY  v.hn, v.vstdate ";
 
-            try {
-                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-            } catch (\yii\db\Exception $e) {
-                throw new \yii\web\ConflictHttpException('sql error');
-            }
-
-            $dataProvider = new \yii\data\ArrayDataProvider([
-                'allModels' => $rawData,
-                'pagination' => False,
-            ]);
-
-            return $this->render('report13', [
-                        'dataProvider' => $dataProvider,
-                        'report_name' => $report_name,
-                        'details' => $details,
-            ]);
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
         }
-  
-  
-        
-        
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+        return $this->render('report13', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
     
+    
+    
+    public function actionReport14($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
+
+        $report_name = 'รายงานจำนวนคนไข้คลินิคความดัน คัดกรองรอบเอว/ส่วนสูง';
+
+        $sql = "SELECT
+                        cm.clinic,cm.hn,
+                        concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        (
+                           select max(v.vstdate)
+                           from vn_stat v where v.vstdate between $datestart and $dateend and v.hn = cm.hn
+                           group by v.hn
+                           limit 1
+                        ) as max_vstdate,
+                        (
+                           select max(o.height) from opdscreen o where o.vstdate between $datestart and $dateend and o.hn = cm.hn
+                           group by o.hn    
+                           limit 1
+                        ) as height_last,
+                        (
+                           select max(o.height) from opdscreen o where o.vstdate between $datestart and $dateend and o.hn = cm.hn
+                           group by o.hn    
+                           limit 1
+                        ) / 2 as height_last_divide2,            
+                        ops.waist as waist_last,
+                                            
+                    (
+                        SELECT CASE 
+                          WHEN (height_last_divide2 < ops.waist) THEN 'ปกติ'
+                          WHEN (height_last_divide2 > ops.waist) THEN 'ไม่ปกติ'
+                          WHEN (height_last_divide2 = ops.waist) THEN 'ปกติ'
+                          ELSE ' ' END
+                    ) AS screen_result_report 
+             
+                  FROM clinicmember  cm
+                  LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+                  LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+                  LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                  LEFT OUTER JOIN (
+                        SELECT    hn,max(vn) as vn
+                        FROM      vn_stat
+                        WHERE     vstdate BETWEEN $datestart and $dateend AND vn in
+                                  (
+                                       select vn from opdscreen
+                                       where waist != ''
+                                   )
+                                    GROUP BY  hn
+                        ) oc ON (oc.hn = cm.hn)
+                  LEFT OUTER JOIN opdscreen ops ON ops.vn = oc.vn   
+                  WHERE 
+                       cm.hn in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                       AND cm.hn not in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))           
+                  AND pd.code != '02'
+                  GROUP BY cm.hn ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+        return $this->render('report14', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+  
+
 }

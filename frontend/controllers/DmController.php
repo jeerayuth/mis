@@ -1928,6 +1928,256 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
     
     
     
+     public function actionReport19($uclinic, $datestart, $dateend, $details) {
+          $this->SaveLog($this->dep_controller, 'report19', $this->getSession());
+        // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+        if ($uclinic != "") {
+            if ($uclinic == 1) {
+                $get_type = 'not';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวาน(DM ONLY) คัดกรองรอบเอว/ส่วนสูง';
+            } else if ($uclinic == 2) {
+                $get_type = '';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานความดัน(DMHT) คัดกรองรอบเอว/ส่วนสูง';
+            }
+                       
+            $sql = "SELECT
+                        cm.clinic,cm.hn,
+                        concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        (
+                           select max(v.vstdate)
+                           from vn_stat v where v.vstdate between $datestart and $dateend and v.hn = cm.hn
+                           group by v.hn
+                           limit 1
+                        ) as max_vstdate,
+                        (
+                           select max(o.height) from opdscreen o where o.vstdate between $datestart and $dateend and o.hn = cm.hn
+                           group by o.hn    
+                           limit 1
+                        ) as height_last,
+                        (
+                           select max(o.height) from opdscreen o where o.vstdate between $datestart and $dateend and o.hn = cm.hn
+                           group by o.hn    
+                           limit 1
+                        ) / 2 as height_last_divide2,            
+                        ops.waist as waist_last,
+                                            
+                    (
+                        SELECT CASE 
+                          WHEN (height_last_divide2 < ops.waist) THEN 'ปกติ'
+                          WHEN (height_last_divide2 > ops.waist) THEN 'ไม่ปกติ'
+                          WHEN (height_last_divide2 = ops.waist) THEN 'ปกติ'
+                          ELSE ' ' END
+                    ) AS screen_result_report 
+             
+                  FROM clinicmember  cm
+                  LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+                  LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+                  LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                  LEFT OUTER JOIN (
+                        SELECT    hn,max(vn) as vn
+                        FROM      vn_stat
+                        WHERE     vstdate BETWEEN $datestart and $dateend AND vn in
+                                  (
+                                       select vn from opdscreen
+                                       where waist != ''
+                                   )
+                                    GROUP BY  hn
+                        ) oc ON (oc.hn = cm.hn)
+                  LEFT OUTER JOIN opdscreen ops ON ops.vn = oc.vn
+          
+                  WHERE 
+                      cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                  AND 
+                      cm.hn  $get_type in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                  AND pd.code != '02'
+                  GROUP BY cm.hn ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+           
+            return $this->render('report19', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+    
+    
+    
+    
+    public function actionReport20($datestart, $dateend, $details) {
+          $this->SaveLog($this->dep_controller, 'report20', $this->getSession());
+        // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+           $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวาน ที่ได้รับการ admit';
+                          
+            $sql = "SELECT
+                    ov.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    ov.vn,ov.an,
+                    v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
+                    v.vstdate as vstdate_vn_stat,ov.vstdate as vstdate_ovst,
+                    a.regdate as admit_date,
+                    (
+                      select
+                            k.department
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      left outer join kskdepartment k on k.depcode = lh.order_department
+                      where lh.vn = ov.an  and lo.lab_items_code = '3246' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as order_date_dtx_department,
+                    (
+                      select
+                            lh.order_date
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.vn = ov.an  and lo.lab_items_code = '3246' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as order_date_dtx,
+                    (
+                      select
+                            lh.lab_order_number
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.vn = ov.an  and lo.lab_items_code = '3246' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as lab_order_dtx,
+
+                    (
+                      select
+                            lo.lab_order_result
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.vn = ov.an  and lo.lab_items_code = '3246' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as dtx,
+
+                     (
+                      select
+                            doc.name
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      left outer join doctor doc on doc.code = lh.doctor_code
+                      where lh.vn = ov.an  and lo.lab_items_code = '3246' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as doctor_code_dtx ,
+
+                    (
+                      select
+                            k.department
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      left outer join kskdepartment k on k.depcode = lh.order_department
+                      where lh.vn = ov.an  and lo.lab_items_code = '3001' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as order_date_glucose_department,
+
+                           (
+                      select
+                            lh.order_date
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.vn = ov.an  and lo.lab_items_code = '3001' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as order_date_glucose,
+
+                       (
+                      select
+                            lo.lab_order_number
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.vn = ov.an  and lo.lab_items_code = '3001' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as lab_order_glucose ,
+
+                    (
+                      select
+                            lo.lab_order_result
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      where lh.vn = ov.an  and lo.lab_items_code = '3001' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as glucose ,
+
+
+                     (
+                      select
+                            doc.name
+                      from lab_head lh
+                      left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                      left outer join doctor doc on doc.code = lh.doctor_code
+                      where lh.vn = ov.an  and lo.lab_items_code = '3001' and lo.confirm='Y'
+                      order by lh.lab_order_number asc
+                      limit 1
+                    ) as doctor_code_glucose
+
+
+
+              FROM ovst ov
+              LEFT OUTER JOIN vn_stat v ON v.vn = ov.vn
+              LEFT OUTER JOIN an_stat a ON a.an = ov.an
+              LEFT OUTER JOIN patient p ON p.hn = ov.hn
+
+              WHERE ov.vstdate BETWEEN $datestart AND $dateend  AND
+
+              (
+                    (v.pdx BETWEEN 'e110' AND  'e119') OR
+                    (v.dx0 BETWEEN 'e110' AND  'e119') OR
+                    (v.dx1 BETWEEN 'e110' AND  'e119') OR
+                    (v.dx2 BETWEEN 'e110' AND  'e119') OR
+                    (v.dx3 BETWEEN 'e110' AND  'e119') OR
+                    (v.dx4 BETWEEN 'e110' AND  'e119') OR
+                    (v.dx5 BETWEEN 'e110' AND  'e119')
+              )
+
+              AND
+                     ov.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))       
+              AND    ov.an != '' ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+           
+            return $this->render('report20', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]); 
+        }
+    
+    
+    
+    
+    
+    
+    
+    
     
 
 
