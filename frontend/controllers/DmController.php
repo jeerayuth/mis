@@ -1938,7 +1938,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
                 $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวาน(DM ONLY) คัดกรองรอบเอว/ส่วนสูง';
             } else if ($uclinic == 2) {
                 $get_type = '';
-                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานความดัน(DMHT) คัดกรองรอบเอว/ส่วนสูง';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานและมีความดันร่วม(DM WITH HT) คัดกรองรอบเอว/ส่วนสูง';
             }
                        
             $sql = "SELECT
@@ -1989,7 +1989,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
                   WHERE 
                       cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
                   AND 
-                      cm.hn  $get_type in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                      cm.hn  $get_type in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
                   AND pd.code != '02'
                   GROUP BY cm.hn ";
 
@@ -2170,7 +2170,111 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
                         'details' => $details,
             ]); 
         }
+        
+        
+        
+        
+        
+    public function actionReport21($uclinic,$datestart, $dateend, $details) {
+          $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
+        // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+           if ($uclinic != "") {
+            if ($uclinic == 1) {
+                $get_type = 'not';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวาน(DM Only) ผลตรวจแลป DTX,Glucose ล่าสุด ตามช่วงวันที่ที่เลือก';
+            } else if ($uclinic == 2) {
+                $get_type = '';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานและมีความดันร่วม(DM WITH HT) ผลตรวจแลป DTX,Glucose ล่าสุด ตามช่วงวันที่ที่เลือก';
+            }
+                                   
+            $sql = "SELECT
+                        cm.clinic,cm.hn,
+                        concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        (
+                          select
+                                k.department
+                          from lab_head lh
+                          left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                          left outer join kskdepartment k on k.depcode = lh.order_department
+                          where lh.order_date between $datestart AND $dateend and lh.hn = cm.hn
+                             AND lo.lab_items_code = '3246' AND lo.confirm='Y'
+                                order by lh.order_date desc
+                                limit 1
+                        ) as max_dtx_department,
+                        (
+                             select lh.order_date from lab_head lh
+                             LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number
+                             where lh.order_date between $datestart AND $dateend and lh.hn = cm.hn
+                             AND lo.lab_items_code = '3246' AND lo.confirm='Y'
+                                order by lh.order_date desc
+                                limit 1
+                        ) as max_dtx_order_date,
+                        (
+                             select lo.lab_order_result from lab_head lh
+                             LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number
+                             where lh.order_date between $datestart AND $dateend and lh.hn = cm.hn
+                             AND lo.lab_items_code = '3246' AND lo.confirm='Y'
+                                order by lh.order_date desc
+                                limit 1
+                        ) as max_dtx_order_result  ,
+                         (
+                          select
+                                k.department
+                          from lab_head lh
+                          left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                          left outer join kskdepartment k on k.depcode = lh.order_department
+                          where lh.order_date between $datestart AND $dateend and lh.hn = cm.hn
+                             AND lo.lab_items_code = '3001' AND lo.confirm='Y'
+                                order by lh.order_date desc
+                                limit 1
+                        ) as max_glucose_department,
+                        (
+                             select lh.order_date from lab_head lh
+                             LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number
+                             where lh.order_date between $datestart AND $dateend and lh.hn = cm.hn
+                             AND lo.lab_items_code = '3001' AND lo.confirm='Y'
+                                order by lh.order_date desc
+                                limit 1
+                        ) as max_glucose_order_date,
+                        (
+                             select lo.lab_order_result from lab_head lh
+                             LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number
+                             where lh.order_date between $datestart AND $dateend and lh.hn = cm.hn
+                             AND lo.lab_items_code = '3001'  AND lo.confirm='Y'
+                                order by lh.order_date desc
+                                limit 1
+                        ) as max_glucose_order_result
+
+                    FROM clinicmember cm
+                    LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                    LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id = cm.clinic_member_status_id
+                    LEFT OUTER JOIN provis_typedis pd on pd.code = cs.provis_typedis
+                    WHERE
+                         cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                         AND cm.hn  $get_type in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                         AND pd.code != '02'
+                    GROUP BY cm.hn ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+           
+            return $this->render('report21', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]); 
+        }
     
+    }
     
     
     
@@ -2180,5 +2284,4 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
     
     
 
-
-}
+} // end class
