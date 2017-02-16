@@ -1041,7 +1041,7 @@ class PcuController extends CommonController {
 
                   SELECT
                         '7' AS options,
-                        'Obesity กลุ่มเสี่ยง' AS title,
+                        'ภาวะลงพุง' AS title,
                         COUNT(p1.person_obesity_screen_status_id) AS count_hn
 
                   FROM person_dmht_screen_summary p1
