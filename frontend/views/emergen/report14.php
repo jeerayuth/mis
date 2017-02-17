@@ -13,7 +13,7 @@ $this->title = $report_name;
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
-        'heading' => $report_name.' (หน่วยเป็นคน)',
+        'heading' => $report_name,
         'before' => $details,
         'type' => 'primary',
         'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
@@ -26,8 +26,8 @@ echo GridView::widget([
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         [
-            'attribute' => 'vn',
-            'header' => 'VN'
+            'attribute' => 'an',
+            'header' => 'AN'
         ],
         [
             'attribute' => 'hn',
@@ -38,8 +38,12 @@ echo GridView::widget([
             'header' => 'ชื่อ-สกุล'
         ],
         [
-            'attribute' => 'vstdate',
-            'header' => 'วันที่รับบริการ'
+            'attribute' => 'regdate',
+            'header' => 'วันที่ Admit'
+        ],
+        [
+            'attribute' => 'dchdate',
+            'header' => 'วันที่ Discharge'
         ],
         [
             'attribute' => 'pdx',
