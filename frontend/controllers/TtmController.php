@@ -151,6 +151,7 @@ class TtmController extends CommonController {
         $sql = "SELECT
                     o.icode,d.name as drug_name,sum(o.qty) as sum_qty,
                      sum(o.sum_price) as sum_price,
+                     sum(o.cost * o.qty ) as sum_cost,
                      count(distinct(o.hn)) as count_hn,
                      count(o.hn) as count_useage
                 FROM opitemrece o

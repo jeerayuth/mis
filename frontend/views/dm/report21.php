@@ -34,6 +34,10 @@ echo GridView::widget([
             'header' => 'ชื่อ-สกุล'
         ], 
         [
+            'attribute' => 'clinic_member_status_name',
+            'header' => 'สถานะคนไข้'
+        ], 
+        [
             'attribute' => 'max_dtx_department',
             'header' => 'จุดที่สั่ง DTX ล่าสุด'
         ], 

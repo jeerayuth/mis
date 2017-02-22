@@ -1,7 +1,6 @@
 <?php
 
 /* @var $this yii\web\View */
-
 use kartik\grid\GridView;
 use yii\helpers\Html;
 
@@ -29,12 +28,12 @@ echo GridView::widget([
         [
             'attribute' => 'hn',
             'header' => 'HN'
-        ],     
-        [
+        ], 
+           [
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
-        ],
-         [
+        ], 
+        [
             'attribute' => 'addrpart',
             'header' => 'บ้านเลขที่',
         ],
@@ -46,22 +45,26 @@ echo GridView::widget([
             'attribute' => 'addresspart',
             'header' => 'ที่อยู่',
         ],
+        [
+            'attribute' => 'clinic_member_status_name',
+            'header' => 'สถานะคนไข้'
+        ], 
+        [
+            'attribute' => 'department',
+            'header' => 'จุดที่สั่ง'
+        ], 
          [
-            'attribute' => 'screen_date',
-            'header' => 'วันที่คัดกรองล่าสุด'
-        ],
-          [
-            'attribute' => 'pdx',
-            'header' => 'รหัสวินิจฉัยหลัก',
-        ],
-        [
-            'attribute' => 'bps_last',
-            'header' => 'BPS ครั้งล่าสุด',
-        ],
-        [
-            'attribute' => 'bpd_last',
-            'header' => 'BPD ครั้งล่าสุด',
-        ],
+            'attribute' => 'order_date_thai',
+            'header' => 'วันที่สั่ง'
+        ], 
+         [
+            'attribute' => 'ldl_lab_result',
+            'header' => 'ผล LDL น้อยกว่า 100 ครั้งล่าสุด'
+        ], 
+        
+        
+         
+       
        
        
     ]

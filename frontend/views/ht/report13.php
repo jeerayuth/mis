@@ -29,38 +29,38 @@ echo GridView::widget([
         [
             'attribute' => 'hn',
             'header' => 'HN'
-        ],
-        [
-            'attribute' => 'vn',
-            'header' => 'VN'
-        ],
-        [
-            'attribute' => 'vstdate',
-            'header' => 'วันที่รับบริการ'
-        ],
+        ],     
         [
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
+        ],
+        [
+            'attribute' => 'addrpart',
+            'header' => 'บ้านเลขที่',
         ],
         [
             'attribute' => 'moopart',
             'header' => 'หมู่บ้าน',
         ],
         [
-            'attribute' => 'address',
+            'attribute' => 'addresspart',
             'header' => 'ที่อยู่',
+        ],
+         [
+            'attribute' => 'screen_date',
+            'header' => 'วันที่คัดกรองล่าสุด'
         ],
           [
             'attribute' => 'pdx',
             'header' => 'รหัสวินิจฉัยหลัก',
         ],
         [
-            'attribute' => 'bps',
-            'header' => 'BPS',
+            'attribute' => 'bps_last',
+            'header' => 'BPS ครั้งล่าสุด',
         ],
         [
-            'attribute' => 'bpd',
-            'header' => 'BPD',
+            'attribute' => 'bpd_last',
+            'header' => 'BPD ครั้งล่าสุด',
         ],
        
        

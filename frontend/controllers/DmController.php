@@ -1769,25 +1769,41 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
             }
                        
             $sql = "SELECT
-                        o.hn,o.vn,
-                        concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate,
-                        concat(p.pname, p.fname,' ',p.lname) as pt_name,v.age_y,
-                        v.moopart,t.full_name as address ,v.pdx,op.bps,op.bpd
-                    FROM ovst o
-                    left outer join clinicmember cm ON cm.hn=o.hn
-                    left outer join clinic_member_status cs on cs.clinic_member_status_id = cm.clinic_member_status_id
-                    left outer join provis_typedis pd on pd.code = cs.provis_typedis
-                    left outer join vn_stat v      ON v.vn = o.vn
-                    left outer join thaiaddress t  on t.addressid = v.aid
-                    left outer join patient p      ON p.hn = o.hn
-                    left outer join opdscreen op   ON op.vn = o.vn
-                    WHERE
-                        o.vstdate BETWEEN   $datestart and $dateend
-                       AND cm.hn in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
-                       AND cm.hn $get_type in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
-                    
-                    GROUP  BY o.vn
-                    ORDER  BY  v.hn, v.vstdate ";
+                        cm.clinic,cm.hn,
+                        concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        pt.addrpart,
+                        pt.moopart,
+                        t.full_name as addresspart,
+                        concat(DAY(ops.vstdate),'/',MONTH(ops.vstdate),'/',(YEAR(ops.vstdate)+543)) as screen_date,
+                        vns.pdx,
+                        ops.bps as bps_last,
+                        ops.bpd as bpd_last
+             
+                  FROM clinicmember  cm
+                  LEFT OUTER JOIN clinic_member_status cs ON cs.clinic_member_status_id=cm.clinic_member_status_id
+                  LEFT OUTER JOIN provis_typedis pd ON pd.code=cs.provis_typedis
+                  LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                  LEFT OUTER JOIN thaiaddress t  ON t.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                  LEFT OUTER JOIN (
+                        SELECT    hn,max(vn) as vn
+                        FROM      vn_stat
+                        WHERE     vstdate BETWEEN $datestart and $dateend AND vn in
+                                  (
+                                       select vn from opdscreen
+                                       where bps != '' and bpd != ''
+                                   )
+                                    GROUP BY  hn
+                        ) oc ON (oc.hn = cm.hn)
+                  LEFT OUTER JOIN vn_stat vns ON vns.vn = oc.vn
+                  LEFT OUTER JOIN opdscreen ops ON ops.vn = oc.vn
+          
+                  WHERE 
+                      cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                  AND 
+                      cm.hn  $get_type in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                  AND pd.code  = '03'
+
+                  GROUP BY cm.hn ORDER BY t.addressid ";
 
             try {
                 $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -1990,7 +2006,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
                       cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
                   AND 
                       cm.hn  $get_type in (select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
-                  AND pd.code != '02'
+                  AND pd.code  = '03'
                   GROUP BY cm.hn ";
 
             try {
@@ -2177,8 +2193,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
         
     public function actionReport21($uclinic,$datestart, $dateend, $details) {
           $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
-        // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
-        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+
            if ($uclinic != "") {
             if ($uclinic == 1) {
                 $get_type = 'not';
@@ -2191,6 +2206,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
             $sql = "SELECT
                         cm.clinic,cm.hn,
                         concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        cs.clinic_member_status_name,
                         (
                           select
                                 k.department
@@ -2253,7 +2269,7 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
                     WHERE
                          cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
                          AND cm.hn  $get_type in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
-                         AND pd.code != '02'
+                         AND pd.code = '03'
                     GROUP BY cm.hn ";
 
             try {
@@ -2275,6 +2291,86 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
         }
     
     }
+    
+    
+     public function actionReport22($uclinic,$datestart, $dateend, $details) {
+          $this->SaveLog($this->dep_controller, 'report22', $this->getSession());
+
+           if ($uclinic != "") {
+            if ($uclinic == 1) {
+                $get_type = 'not';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวาน(DM Only) ผลตรวจแลป LDL น้อยกว่า 100 ครั้งล่าสุด ตามช่วงวันที่ที่เลือก';
+            } else if ($uclinic == 2) {
+                $get_type = '';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานและมีความดันร่วม(DM WITH HT) ผลตรวจแลป LDL น้อยกว่า 100 ครั้งล่าสุด ตามช่วงวันที่ที่เลือก';
+            }
+                                   
+            $sql = "SELECT
+                        cm.clinic,cm.hn,
+                        pt.addrpart,
+                        pt.moopart,
+                        t.full_name as addresspart,
+                        concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        cs.clinic_member_status_name,
+                        lbh.vn,
+                        k.department ,
+                        lbh.order_date ,
+                        concat(DAY(lbh.order_date),'/',MONTH(lbh.order_date),'/',(YEAR(lbh.order_date)+543)) as order_date_thai,
+
+                        (
+                            select lab_order.lab_order_result
+                            from lab_head
+                            left outer join lab_order on lab_order.lab_order_number = lab_head.lab_order_number
+                            where lab_head.vn = lbh.vn and lab_order.lab_items_code = '3008'
+                            and lab_order.lab_order_result < 100
+                            group by lab_head.vn
+                        )  as ldl_lab_result
+
+                    FROM clinicmember cm
+                    LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                    LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id = cm.clinic_member_status_id
+                    LEFT OUTER JOIN provis_typedis pd on pd.code = cs.provis_typedis
+                    LEFT OUTER JOIN thaiaddress t  ON t.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+
+                    LEFT OUTER JOIN (
+                        SELECT    lab_head.lab_order_number,lab_head.hn,max(lab_head.vn) as vn
+                        FROM      lab_head
+                        LEFT OUTER JOIN lab_order ON lab_order.lab_order_number = lab_head.lab_order_number
+                        WHERE     lab_head.order_date BETWEEN $datestart AND $dateend
+                                  AND lab_order.lab_items_code = '3008'  AND lab_order.lab_order_result < 100
+                                  GROUP BY  lab_head.hn
+                        ) lh ON (lh.hn = cm.hn)
+
+                    LEFT OUTER JOIN lab_head lbh ON lbh.vn = lh.vn
+                    LEFT OUTER JOIN lab_order lor ON lor.lab_order_number = lh.lab_order_number
+                    LEFT OUTER JOIN kskdepartment k ON k.depcode = lbh.order_department
+
+                    WHERE
+                        cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                         AND cm.hn  $get_type in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+                         AND pd.code = '03'
+                    GROUP BY cm.hn ORDER BY t.addressid  ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+           
+            return $this->render('report22', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]); 
+        }
+    
+    }
+    
     
     
     
