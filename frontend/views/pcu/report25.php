@@ -60,6 +60,10 @@ echo GridView::widget([
             'header' => 'ค่า BMI'
         ],
         [
+            'attribute' => 'waist',
+            'header' => 'รอบเอว'
+        ],
+        [
             'attribute' => 'bdg_year',
             'header' => 'ปีที่คัดกรอง'
         ],

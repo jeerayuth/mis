@@ -1040,15 +1040,30 @@ class PcuController extends CommonController {
                   UNION
 
                   SELECT
-                        '7' AS options,
-                        'ภาวะลงพุง' AS title,
-                        COUNT(p1.person_obesity_screen_status_id) AS count_hn
 
-                  FROM person_dmht_screen_summary p1
-                  WHERE
-                            p1.bdg_year = $begin_year
-                        AND p1.status_active='Y'
-                        AND p1.person_obesity_screen_status_id = 2 ";
+                            '7' AS options,
+                            'ภาวะอ้วนลงพุง, BMI มากกว่าหรือเท่ากับ 23' AS title,
+                                count(distinct(p2.cid)) as count_cid
+
+                            FROM person_dmht_screen_summary p1
+                            LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
+                            LEFT OUTER JOIN house h1 on h1.house_id = p2.house_id
+                            LEFT OUTER JOIN village v on v.village_id = h1.village_id
+                            LEFT OUTER JOIN sex s on s.code = p2.sex
+                            LEFT OUTER JOIN person_dmht_risk_screen_head ph ON ph.person_dmht_screen_summary_id = p1.person_dmht_screen_summary_id
+                            WHERE
+                                 p1.bdg_year = $begin_year
+                                 AND p1.status_active='Y'
+
+                                 AND
+                                 (
+
+                                    ((p2.sex = '2' AND ph.bmi >= 23) OR  (p2.sex = '2' AND ph.waist > 80) OR  (p2.sex = '2' AND ph.bmi >= 23 AND ph.waist > 80))  OR
+                                    ((p2.sex = '1' AND ph.bmi >= 23) OR  (p2.sex = '1' AND ph.waist > 90) OR  (p2.sex = '1' AND ph.bmi >= 23 AND ph.waist > 90))
+
+
+                                 )                                  
+                            ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -1220,7 +1235,7 @@ class PcuController extends CommonController {
                                 p1.cid,concat(p2.pname,p2.fname,'  ',p2.lname) as person_name,
                                 p2.age_y,h1.address,v.village_moo,v.village_name,s.name as sex,
                                 p1.person_ht_screen_status_id,p1.bdg_year,
-                                ph.bmi
+                                ph.bmi,ph.waist
                             FROM person_dmht_screen_summary p1
                             LEFT OUTER JOIN person p2 on p2.person_id = p1.person_id
                             LEFT OUTER JOIN house h1 on h1.house_id = p2.house_id
@@ -1230,7 +1245,13 @@ class PcuController extends CommonController {
                             WHERE
                                  p1.bdg_year = $begin_year
                                  AND p1.status_active='Y'
-                                 AND p1.person_obesity_screen_status_id = 2
+                                 AND 
+                                 (
+                                    ((p2.sex = '1' AND ph.bmi >= 23 OR p2.sex = '1' AND ph.waist > 90) OR (p2.sex = '1' AND ph.bmi >= 23 AND ph.waist > 90)) 
+                                        OR
+                                    ((p2.sex = '2' AND ph.bmi >= 23 OR p2.sex = '2' AND ph.waist > 80) OR (p2.sex = '2' AND ph.bmi >= 23 AND ph.waist > 80))                                
+                                  )
+                                    
                             GROUP BY p2.cid      
                             ORDER BY 
                                  v.village_moo ,p2.sex ";
