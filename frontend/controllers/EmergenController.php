@@ -1130,6 +1130,52 @@ limit 40 ";
     }
     
     
+     public function actionReport17($datestart, $dateend, $details) {
+             // save log
+        $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
+        
+        $report_name = "รายงานจำนวนครั้ง CPR ที่ห้องอุบัติเหตุฉุกเฉิน";
+         
+        $sql = "SELECT
+                    v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate_thai,
+                    v.vstdate,v.pdx,v.age_y , o.icode,
+                    o.qty
+                FROM vn_stat v
+                LEFT OUTER JOIN opitemrece o on o.vn = v.vn
+                LEFT OUTER JOIN patient p on p.hn = v.hn
+                WHERE 
+                    v.vstdate BETWEEN $datestart AND $dateend  AND v.vn IN
+
+                (
+                      select vn from er_regist
+                )
+
+                AND o.icode = '3001210'
+                GROUP BY o.vn
+                ORDER BY o.hn,o.vstdate ";
+            
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report17', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
     
     
     

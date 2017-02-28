@@ -1282,5 +1282,157 @@ class PcuController extends CommonController {
 
         }
     }
+    
+    
+    public function actionReport26($details,$age_id) {
+        
+         // save log
+        $this->SaveLog($this->dep_controller, 'report26', $this->getSession());
+
+        if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
+            if ($age_id == 1) {
+                $age = '>=35';
+                $report_name = "รายงานสรุปจำนวนประชากรอายุ $age ปี ในเขตรับผิดชอบ";
+            } 
+        }
+
+
+        $sql = "SELECT
+                    v.village_id,
+                    v.village_moo,
+                    v.village_name,
+                    l.location_area_name,
+                    h.location_area_id,
+                    count(h.location_area_id)   as count_location
+                FROM person p
+                left outer join village v on v.village_id = p.village_id
+                left outer join house h on h.house_id = p.house_id
+                left outer join house_location_area l on l.location_area_id = h.location_area_id
+
+                WHERE p.village_id != 1   AND timestampdiff(year,p.birthdate,curdate())  $age
+
+                GROUP BY v.village_id,h.location_area_id
+                having count(h.location_area_id)  > 0  ";
+             
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report26', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                    'age_id' => $age_id,
+                    
+        ]);
+    }
+    
+    
+    
+    
+    public function actionReport27($village_id, $age_id, $location_area_id) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report27', $this->getSession());
+
+
+        if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
+            if ($age_id == 1) {
+                $age = '>=35';
+                $report_name = "รายงานสรุปหญิงอายุ $age ปี ในเขตรับผิดชอบ  แบ่งตามอายุ, เทศบาล/อบต.";
+            } 
+        }
+
+        $sql = "select
+                    p.house_id,p.cid,concat(p.pname,p.fname,' ',p.lname) as person_name ,
+                    p.birthdate, 
+                    timestampdiff(year,p.birthdate,curdate()) as age_y_cal, 
+                    p.village_id ,
+                    h.address,
+                    v.village_moo,
+                    v.village_name,
+                    t.full_name,
+                    h.location_area_id, l.location_area_name
+                from person p
+                left outer join village v on v.village_id = p.village_id
+                left outer join thaiaddress t on t.addressid = v.address_id
+                left outer join house h on h.house_id = p.house_id
+                left outer join house_location_area l on l.location_area_id = h.location_area_id
+
+                where p.village_id  = $village_id  and timestampdiff(year,p.birthdate,curdate()) $age
+                        and  h.location_area_id = $location_area_id
+                        and  h.location_area_id is not null
+
+                order by p.village_id  ";
+               
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report27', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'village_id' => $village_id,
+  
+        ]);
+    }
+    
+    
+    public function actionReport28() {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report28', $this->getSession());
+
+        $report_name = "บ้านไม่ได้ระบุ Location";
+        $sql = "select
+                    h.village_id , v.village_moo,
+                    v.village_name,
+                    h.address
+                from person p
+                left outer join village v on v.village_id = p.village_id
+                left outer join house h on h.house_id = p.house_id
+                left outer join house_location_area l on l.location_area_id = h.location_area_id
+
+                where p.village_id != 1   and  h.location_area_id is null
+
+                order by p.village_id  ";
+                           
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report28', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                   
+  
+        ]);
+    }
 
 }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2017-02-22 14:06:26
+Date: 2017-02-28 14:07:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=328 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=330 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -299,3 +299,5 @@ INSERT INTO lamaereports VALUES ('324', '11', 'รายงานมูลค่
 INSERT INTO lamaereports VALUES ('325', '11', 'รายงานมูลค่าการสั่งใช้ยาแพทย์แผนไทยทั้งหมดแยกตามสิทธิ์การรักษา', 'form1', 'report6', '2017-02-20', 'enable', 'ttm', null);
 INSERT INTO lamaereports VALUES ('326', '3', 'รายงานจำนวนคนไข้คลินิคเบาหวาน (สถานะติดตามการรักษา) มีผลตรวจแลป LDL น้อยกว่า 100 ครั้งล่าสุด', 'form3', 'report22', '2017-02-22', 'enable', 'dm', null);
 INSERT INTO lamaereports VALUES ('327', '4', 'รายงานจำนวนคนไข้คลินิคความดัน (สถานะติดตามการรักษา) มีผลตรวจแลป LDL น้อยกว่า 100 ครั้งล่าสุด', 'form1', 'report15', '2017-02-22', 'enable', 'ht', null);
+INSERT INTO lamaereports VALUES ('328', '9', 'รายงานสรุปประชากรในเขตรับผิดชอบ แบ่งตามอายุ, เทศบาล/อบต.', 'form14', 'report26', '2017-02-24', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('329', '7', 'รายงานจำนวนครั้ง CPR ที่ห้องอุบัติเหตุฉุกเฉิน', 'form1', 'report17', '2017-02-28', 'enable', 'emergen', null);
