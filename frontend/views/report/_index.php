@@ -92,6 +92,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 18, 'dep_name' => 'คลินิก ARV']) ?>">คลินิก ARV <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
         
+        <tr>
+            <th scope="row">17</th>
+            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 19, 'dep_name' => 'X-Ray']) ?>">X-Ray <span class="glyphicon glyphicon-zoom-in"></span></a></td>
+        </tr>
+        
     </tbody>
 
 </table>
