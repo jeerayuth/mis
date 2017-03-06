@@ -37,7 +37,7 @@ class XrayController extends CommonController {
                     (
                                 select holiday_date from   holiday
                     ) AND
-                  x.report_time > '16:00:00'
+                  x.report_time > '16:00:00' OR (x.report_time BETWEEN '00:00:01' AND '07:59:59')
 
                 )  ";
                          
