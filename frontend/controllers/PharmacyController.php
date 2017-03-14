@@ -806,6 +806,134 @@ group by o.icode ";
     
     
     
+    public function actionReport15($rxtime_id, $datestart, $dateend, $details) {
+
+            // save log
+        $this->SaveLog($this->dep_controller, 'report15', $this->getSession());  
+        $rxtime = "";
+      
+        if ($rxtime_id != '') {
+            if ($rxtime_id == 1) {
+                $report_name = "รายงานการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 16.01น. ถึง 17.00น.)";
+                $rxtime = " '16:01:01' and '17:00:59' ";
+            } else if ($rxtime_id == 2) {
+                $report_name = "รายงานการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 17.01 น. ถึง 18.00น.)";
+                $rxtime = " '17:01:00' and '18:00:59' ";
+            } else if ($rxtime_id == 3) {
+                $report_name = "รายงานการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 18.01 น. ถึง 19.00น.)";
+                $rxtime = " '18:01:00' and '19:00:59' ";
+            } else if ($rxtime_id == 4) {
+                $report_name = "รายงานการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 19.01 น. ถึง 20.00น.)";
+                $rxtime = " '19:01:00' and '20:00:59' ";
+            } 
+        }
+
+
+        $sql = "SELECT
+                    o.icode,d.name as drug_name,sum(o.qty) as sum_qty
+
+                FROM opitemrece    o
+                    left outer join patient p on p.hn = o.hn
+                    left outer join vn_stat v on v.vn = o.vn
+                    left outer join opdscreen c on c.vn = o.vn
+                    left outer join drugitems d on d.icode = o.icode
+                    left outer join nondrugitems nd on nd.icode = o.icode
+                
+                WHERE o.rxdate between $datestart and $dateend  and o.rxtime between $rxtime
+     
+                    and o.icode like '1%'              
+                    and o.rxdate not in
+                        (
+                            select holiday_date from holiday
+                         )
+                        
+                GROUP BY  o.icode
+                ORDER BY  sum_qty  desc ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report15', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    public function actionReport16($rxtime_id, $datestart, $dateend, $details) {
+
+            // save log
+        $this->SaveLog($this->dep_controller, 'report16', $this->getSession());  
+        $rxtime = "";
+      
+        if ($rxtime_id != '') {
+            if ($rxtime_id == 1) {
+                $report_name = "รายงานจำนวน visit คนไข้สั่งใช้ยา ที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 16.01น. ถึง 17.00น.)";
+                $rxtime = " '16:01:01' and '17:00:59' ";
+            } else if ($rxtime_id == 2) {
+                $report_name = "รายงานจำนวน visit คนไข้สั่งใช้ยา ที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 17.01 น. ถึง 18.00น.)";
+                $rxtime = " '17:01:00' and '18:00:59' ";
+            } else if ($rxtime_id == 3) {
+                $report_name = "รายงานจำนวน visit คนไข้สั่งใช้ยา ที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 18.01 น. ถึง 19.00น.)";
+                $rxtime = " '18:01:00' and '19:00:59' ";
+            } else if ($rxtime_id == 4) {
+                $report_name = "รายงานจำนวน visit คนไข้สั่งใช้ยา ที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 19.01 น. ถึง 20.00น.)";
+                $rxtime = " '19:01:00' and '20:00:59' ";
+            } 
+        }
+
+
+        $sql = "SELECT
+                    count(distinct(o.vn)) +   count(distinct(o.an))      as count_visit
+                FROM opitemrece    o
+                    left outer join patient p on p.hn = o.hn
+                    left outer join vn_stat v on v.vn = o.vn
+                    left outer join opdscreen c on c.vn = o.vn
+                    left outer join drugitems d on d.icode = o.icode
+                    left outer join nondrugitems nd on nd.icode = o.icode
+                
+                WHERE o.rxdate between $datestart and $dateend  and o.rxtime between $rxtime
+   
+                    and o.icode like '1%'
+                    
+                    and o.rxdate not in
+                        (
+                            select holiday_date from holiday
+                         )  ";
+                                     
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report16', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
     
     
 

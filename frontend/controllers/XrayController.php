@@ -37,8 +37,17 @@ class XrayController extends CommonController {
                     (
                                 select holiday_date from   holiday
                     ) AND
-                  x.report_time > '16:00:00' OR (x.report_time BETWEEN '00:00:01' AND '07:59:59')
-
+                  x.report_time > '16:01:01' 
+                  
+                 OR 
+                 
+                  x.report_date  BETWEEN $datestart and $dateend AND
+                  x.report_date NOT IN
+                    (
+                       select holiday_date from   holiday
+                    ) AND
+                  x.report_time  BETWEEN '00:01:01' AND '07:59:59'
+                  
                 )  ";
                          
 
