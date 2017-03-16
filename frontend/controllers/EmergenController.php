@@ -1176,6 +1176,50 @@ limit 40 ";
     
     
     
+    public function actionReport18($datestart, $dateend, $details) {
+
+            // save log
+        $this->SaveLog($this->dep_controller, 'report18', $this->getSession());
+               
+        $report_name = "รายงานจำนวนครั้งผู้รับบริการในกลุ่มผู้ป่วยกระดูกหักที่ห้องอุบัติเหตุฉุกเฉิน";
+
+
+      
+        $sql = "";
+
+
+        $sql2 = "";
+
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();   
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        $dataProvider2 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData2,
+            'pagination' => FALSE,
+        ]);
+
+      
+
+        return $this->render('report18', [
+                    'dataProvider' => $dataProvider,
+                    'dataProvider2' => $dataProvider2,          
+                    'rawData' => $rawData,
+                    'rawData2' => $rawData2,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
     
     
     
