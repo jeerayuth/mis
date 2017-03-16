@@ -1694,7 +1694,6 @@ limit 40 ";
 
 
 
-
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
