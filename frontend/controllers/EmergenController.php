@@ -6,13 +6,14 @@ use Yii;
 use frontend\components\CommonController;
 
 class EmergenController extends CommonController {
+
     public $dep_controller = 'emergen';
 
     public function actionReport1($datestart, $dateend, $details) {
-        
-            // save log
+
+        // save log
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
-        
+
 
         $report_name = "รายงานจำนวนครั้งในการใช้ยา TRCS";
         $sql = "SELECT
@@ -48,9 +49,9 @@ ORDER BY total_usage DESC ";
     }
 
     public function actionReport2($datestart, $dateend, $details) {
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
-        
+
 
         $report_name = "รายงานจำนวนครั้งในการใช้ยา PCEC";
         $sql = "SELECT
@@ -89,9 +90,9 @@ ORDER BY total_usage DESC ";
     }
 
     public function actionReport3($datestart, $dateend, $details) {
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
-        
+
 
         $report_name = "รายงานจำนวนครั้งในการใช้ยา TETANUS";
         $sql = "SELECT
@@ -126,9 +127,9 @@ ORDER BY total_usage DESC ";
     }
 
     public function actionReport4($datestart, $dateend, $details) {
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
-        
+
 
         $report_name = "รายงานป้องกันและแก้ไขปัญหาอุบัติเหตุทางถนน";
         $sql = "select pt.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,er.vstdate
@@ -166,9 +167,9 @@ er.vn in
     }
 
     public function actionReport5($datestart, $dateend, $details) {
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
-        
+
 
         $report_name = "รายงานผู้ป่วยที่รับบริการที่ห้องฉุกเฉิน";
         $sql = "select 
@@ -301,9 +302,9 @@ er.vn in
     }
 
     public function actionReport6($datestart, $dateend, $details) {
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
-        
+
 
         $report_name = "อันดับโรคที่พบบ่อยที่ห้องอุบัติเหตุฉุกเฉิน";
         $sql = " select o.icd10 as icd10,ic.name as icd_name,ic.tname,count(o.icd10) as count_all
@@ -336,10 +337,10 @@ limit 40 ";
 
     public function actionReport7($rxtime_id, $datestart, $dateend, $details) {
 
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
-        
-        
+
+
         $rxtime = "";
         $work = "";
 
@@ -400,9 +401,9 @@ limit 40 ";
     }
 
     public function actionReport8($datestart, $dateend, $details) {
-    // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
-        
+
         $report_name = "รายงานอันดับการสั่งใช้ยานอกเวลา(16.00น.-07.59น.)ที่ห้องอุบัติเหตุฉุกเฉิน (เฉพาะวันหยุดราชการ)";
         $sql = "SELECT
                     o.icode,d.name as drug_name,sum(o.qty) as sum_qty
@@ -448,10 +449,10 @@ limit 40 ";
 
     public function actionReport9($refer_type_id, $datestart, $dateend, $details) {
 
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
-        
-        
+
+
         $report_name = "รายงานสรุปอันดับโรคส่ง Refer ที่ห้องอุบัติเหตุฉุกเฉิน";
 
         $refer = '';
@@ -585,15 +586,14 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
-    
-    
-    public function actionReport10($datestart, $dateend, $details) {
-            // save log
-        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
-        
 
-         $report_name = "รายงานผู้รับบริการหัตถการ เย็บแผลทั่วไป,excission,off norplant,ฝัง norplant,stitch off (ตัดไหม)";
-         
+    public function actionReport10($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
+
+
+        $report_name = "รายงานผู้รับบริการหัตถการ เย็บแผลทั่วไป,excission,off norplant,ฝัง norplant,stitch off (ตัดไหม)";
+
         $sql = "select er.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
             concat(DAY(er.vstdate),'/',MONTH(er.vstdate),'/',(YEAR(er.vstdate)+543)) as vstdate,
                 (
@@ -637,15 +637,14 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
-    
-    
+
     public function actionReport11($datestart, $dateend, $details) {
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
-        
+
 
         $report_name = "ตรวจแลป Hemoculture";
-         
+
         $sql = "SELECT 
                     lh.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                     concat(DAY(lh.order_date),'/',MONTH(lh.order_date),'/',(YEAR(lh.order_date)+543)) as order_date,
@@ -659,7 +658,7 @@ limit 40 ";
                     lh.order_date between $datestart and $dateend
                     and lo.lab_items_code = '3166' ";
 
-                
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -678,15 +677,14 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
-    
-    
+
     public function actionReport12($datestart, $dateend, $details) {
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
-        
+
 
         $report_name = "รายงาน RE-Visit ผู้ป่วยนอกทั้งหมด ภายใน 48 ชั่วโมง";
-         
+
         $sql = "select
                 v.hn,
                 concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate
@@ -710,7 +708,7 @@ limit 40 ";
 
                 order by v.hn,v.vstdate";
 
-                
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -729,16 +727,14 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
-    
-    
-    
-     public function actionReport13($datestart, $dateend, $details) {
-             // save log
+
+    public function actionReport13($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
-        
+
 
         $report_name = "รายงานคนไข้ diag head injury รับบริการที่งานอุบัติเหตุฉุกเฉิน";
-         
+
         $sql = "SELECT
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
                     v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
@@ -814,7 +810,7 @@ limit 40 ";
 
                             )
                         ) group by v.hn ";
-            
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -833,13 +829,13 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
-    
-     public function actionReport14($datestart, $dateend, $details) {
-             // save log
+
+    public function actionReport14($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
-        
+
         $report_name = "รายงานคนไข้ Admit diag head injury";
-         
+
         $sql = "SELECT
                     concat(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) as regdate,
                     concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as dchdate,
@@ -915,7 +911,7 @@ limit 40 ";
 
 
             group by a.hn ";
-            
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -934,14 +930,13 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
-   
-   
+
     public function actionReport15($datestart, $dateend, $details) {
-             // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report15', $this->getSession());
-        
+
         $report_name = "รายงานคนไข้ผู้ป่วยนอกทั้งหมด diag head injury";
-         
+
         $sql = "SELECT
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
                     v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
@@ -1013,7 +1008,7 @@ limit 40 ";
 
                             )
                         ) group by v.hn ";
-            
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -1032,14 +1027,13 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
-    
-    
+
     public function actionReport16($datestart, $dateend, $details) {
-             // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report16', $this->getSession());
-        
+
         $report_name = "รายงานคนไข้ผู้ป่วยนอกทั้งหมด diag head injury Re-visit ภายใน 48 ชั่วโมง ";
-         
+
         $sql = "SELECT
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
                     v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
@@ -1110,7 +1104,7 @@ limit 40 ";
 
                         and v.old_diagnosis = 'Y'
                         and v.lastvisit_hour <= 48 group by v.hn ";
-            
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -1128,14 +1122,13 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
-    
-    
-     public function actionReport17($datestart, $dateend, $details) {
-             // save log
+
+    public function actionReport17($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
-        
+
         $report_name = "รายงานจำนวนครั้ง CPR ที่ห้องอุบัติเหตุฉุกเฉิน";
-         
+
         $sql = "SELECT
                     v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate_thai,
@@ -1154,7 +1147,7 @@ limit 40 ";
                 AND o.icode = '3001210'
                 GROUP BY o.vn
                 ORDER BY o.hn,o.vstdate ";
-            
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -1172,29 +1165,260 @@ limit 40 ";
                     'details' => $details,
         ]);
     }
-    
-    
-    
-    
+
     public function actionReport18($datestart, $dateend, $details) {
 
-            // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report18', $this->getSession());
-               
-        $report_name = "รายงานจำนวนครั้งผู้รับบริการในกลุ่มผู้ป่วยกระดูกหักที่ห้องอุบัติเหตุฉุกเฉิน";
+
+        $report_name = "รายงานจำนวนครั้งผู้รับบริการในกลุ่มผู้ป่วยกระดูกหัก (แบบ Close) ที่ห้องอุบัติเหตุฉุกเฉิน ";
 
 
-      
-        $sql = "";
+        $sql = "SELECT
+
+                    e.er_dch_type,dch.name as dch_type,count(distinct(e.vn)) as count_vn
+
+                    FROM er_regist  e
+
+                    LEFT OUTER JOIN vn_stat v ON v.vn = e.vn
+                    LEFT OUTER JOIN er_dch_type dch ON dch.er_dch_type = e.er_dch_type
+
+                    WHERE e.vstdate BETWEEN $datestart AND $dateend  AND
+                     (
+
+                            v.pdx in
+
+                            ('s0200','s3230','s6230','s9220'
+                            's0210','s3240','s6240','s9230'
+                            's0220','s3250','s6250','s9240'
+                            's0230','s3270','s6260','s9250'
+                            's0240','s3280','s6270','s9270'
+                            's0250','s4200','s6280','s9290'
+                            's0260','s4210','s7200'  
+                            's0270','s4220','s7210'  
+                            's0280','s4230','s7220'  
+                            's1200','s4240','s7230'  
+                            's1210','s4270','s7240'  
+                            's1220','s4280','s7270'  
+                            's1270','s4290','s7280'  
+                            's1280','s5200','s7290'  
+                            's1290','s5210','s8200'  
+                            's2200','s5220','s8210'  
+                            's2210','s5230','s8220'  
+                            's2220','s5240','s8230'  
+                            's2230','s5250','s8240'  
+                            's2240','s5260','s8250'  
+                            's2250','s5270','s8260'  
+                            's2280','s5280','s8270'  
+                            's2290','s5290','s8280'  
+                            's3200','s6200','s8290'  
+                            's3210','s6210','s9200'  
+                            's3220','s6220','s9210'  
+                            )
 
 
-        $sql2 = "";
+                            OR
 
+                            v.dx0 in
+
+                              ('s0200','s3230','s6230','s9220'
+                            's0210','s3240','s6240','s9230'
+                            's0220','s3250','s6250','s9240'
+                            's0230','s3270','s6260','s9250'
+                            's0240','s3280','s6270','s9270'
+                            's0250','s4200','s6280','s9290'
+                            's0260','s4210','s7200'  
+                            's0270','s4220','s7210'  
+                            's0280','s4230','s7220'  
+                            's1200','s4240','s7230'  
+                            's1210','s4270','s7240'  
+                            's1220','s4280','s7270'  
+                            's1270','s4290','s7280'  
+                            's1280','s5200','s7290'  
+                            's1290','s5210','s8200'  
+                            's2200','s5220','s8210'  
+                            's2210','s5230','s8220'  
+                            's2220','s5240','s8230'  
+                            's2230','s5250','s8240'  
+                            's2240','s5260','s8250'  
+                            's2250','s5270','s8260'  
+                            's2280','s5280','s8270'  
+                            's2290','s5290','s8280'  
+                            's3200','s6200','s8290'  
+                            's3210','s6210','s9200'  
+                            's3220','s6220','s9210'  
+                            )
+
+
+                            OR
+
+                            v.dx1 in
+
+                              ('s0200','s3230','s6230','s9220'
+                            's0210','s3240','s6240','s9230'
+                            's0220','s3250','s6250','s9240'
+                            's0230','s3270','s6260','s9250'
+                            's0240','s3280','s6270','s9270'
+                            's0250','s4200','s6280','s9290'
+                            's0260','s4210','s7200'  
+                            's0270','s4220','s7210'  
+                            's0280','s4230','s7220'  
+                            's1200','s4240','s7230'  
+                            's1210','s4270','s7240'  
+                            's1220','s4280','s7270'  
+                            's1270','s4290','s7280'  
+                            's1280','s5200','s7290'  
+                            's1290','s5210','s8200'  
+                            's2200','s5220','s8210'  
+                            's2210','s5230','s8220'  
+                            's2220','s5240','s8230'  
+                            's2230','s5250','s8240'  
+                            's2240','s5260','s8250'  
+                            's2250','s5270','s8260'  
+                            's2280','s5280','s8270'  
+                            's2290','s5290','s8280'  
+                            's3200','s6200','s8290'  
+                            's3210','s6210','s9200'  
+                            's3220','s6220','s9210'  
+                            )
+
+                             OR
+
+                            v.dx2 in
+
+                              ('s0200','s3230','s6230','s9220'
+                            's0210','s3240','s6240','s9230'
+                            's0220','s3250','s6250','s9240'
+                            's0230','s3270','s6260','s9250'
+                            's0240','s3280','s6270','s9270'
+                            's0250','s4200','s6280','s9290'
+                            's0260','s4210','s7200'  
+                            's0270','s4220','s7210'  
+                            's0280','s4230','s7220'  
+                            's1200','s4240','s7230'  
+                            's1210','s4270','s7240'  
+                            's1220','s4280','s7270'  
+                            's1270','s4290','s7280'  
+                            's1280','s5200','s7290'  
+                            's1290','s5210','s8200'  
+                            's2200','s5220','s8210'  
+                            's2210','s5230','s8220'  
+                            's2220','s5240','s8230'  
+                            's2230','s5250','s8240'  
+                            's2240','s5260','s8250'  
+                            's2250','s5270','s8260'  
+                            's2280','s5280','s8270'  
+                            's2290','s5290','s8280'  
+                            's3200','s6200','s8290'  
+                            's3210','s6210','s9200'  
+                            's3220','s6220','s9210'  
+                            )
+                            
+                            OR
+
+                            v.dx3 in
+
+                              ('s0200','s3230','s6230','s9220'
+                            's0210','s3240','s6240','s9230'
+                            's0220','s3250','s6250','s9240'
+                            's0230','s3270','s6260','s9250'
+                            's0240','s3280','s6270','s9270'
+                            's0250','s4200','s6280','s9290'
+                            's0260','s4210','s7200'  
+                            's0270','s4220','s7210'  
+                            's0280','s4230','s7220'  
+                            's1200','s4240','s7230'  
+                            's1210','s4270','s7240'  
+                            's1220','s4280','s7270'  
+                            's1270','s4290','s7280'  
+                            's1280','s5200','s7290'  
+                            's1290','s5210','s8200'  
+                            's2200','s5220','s8210'  
+                            's2210','s5230','s8220'  
+                            's2220','s5240','s8230'  
+                            's2230','s5250','s8240'  
+                            's2240','s5260','s8250'  
+                            's2250','s5270','s8260'  
+                            's2280','s5280','s8270'  
+                            's2290','s5290','s8280'  
+                            's3200','s6200','s8290'  
+                            's3210','s6210','s9200'  
+                            's3220','s6220','s9210'  
+                            )
+
+
+                            OR
+
+                            v.dx4 in
+
+                              ('s0200','s3230','s6230','s9220'
+                            's0210','s3240','s6240','s9230'
+                            's0220','s3250','s6250','s9240'
+                            's0230','s3270','s6260','s9250'
+                            's0240','s3280','s6270','s9270'
+                            's0250','s4200','s6280','s9290'
+                            's0260','s4210','s7200'  
+                            's0270','s4220','s7210'  
+                            's0280','s4230','s7220'  
+                            's1200','s4240','s7230'  
+                            's1210','s4270','s7240'  
+                            's1220','s4280','s7270'  
+                            's1270','s4290','s7280'  
+                            's1280','s5200','s7290'  
+                            's1290','s5210','s8200'  
+                            's2200','s5220','s8210'  
+                            's2210','s5230','s8220'  
+                            's2220','s5240','s8230'  
+                            's2230','s5250','s8240'  
+                            's2240','s5260','s8250'  
+                            's2250','s5270','s8260'  
+                            's2280','s5280','s8270'  
+                            's2290','s5290','s8280'  
+                            's3200','s6200','s8290'  
+                            's3210','s6210','s9200'  
+                            's3220','s6220','s9210'  
+                            )
+
+
+                            OR
+
+                            v.dx5 in
+
+                              ('s0200','s3230','s6230','s9220'
+                            's0210','s3240','s6240','s9230'
+                            's0220','s3250','s6250','s9240'
+                            's0230','s3270','s6260','s9250'
+                            's0240','s3280','s6270','s9270'
+                            's0250','s4200','s6280','s9290'
+                            's0260','s4210','s7200'  
+                            's0270','s4220','s7210'  
+                            's0280','s4230','s7220'  
+                            's1200','s4240','s7230'  
+                            's1210','s4270','s7240'  
+                            's1220','s4280','s7270'  
+                            's1270','s4290','s7280'  
+                            's1280','s5200','s7290'  
+                            's1290','s5210','s8200'  
+                            's2200','s5220','s8210'  
+                            's2210','s5230','s8220'  
+                            's2220','s5240','s8230'  
+                            's2230','s5250','s8240'  
+                            's2240','s5260','s8250'  
+                            's2250','s5270','s8260'  
+                            's2280','s5280','s8270'  
+                            's2290','s5290','s8280'  
+                            's3200','s6200','s8290'  
+                            's3210','s6210','s9200'  
+                            's3220','s6220','s9210'  
+                            )
+
+                    )
+
+                    GROUP BY e.er_dch_type";
 
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();   
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
@@ -1204,25 +1428,296 @@ limit 40 ";
             'pagination' => FALSE,
         ]);
 
-        $dataProvider2 = new \yii\data\ArrayDataProvider([
-            'allModels' => $rawData2,
-            'pagination' => FALSE,
-        ]);
-
-      
 
         return $this->render('report18', [
                     'dataProvider' => $dataProvider,
-                    'dataProvider2' => $dataProvider2,          
                     'rawData' => $rawData,
-                    'rawData2' => $rawData2,
                     'report_name' => $report_name,
                     'details' => $details,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend
+        ]);
+    }
+
+    
+    public function actionReport19($er_dch_type, $datestart, $dateend, $report_name) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report19', $this->getSession());
+
+        $report_name = "รายงานจำนวนครั้งผู้รับบริการในกลุ่มผู้ป่วยกระดูกหัก (แบบ Close) ที่ห้องอุบัติเหตุฉุกเฉิน  ระหว่างวันที่ $datestart ถึง $dateend";
+
+        $sql = "SELECT
+
+                    v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,e.*,
+                    concat(DAY(e.vstdate),'/',MONTH(e.vstdate),'/',(YEAR(e.vstdate)+543)) as vstdate_thai,
+                    ro.refer_hospcode,
+                    concat(hp.hosptype,hp.name) as hosp_name
+
+                    FROM er_regist  e
+
+                    LEFT OUTER JOIN vn_stat v ON v.vn = e.vn
+                    LEFT OUTER JOIN patient p ON p.hn = v.hn
+                    LEFT OUTER JOIN referout ro ON ro.vn = e.vn
+                    LEFT OUTER JOIN hospcode hp ON hp.hospcode = ro.refer_hospcode
+
+                    WHERE e.vstdate BETWEEN $datestart AND $dateend  AND
+                     (
+
+                        v.pdx in
+
+                        ('s0200','s3230','s6230','s9220'
+                        's0210','s3240','s6240','s9230'
+                        's0220','s3250','s6250','s9240'
+                        's0230','s3270','s6260','s9250'
+                        's0240','s3280','s6270','s9270'
+                        's0250','s4200','s6280','s9290'
+                        's0260','s4210','s7200'  
+                        's0270','s4220','s7210'  
+                        's0280','s4230','s7220'  
+                        's1200','s4240','s7230'  
+                        's1210','s4270','s7240'  
+                        's1220','s4280','s7270'  
+                        's1270','s4290','s7280'  
+                        's1280','s5200','s7290'  
+                        's1290','s5210','s8200'  
+                        's2200','s5220','s8210'  
+                        's2210','s5230','s8220'  
+                        's2220','s5240','s8230'  
+                        's2230','s5250','s8240'  
+                        's2240','s5260','s8250'  
+                        's2250','s5270','s8260'  
+                        's2280','s5280','s8270'  
+                        's2290','s5290','s8280'  
+                        's3200','s6200','s8290'  
+                        's3210','s6210','s9200'  
+                        's3220','s6220','s9210'  
+                        )
+
+
+                        OR
+
+                        v.dx0 in
+
+                          ('s0200','s3230','s6230','s9220'
+                        's0210','s3240','s6240','s9230'
+                        's0220','s3250','s6250','s9240'
+                        's0230','s3270','s6260','s9250'
+                        's0240','s3280','s6270','s9270'
+                        's0250','s4200','s6280','s9290'
+                        's0260','s4210','s7200'  
+                        's0270','s4220','s7210'  
+                        's0280','s4230','s7220'  
+                        's1200','s4240','s7230'  
+                        's1210','s4270','s7240'  
+                        's1220','s4280','s7270'  
+                        's1270','s4290','s7280'  
+                        's1280','s5200','s7290'  
+                        's1290','s5210','s8200'  
+                        's2200','s5220','s8210'  
+                        's2210','s5230','s8220'  
+                        's2220','s5240','s8230'  
+                        's2230','s5250','s8240'  
+                        's2240','s5260','s8250'  
+                        's2250','s5270','s8260'  
+                        's2280','s5280','s8270'  
+                        's2290','s5290','s8280'  
+                        's3200','s6200','s8290'  
+                        's3210','s6210','s9200'  
+                        's3220','s6220','s9210'  
+                        )
+
+
+                        OR
+
+                        v.dx1 in
+
+                          ('s0200','s3230','s6230','s9220'
+                        's0210','s3240','s6240','s9230'
+                        's0220','s3250','s6250','s9240'
+                        's0230','s3270','s6260','s9250'
+                        's0240','s3280','s6270','s9270'
+                        's0250','s4200','s6280','s9290'
+                        's0260','s4210','s7200'  
+                        's0270','s4220','s7210'  
+                        's0280','s4230','s7220'  
+                        's1200','s4240','s7230'  
+                        's1210','s4270','s7240'  
+                        's1220','s4280','s7270'  
+                        's1270','s4290','s7280'  
+                        's1280','s5200','s7290'  
+                        's1290','s5210','s8200'  
+                        's2200','s5220','s8210'  
+                        's2210','s5230','s8220'  
+                        's2220','s5240','s8230'  
+                        's2230','s5250','s8240'  
+                        's2240','s5260','s8250'  
+                        's2250','s5270','s8260'  
+                        's2280','s5280','s8270'  
+                        's2290','s5290','s8280'  
+                        's3200','s6200','s8290'  
+                        's3210','s6210','s9200'  
+                        's3220','s6220','s9210'  
+                        )
+
+                         OR
+
+                        v.dx2 in
+
+                          ('s0200','s3230','s6230','s9220'
+                        's0210','s3240','s6240','s9230'
+                        's0220','s3250','s6250','s9240'
+                        's0230','s3270','s6260','s9250'
+                        's0240','s3280','s6270','s9270'
+                        's0250','s4200','s6280','s9290'
+                        's0260','s4210','s7200'  
+                        's0270','s4220','s7210'  
+                        's0280','s4230','s7220'  
+                        's1200','s4240','s7230'  
+                        's1210','s4270','s7240'  
+                        's1220','s4280','s7270'  
+                        's1270','s4290','s7280'  
+                        's1280','s5200','s7290'  
+                        's1290','s5210','s8200'  
+                        's2200','s5220','s8210'  
+                        's2210','s5230','s8220'  
+                        's2220','s5240','s8230'  
+                        's2230','s5250','s8240'  
+                        's2240','s5260','s8250'  
+                        's2250','s5270','s8260'  
+                        's2280','s5280','s8270'  
+                        's2290','s5290','s8280'  
+                        's3200','s6200','s8290'  
+                        's3210','s6210','s9200'  
+                        's3220','s6220','s9210'  
+                        )
+                        
+                        OR
+
+                        v.dx3 in
+
+                          ('s0200','s3230','s6230','s9220'
+                        's0210','s3240','s6240','s9230'
+                        's0220','s3250','s6250','s9240'
+                        's0230','s3270','s6260','s9250'
+                        's0240','s3280','s6270','s9270'
+                        's0250','s4200','s6280','s9290'
+                        's0260','s4210','s7200'  
+                        's0270','s4220','s7210'  
+                        's0280','s4230','s7220'  
+                        's1200','s4240','s7230'  
+                        's1210','s4270','s7240'  
+                        's1220','s4280','s7270'  
+                        's1270','s4290','s7280'  
+                        's1280','s5200','s7290'  
+                        's1290','s5210','s8200'  
+                        's2200','s5220','s8210'  
+                        's2210','s5230','s8220'  
+                        's2220','s5240','s8230'  
+                        's2230','s5250','s8240'  
+                        's2240','s5260','s8250'  
+                        's2250','s5270','s8260'  
+                        's2280','s5280','s8270'  
+                        's2290','s5290','s8280'  
+                        's3200','s6200','s8290'  
+                        's3210','s6210','s9200'  
+                        's3220','s6220','s9210'  
+                        )
+
+
+                        OR
+
+                        v.dx4 in
+
+                          ('s0200','s3230','s6230','s9220'
+                        's0210','s3240','s6240','s9230'
+                        's0220','s3250','s6250','s9240'
+                        's0230','s3270','s6260','s9250'
+                        's0240','s3280','s6270','s9270'
+                        's0250','s4200','s6280','s9290'
+                        's0260','s4210','s7200'  
+                        's0270','s4220','s7210'  
+                        's0280','s4230','s7220'  
+                        's1200','s4240','s7230'  
+                        's1210','s4270','s7240'  
+                        's1220','s4280','s7270'  
+                        's1270','s4290','s7280'  
+                        's1280','s5200','s7290'  
+                        's1290','s5210','s8200'  
+                        's2200','s5220','s8210'  
+                        's2210','s5230','s8220'  
+                        's2220','s5240','s8230'  
+                        's2230','s5250','s8240'  
+                        's2240','s5260','s8250'  
+                        's2250','s5270','s8260'  
+                        's2280','s5280','s8270'  
+                        's2290','s5290','s8280'  
+                        's3200','s6200','s8290'  
+                        's3210','s6210','s9200'  
+                        's3220','s6220','s9210'  
+                        )
+
+
+                        OR
+
+                        v.dx5 in
+
+                          ('s0200','s3230','s6230','s9220'
+                        's0210','s3240','s6240','s9230'
+                        's0220','s3250','s6250','s9240'
+                        's0230','s3270','s6260','s9250'
+                        's0240','s3280','s6270','s9270'
+                        's0250','s4200','s6280','s9290'
+                        's0260','s4210','s7200'  
+                        's0270','s4220','s7210'  
+                        's0280','s4230','s7220'  
+                        's1200','s4240','s7230'  
+                        's1210','s4270','s7240'  
+                        's1220','s4280','s7270'  
+                        's1270','s4290','s7280'  
+                        's1280','s5200','s7290'  
+                        's1290','s5210','s8200'  
+                        's2200','s5220','s8210'  
+                        's2210','s5230','s8220'  
+                        's2220','s5240','s8230'  
+                        's2230','s5250','s8240'  
+                        's2240','s5260','s8250'  
+                        's2250','s5270','s8260'  
+                        's2280','s5280','s8270'  
+                        's2290','s5290','s8280'  
+                        's3200','s6200','s8290'  
+                        's3210','s6210','s9200'  
+                        's3220','s6220','s9210'  
+                        )
+
+                    ) AND e.er_dch_type = $er_dch_type ";
+
+
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report19', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'er_dch_type' => $er_dch_type,
         ]);
     }
     
     
     
     
-    
+
 }
