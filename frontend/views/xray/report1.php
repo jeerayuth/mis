@@ -37,6 +37,10 @@ echo GridView::widget([
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
         ],
+         [
+            'attribute' => 'xray_items_name',
+            'header' => 'รายการที่ทำ'
+        ],
         [
             'attribute' => 'report_date',
             'header' => 'วันที่รายงานผล'
@@ -45,6 +49,8 @@ echo GridView::widget([
             'attribute' => 'report_time',
             'header' => 'เวลารายงานผล'
         ],
+       
+        
         /*
         [
             'attribute' => 'staff',

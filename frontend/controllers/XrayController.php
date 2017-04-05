@@ -18,9 +18,11 @@ class XrayController extends CommonController {
         $sql = "SELECT
                     x.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name, 
                     concat(DAY(x.report_date),'/',MONTH(x.report_date),'/',(YEAR(x.report_date)+543)) as report_date,
-                    x.report_time,x.staff
+                    x.report_time,x.staff,
+                    x.xray_items_code ,i.xray_items_name
                 FROM xray_report x
                 LEFT OUTER JOIN patient p ON p.hn = x.hn
+                LEFT OUTER JOIN xray_items i on i.xray_items_code = x.xray_items_code
                 WHERE
 
                 (
