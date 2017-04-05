@@ -6,10 +6,11 @@ use Yii;
 use frontend\components\CommonController;
 
 class PharmacyController extends CommonController {
+
     public $dep_controller = 'pharmacy';
 
     public function actionReport1($datestart, $dateend, $details) {
-                // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = "รายงานมูลค่าการใช้ยาปฏิชีวนะ";
@@ -63,10 +64,9 @@ ORDER BY  sum_cost DESC ";
         ]);
     }
 
-    
     public function actionReport2($diag_id, $datestart, $dateend, $details) {
-        
-                // save log
+
+        // save log
         $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $diag1 = '';
@@ -158,14 +158,14 @@ ORDER BY  sum_cost DESC ";
     }
 
     public function actionReport3($diag_id, $datestart, $dateend, $details) {
-                // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
     }
 
     public function actionReport4($datestart, $dateend, $details) {
-                // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
-        
+
         $report_name = "รายงาน High  Alert Drug";
         $sql = "SELECT
                 o.vstdate,o.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
@@ -208,9 +208,9 @@ ORDER BY  sum_cost DESC ";
     }
 
     public function actionReport5($datestart, $dateend, $details) {
-                // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
-        
+
         $report_name = "รายงานผลการใช้ยาปฏิชีวนะ ในผู้ป่วยติดเชื้อดื้อยา";
         $report_name2 = "กราฟสรุปจำนวนครั้งการสั่งใช้ใช้ยาปฏิชีวนะ ในผู้ป่วยติดเชื้อดื้อยา";
         $report_name3 = "กราฟสรุปจำนวนครั้งการ Admit ที่มีการสั่งใช้ยาปฏิชีวนะ ในผู้ป่วยติดเชื้อดื้อยา";
@@ -230,7 +230,7 @@ where o.icode in ('1560011','1580019','1590011')
 and o.vstdate between $datestart and $dateend
 order by  o.hn ,o.vstdate ";
 
-        
+
         $sql2 = "select
 o.icode,d.name as drug_name, count(o.icode) as count_use , count(distinct(o.an)) as count_an
 
@@ -257,9 +257,9 @@ group by o.icode ";
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-        
-        
-         $dataProvider2 = new \yii\data\ArrayDataProvider([
+
+
+        $dataProvider2 = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData2,
             'pagination' => FALSE,
         ]);
@@ -278,10 +278,9 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
+
     public function actionReport6($datestart, $dateend, $details) {
-                // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
         $report_name = "รายงาน 100 อันดับมูลค่าการใช้ยาตามราคาทุน";
@@ -314,10 +313,9 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
-     public function actionReport7($datestart, $dateend, $details) {
-                 // save log
+
+    public function actionReport7($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
         $report_name = "รายงานจ่ายยานอกเวลา 16.01น. - 07.59น.(รวมวันหยุดราชการ)";
@@ -370,10 +368,9 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
+
     public function actionReport8($datestart, $dateend, $details) {
-                // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่จ่ายยานอกเวลา 16.01น. - 07.59น.(รวมวันหยุดราชการ)";
@@ -401,7 +398,7 @@ group by o.icode ";
                     select holiday_date from holiday
                 ) */  
                 and o.icode like '1%'  ";
- 
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -421,13 +418,11 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
-    
-    public function actionReport9($diag_id,$datestart, $dateend, $details) {
-                // save log
+
+    public function actionReport9($diag_id, $datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
-        
+
         $diag1 = '';
         $diag2 = '';
 
@@ -452,8 +447,8 @@ group by o.icode ";
                 $diag2 = 'A090';
             }
         }
-        
-        
+
+
         $report_name = "รายงานผู้มารับบริการแยกตามกลุ่มรหัสวินิจฉัยโรค";
         $sql = "
                 SELECT
@@ -545,9 +540,9 @@ group by o.icode ";
                                     (a.dx5 between '$diag1' and '$diag2')
                              )    ";
 
-               
 
-     
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -567,11 +562,8 @@ group by o.icode ";
         ]);
     }
 
-
-    
-    
-     public function actionReport10($datestart, $dateend, $details) {
-                 // save log
+    public function actionReport10($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่ได้รับยา Glibenclamide";
@@ -598,7 +590,7 @@ group by o.icode ";
                 v.vstdate between $datestart and $dateend
                 and om.icode in ('1460402')
                 ORDER BY v.vn,v.vstdate ";
-               
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -617,10 +609,9 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
-     public function actionReport11($datestart, $dateend, $details) {
-                 // save log
+
+    public function actionReport11($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่ได้รับยา METFORMIN";
@@ -647,8 +638,8 @@ group by o.icode ";
                 v.vstdate between $datestart and $dateend
                 and om.icode in ('1430101')
                 ORDER BY v.vn,v.vstdate ";
-        
-        
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -667,11 +658,9 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
-    
+
     public function actionReport12($datestart, $dateend, $details) {
-                // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่ได้รับยา Diclofenac,Mefenamic,Ibuprofen";
@@ -698,8 +687,8 @@ group by o.icode ";
                 v.vstdate between $datestart and $dateend
                 and om.icode in ('1000110','1000182','1000154')
                 ORDER BY v.vn,v.vstdate ";
-        
-        
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -718,10 +707,9 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
-     public function actionReport13($datestart, $dateend, $details) {
-                 // save log
+
+    public function actionReport13($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่ได้รับยา Diclofenac และ Mefenamic และIbuprofen ร่วมกัน";
@@ -748,8 +736,8 @@ group by o.icode ";
                 v.vstdate between $datestart and $dateend
                 and (om.icode='1000110' and om.icode='1000182' and om.icode='1000154')
                 ORDER BY v.vn,v.vstdate ";
-        
-        
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -768,10 +756,9 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
+
     public function actionReport14($datestart, $dateend, $details) {
-                // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
 
         $report_name = "รายงานจำนวนคนที่ได้รับยาในกลุ่มยาที่กำหนด";
@@ -783,8 +770,8 @@ group by o.icode ";
                     o.rxdate BETWEEN $datestart and $dateend
                 AND o.icode IN ('1430101','1460402','1000154','1000110','1000182')
                 GROUP BY o.icode ";
-        
-        
+
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -803,15 +790,13 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
-    
+
     public function actionReport15($rxtime_id, $datestart, $dateend, $details) {
 
-            // save log
-        $this->SaveLog($this->dep_controller, 'report15', $this->getSession());  
+        // save log
+        $this->SaveLog($this->dep_controller, 'report15', $this->getSession());
         $rxtime = "";
-      
+
         if ($rxtime_id != '') {
             if ($rxtime_id == 1) {
                 $report_name = "รายงานการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 16.01น. ถึง 17.00น.)";
@@ -825,7 +810,7 @@ group by o.icode ";
             } else if ($rxtime_id == 4) {
                 $report_name = "รายงานการสั่งใช้ยานอกเวลาที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 19.01 น. ถึง 20.00น.)";
                 $rxtime = " '19:01:00' and '20:00:59' ";
-            } 
+            }
         }
 
 
@@ -870,15 +855,13 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
-    
+
     public function actionReport16($rxtime_id, $datestart, $dateend, $details) {
 
-            // save log
-        $this->SaveLog($this->dep_controller, 'report16', $this->getSession());  
+        // save log
+        $this->SaveLog($this->dep_controller, 'report16', $this->getSession());
         $rxtime = "";
-      
+
         if ($rxtime_id != '') {
             if ($rxtime_id == 1) {
                 $report_name = "รายงานจำนวน visit คนไข้สั่งใช้ยา ที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 16.01น. ถึง 17.00น.)";
@@ -892,7 +875,7 @@ group by o.icode ";
             } else if ($rxtime_id == 4) {
                 $report_name = "รายงานจำนวน visit คนไข้สั่งใช้ยา ที่ห้องอุบัติเหตุฉุกเฉิน(ช่วงเวลา 19.01 น. ถึง 20.00น.)";
                 $rxtime = " '19:01:00' and '20:00:59' ";
-            } 
+            }
         }
 
 
@@ -913,7 +896,7 @@ group by o.icode ";
                         (
                             select holiday_date from holiday
                          )  ";
-                                     
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -934,8 +917,39 @@ group by o.icode ";
                     'details' => $details,
         ]);
     }
-    
-    
 
+    public function actionReport17($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
+
+        $report_name = "รายงานมูลค่าการใช้ยาทั้งหมด";
+        $sql = "SELECT s.icode,s.name as drug_name,s.units as drug_unit,s.unitprice,s.unitcost,sum(o.qty) as count_use,
+        sum(IF(o.unitprice <> 0,o.unitprice*o.qty,s.unitprice*o.qty)) as sum_price ,
+        sum(IF(o.cost <> 0, o.cost*o.qty,s.unitcost*o.qty)) as  sum_cost
+        FROM opitemrece o
+        left outer join drugitems s on s.icode=o.icode
+        WHERE o.vstdate between $datestart and $dateend
+        and o.icode like '1%'
+        GROUP BY o.icode ,s.name
+        ORDER BY sum_cost desc ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report17', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
 
 }

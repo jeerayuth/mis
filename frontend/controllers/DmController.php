@@ -2373,6 +2373,129 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
     
     
     
+     public function actionReport23($uclinic,$datestart, $dateend, $details) {
+          $this->SaveLog($this->dep_controller, 'report23', $this->getSession());
+
+           if ($uclinic != "") {
+            if ($uclinic == 1) {
+                $get_type = 'not';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวาน(DM Only) ผลตรวจแลป dtx,glucose(fpg) 2 ครั้งล่าสุด ระหว่าง 70 ถึง 130 ตามช่วงวันที่ที่เลือก';
+            } else if ($uclinic == 2) {
+                $get_type = '';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานและมีความดันร่วม(DM WITH HT)  ผลตรวจแลป dtx,glucose(fpg) 2 ครั้งล่าสุด ระหว่าง 70 ถึง 130  ตามช่วงวันที่ที่เลือก';
+            }
+                                   
+            $sql = "SELECT
+                        cm.clinic,cm.hn,
+                        pt.addrpart,
+                        pt.moopart,
+                        t.full_name as addresspart,
+                        concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        cs.clinic_member_status_name ,
+                        lh.vn as vn_last ,
+
+                        (
+                            select lab_order.lab_order_result
+                            from lab_head
+                            left outer join lab_order on lab_order.lab_order_number = lab_head.lab_order_number
+                            where lab_head.vn = lh.vn   AND lab_order.lab_items_code  in ('3246','3001')
+                            group by lab_head.vn
+                        )  as glucose_lab_result_last  ,
+
+                        
+
+
+                        (
+                              select  lo.lab_order_result
+                              from vn_stat v
+                              left outer join lab_head lh on lh.vn = v.vn
+                              left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                              where v.vstdate between $datestart AND $dateend
+                              and v.hn = cm.hn
+                              and
+                                     (
+                                                v.pdx between 'e110' and 'e119' or
+                                                v.dx0 between 'e110' and 'e119' or
+                                                v.dx1 between 'e110' and 'e119' or
+                                                v.dx2 between 'e110' and 'e119' or
+                                                v.dx3 between 'e110' and 'e119' or
+                                                v.dx4 between 'e110' and 'e119' or
+                                                v.dx5 between 'e110' and 'e119'
+
+                                     )
+                              and lo.lab_items_code  in ('3246','3001')  
+                              and lo.lab_order_result between 70 and 130
+                              group by v.vn
+                              order by v.vn desc limit 1,1
+                        )   AS glucose_lab_second_last
+
+
+
+                    FROM clinicmember cm
+                    LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                    LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id = cm.clinic_member_status_id
+                    LEFT OUTER JOIN provis_typedis pd on pd.code = cs.provis_typedis
+                    LEFT OUTER JOIN thaiaddress t  ON t.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+
+                    LEFT OUTER JOIN (
+                        SELECT
+                                      lab_head.hn,max(lab_head.vn) as vn
+
+                        FROM      lab_head
+                        LEFT OUTER JOIN lab_order ON lab_order.lab_order_number = lab_head.lab_order_number
+                        LEFT OUTER JOIN vn_stat v ON v.vn = lab_head.vn
+                        WHERE     lab_head.order_date BETWEEN $datestart AND $dateend
+                                  AND lab_order.lab_items_code  in ('3246','3001')  
+                                  AND lab_order.lab_order_result between 70 and 130
+                                  AND
+                                     (
+                                                v.pdx between 'e110' and 'e119' or
+                                                v.dx0 between 'e110' and 'e119' or
+                                                v.dx1 between 'e110' and 'e119' or
+                                                v.dx2 between 'e110' and 'e119' or
+                                                v.dx3 between 'e110' and 'e119' or
+                                                v.dx4 between 'e110' and 'e119' or
+                                                v.dx5 between 'e110' and 'e119'
+                                     )
+                                  GROUP BY  lab_head.hn
+                        ) lh ON (lh.hn = cm.hn)
+
+
+
+                    WHERE
+                        cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                         AND cm.hn  $get_type in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+
+                         AND pd.code = '03'
+
+                    GROUP BY cm.hn
+                    having (glucose_lab_result_last between 70 and 130  and  glucose_lab_second_last  between 70 and 130)
+                    ORDER BY t.addressid ";
+
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+           
+            return $this->render('report23', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]); 
+        }
+    
+    }
+    
+    
+    
+    
     
     
     
