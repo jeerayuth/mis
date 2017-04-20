@@ -11,7 +11,6 @@ $this->title = $report_name;
 ?>
 
 
-
 <?php
 
 echo GridView::widget([
@@ -37,7 +36,7 @@ echo GridView::widget([
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
         ],
-         [
+        [
             'attribute' => 'xray_items_name',
             'header' => 'รายการที่ทำ'
         ],
@@ -45,18 +44,19 @@ echo GridView::widget([
             'attribute' => 'report_date',
             'header' => 'วันที่รายงานผล'
         ],
-         [
+        [
+            'attribute' => 'request_time',
+            'header' => 'เวลาที่สั่ง'
+        ],
+        [
             'attribute' => 'report_time',
             'header' => 'เวลารายงานผล'
         ],
-       
-        
-        /*
-        [
-            'attribute' => 'staff',
-            'header' => 'login ผู้ปฏิบัติงาน'
-        ], */
-              
+    /*
+      [
+      'attribute' => 'staff',
+      'header' => 'login ผู้ปฏิบัติงาน'
+      ], */
     ]
 ])
 ?>
