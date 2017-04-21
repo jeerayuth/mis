@@ -398,5 +398,243 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
                     'details' => $details,
         ]); 
     }
+    
+    
+     public function actionReport7($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
+              
+        $report_name = "รายงานจำนวนครั้งคนไข้(IPD) ที่มีรหัสวินิจฉัย diarrhea (A090-A099)";
+        $sql = "SELECT
+                    a.hn,a.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name as sex,a.age_y,a.regdate ,a.dchdate,a.admdate,
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5
 
+                    FROM an_stat a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join sex s on s.code = a.sex
+
+                    WHERE a.dchdate between $datestart and $dateend and
+
+                    (
+                          (a.pdx between 'a090' and 'a099') or
+                          (a.dx0 between 'a090' and 'a099') or
+                          (a.dx1 between 'a090' and 'a099') or
+                          (a.dx2 between 'a090' and 'a099') or
+                          (a.dx3 between 'a090' and 'a099') or
+                          (a.dx4 between 'a090' and 'a099') or
+                          (a.dx5 between 'a090' and 'a099')
+                    )
+                    ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report7', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+    
+    
+     public function actionReport8($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
+              
+        $report_name = "รายงานจำนวนครั้งไข้เลือดออก คนไข้(IPD) รหัสวินิจฉัย (A90-A919)";
+        $sql = "SELECT
+                    a.hn,a.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name as sex,a.age_y,a.regdate ,a.dchdate,a.admdate,
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5
+
+                    FROM an_stat a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join sex s on s.code = a.sex
+
+                    WHERE a.dchdate between $datestart and $dateend and
+
+                    (
+                          (a.pdx between 'a90' and 'a919') or
+                          (a.dx0 between 'a90' and 'a919') or
+                          (a.dx1 between 'a90' and 'a919') or
+                          (a.dx2 between 'a90' and 'a919') or
+                          (a.dx3 between 'a90' and 'a919') or
+                          (a.dx4 between 'a90' and 'a919') or
+                          (a.dx5 between 'a90' and 'a919')
+                    )
+                    ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report8', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+    
+    
+    
+    public function actionReport9($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
+              
+        $report_name = "รายงานจำนวนครั้งคนไข้ไส้ติ่งอักเสบ คนไข้(IPD) รหัสวินิจฉัย (K352-K37)";
+        $sql = "SELECT
+                    a.hn,a.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name as sex,a.age_y,a.regdate ,a.dchdate,a.admdate,
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5
+
+                    FROM an_stat a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join sex s on s.code = a.sex
+
+                    WHERE a.dchdate between $datestart and $dateend and
+
+                    (
+                          (a.pdx between 'k352' and 'k37') or
+                          (a.dx0 between 'k352' and 'k37') or
+                          (a.dx1 between 'k352' and 'k37') or
+                          (a.dx2 between 'k352' and 'k37') or
+                          (a.dx3 between 'k352' and 'k37') or
+                          (a.dx4 between 'k352' and 'k37') or
+                          (a.dx5 between 'k352' and 'k37')
+                    )
+                    ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report9', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+
+
+    
+    public function actionReport10($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
+              
+        $report_name = "รายงานจำนวนครั้งคนไข้ Pneumonia คนไข้(IPD) รหัสวินิจฉัย (J120-J189)";
+        $sql = "SELECT
+                    a.hn,a.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name as sex,a.age_y,a.regdate ,a.dchdate,a.admdate,
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5
+
+                    FROM an_stat a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join sex s on s.code = a.sex
+
+                    WHERE a.dchdate between $datestart and $dateend and
+
+                    (
+                          (a.pdx between 'j120' and 'j189') or
+                          (a.dx0 between 'j120' and 'j189') or
+                          (a.dx1 between 'j120' and 'j189') or
+                          (a.dx2 between 'j120' and 'j189') or
+                          (a.dx3 between 'j120' and 'j189') or
+                          (a.dx4 between 'j120' and 'j189') or
+                          (a.dx5 between 'j120' and 'j189')
+                    )
+                    ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report10', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+
+    
+     public function actionReport11($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
+              
+        $report_name = "รายงานจำนวนครั้งคนไข้ Sepsis คนไข้(IPD) รหัสวินิจฉัย (A400 - A419,R572 , R650-R659)";
+        $sql = "SELECT
+                    a.hn,a.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name as sex,a.age_y,a.regdate ,a.dchdate,a.admdate,
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5
+
+                    FROM an_stat a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join sex s on s.code = a.sex
+
+                    WHERE a.dchdate between $datestart and $dateend and
+
+                    (
+                          ((a.pdx between 'a400' and 'a419') or (a.pdx between 'r650' and 'r659' ) or (pdx = 'r572'))  or
+                          ((a.dx0 between 'a400' and 'a419') or (a.dx0 between 'r650' and 'r659' ) or (dx0 = 'r572'))  or
+                          ((a.dx1 between 'a400' and 'a419') or (a.dx1 between 'r650' and 'r659' ) or (dx1 = 'r572'))  or
+                          ((a.dx2 between 'a400' and 'a419') or (a.dx2 between 'r650' and 'r659' ) or (dx2 = 'r572'))  or
+                          ((a.dx3 between 'a400' and 'a419') or (a.dx3 between 'r650' and 'r659' ) or (dx3 = 'r572'))  or
+                          ((a.dx4 between 'a400' and 'a419') or (a.dx4 between 'r650' and 'r659' ) or (dx4 = 'r572'))  or
+                          ((a.dx5 between 'a400' and 'a419') or (a.dx5 between 'r650' and 'r659' ) or (dx5 = 'r572'))
+                    )
+                    ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report11', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
