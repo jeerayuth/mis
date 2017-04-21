@@ -1434,5 +1434,45 @@ class PcuController extends CommonController {
   
         ]);
     }
+    
+    
+    public function actionReport29($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report29', $this->getSession());
 
+        $report_name = "รายงานผู้มารับบริการ(เฉพาะสัญชาติไทย)ตามช่วงเวลาที่มารับบริการ opd ที่ไม่มีชื่ออยู่ในบัญชี 1(อ้างอิงจาก CID)";
+        $sql = "SELECT
+                    v.hn,v.cid, concat(p.pname,p.fname,'  ',p.lname) as pt_name ,
+                    p.addrpart, th.addressid,th.full_name
+              FROM vn_stat v
+              LEFT OUTER JOIN patient p ON p.hn = v.hn
+              LEFT OUTER JOIN thaiaddress th on th.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+              WHERE
+                   v.vstdate BETWEEN $datestart AND $dateend AND
+                   v.cid NOT IN(SELECT cid FROM person) AND (p.death ='N' or p.death is NULL or p.death='  ') AND
+                   p.nationality = '99' AND (p.cid not like '0%' and p.cid<>' ' and p.cid is not null and p.cid not like '111111111%')
+              GROUP BY v.hn  
+              ORDER BY th.addressid ";
+            
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report29', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+   
 }
