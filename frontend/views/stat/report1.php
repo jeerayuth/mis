@@ -16,8 +16,8 @@ $this->title = $report_name;
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
-        'heading' => $report_name,
-        'before' => 'เริ่มเก็บสถิติการใช้งานระบบรายงาน เมื่อ 03 กุมภาพันธ์ 2560',
+        'heading' => 'สถิติการใช้งาน : '. $report_name,
+        'before' => 'เริ่มระบบเก็บสถิติการใช้งานระบบรายงาน เมื่อ 03 กุมภาพันธ์ 2560',
         'type' => 'primary',
         'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
     ],
@@ -44,3 +44,38 @@ echo GridView::widget([
 ])
 ?>
 
+<br/>
+
+<?php
+
+echo GridView::widget([
+    'dataProvider' => $dataProvider2,
+    'panel' => [
+        'heading' => 'ประวัติการใช้งาน : '.$report_name.'  '.$report_name2,
+        'before' => 'เริ่มระบบเก็บสถิติการใช้งานระบบรายงาน เมื่อ 03 กุมภาพันธ์ 2560',
+        'type' => 'primary',
+        'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
+    ],
+    'export' => [
+        'fontAwesome' => true,
+        'showConfirmAlert' => false,
+        'target' => GridView::TARGET_BLANK
+    ],
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+        [
+            'attribute' => 'username',
+            'header' => 'ชื่อผู้ใช้'
+        ],
+        [
+            'attribute' => 'fullname',
+            'header' => 'ชื่อ-สกุล'
+        ],
+        [
+            'attribute' => 'viewlog',
+            'header' => 'วันที่เวลา'
+        ],
+                  
+    ]
+])
+?>
