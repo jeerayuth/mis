@@ -629,6 +629,87 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     
     
     
+    public function actionReport12($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
+              
+        $report_name = "รายงานจำนวนครั้งคนไข้(IPD) ที่มีรหัสวินิจฉัย Stroke (I600-I688),Diag Type3";
+        $sql = "SELECT
+                    a.hn,a.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name as sex,
+                    a.age_y,a.regdate ,a.dchdate,a.admdate,
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5, ip.diagtype
+
+                    FROM an_stat a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join sex s on s.code = a.sex
+                    left outer join iptdiag ip on ip.an = a.an
+
+                    WHERE a.dchdate between $datestart and $dateend
+                    and  ip.icd10 between 'i600' and 'i688'  and ip.diagtype = '3'
+                    GROUP BY a.an
+                    ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report12', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+    
+    
+     public function actionReport13($datestart, $dateend, $details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
+              
+        $report_name = "รายงานจำนวนครั้งคนไข้(IPD) ที่มีรหัสวินิจฉัย MI (I210-I219),Diag Type 3";
+        $sql = "SELECT
+                    a.hn,a.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name as sex,
+                    a.age_y,a.regdate ,a.dchdate,a.admdate,
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5, ip.diagtype
+
+                    FROM an_stat a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join sex s on s.code = a.sex
+                    left outer join iptdiag ip on ip.an = a.an
+
+                    WHERE a.dchdate between $datestart and $dateend
+                    and  ip.icd10 between 'i210' and 'i219'  and ip.diagtype = '3'
+                    GROUP BY a.an
+                    ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report13', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+    
+    
+    
+    
+    
     
     
     
