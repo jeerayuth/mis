@@ -45,6 +45,10 @@ echo GridView::widget([
             'attribute' => 'addrpart',
             'header' => 'เลขที่อยู่'
         ],
+        [
+            'attribute' => 'moopart',
+            'header' => 'หมู่ที่'
+        ],
          [
             'attribute' => 'full_name',
             'header' => 'ที่อยู่'

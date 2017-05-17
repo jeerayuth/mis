@@ -1443,7 +1443,7 @@ class PcuController extends CommonController {
         $report_name = "รายงานผู้มารับบริการ(เฉพาะสัญชาติไทย)ตามช่วงเวลาที่มารับบริการ opd ที่ไม่มีชื่ออยู่ในบัญชี 1(อ้างอิงจาก CID)";
         $sql = "SELECT
                     v.hn,v.cid, concat(p.pname,p.fname,'  ',p.lname) as pt_name ,
-                    p.addrpart, th.addressid,th.full_name
+                    p.addrpart, p.moopart,th.addressid,th.full_name
               FROM vn_stat v
               LEFT OUTER JOIN patient p ON p.hn = v.hn
               LEFT OUTER JOIN thaiaddress th on th.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
