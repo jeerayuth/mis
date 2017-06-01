@@ -1412,9 +1412,8 @@ class PcuController extends CommonController {
 
                 where p.village_id != 1   and  h.location_area_id is null
 
-                order by p.village_id  ";
+                order by p.village_id ";
                            
-
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
