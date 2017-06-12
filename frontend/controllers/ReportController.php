@@ -39,6 +39,7 @@ class ReportController extends \yii\web\Controller {
         return $this->render('//report/grid', ['models' => $models, 'dep_name' => $dep_name]);
     }
 
+    
     public function actionForm($controller = null, $form_id = null, $pointer = null, $report_name = null, $details = null) {
         //Function เลือก รูปแบบฟอร์มค้นหาข้อมูล
         $view = null;
