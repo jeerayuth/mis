@@ -182,7 +182,7 @@ class ClaimController extends CommonController {
                     left outer join ipt i on i.an = a.an  
 
                 WHERE  a.pcode='A7' and a.regdate between $datestart and $dateend and a.pdx not between 'k000' and  'k089' and pdx !='o800' and pdx!= 'z370' and pdx not like 'z35%' and pdx not like 'z36%' 
-                and pdx  not in('z32','z320','z321','z33','z34','z340','z348','z349')  and pdx <>'' and pdx not like '%xx%' and pdx is not null 
+                and pdx  not in('z32','z320','z321','z33','z34','z340','z348','z349')   and pdx not like '%xx%' 
                 GROUP BY a.vn order by a.regdate,a.hn  ";
 
         try {

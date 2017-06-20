@@ -784,6 +784,39 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     
     
     
+    public function actionReport16($details) {
+              // save log
+        $this->SaveLog($this->dep_controller, 'report16', $this->getSession());
+        $cur_date = date('d-m-Y');  
+        $report_name = "รายงานตรวจสอบวันเกิดคนไข้ ณ วันที่ $cur_date";
+        $sql = "SELECT
+                    a.an,a.hn,
+                    concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    concat(a.age_y, ' ปี ',a.age_m,' เดือน') as age,a.regdate,
+                    date(now()) as cur_date,p.birthday ,a.ward
+                FROM an_stat a
+                left outer join patient p on p.hn = a.hn
+                where a.ward = '01' and a.dchdate  is null  
+                and  p.birthday =  date(now()) ";                                
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report16', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+    
     
     
     
