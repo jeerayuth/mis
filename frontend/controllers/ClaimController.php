@@ -914,6 +914,51 @@ class ClaimController extends CommonController {
         ]);
      }
      
+      public function actionReport20($datestart, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report20', $this->getSession());
+
+        $report_name = "รายงานสรุปยอดผู้มารับบริการ OPD แยกรายวันตามสิทธิ์การรักษา";
+        
+        $sql = "SELECT
+                    v.pttype , p.name as pttype_name,count(distinct(v.vn)) as count_vn  ,
+                    sum(income) as sum_income
+                FROM vn_stat  v
+                left outer join pttype p on p.pttype = v.pttype
+                left outer join service_time s on s.vn = v.vn
+                WHERE
+                  (
+                    (v.vstdate = date_sub($datestart,interval 1 day) and s.service3 between '16:01:00' and '23:59:59')
+                      or
+                     (v.vstdate = $datestart and s.service3 between '00:00:00' and '16:00:59')
+                   )
+                    GROUP BY v.pttype ";
+
+                                                       
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report20', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $datestart,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+      
+        
+        
+     }
+     
+     
      
      
      
