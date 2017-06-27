@@ -127,7 +127,28 @@ class ClaimController extends CommonController {
 
         $report_name = "รายงานประกันสังคมผู้ป่วยนอก";
         $sql = "SELECT concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                ,v.cid,s.name as sex,v.age_y,concat(ic.code,'  ',v.dx0,'  ',v.dx1,'  ',v.dx2,'  ',v.dx3,'  ',v.dx4,'  ',v.dx5) as icd10,concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money,
+                ,v.cid,s.name as sex,v.age_y,
+                
+                v.pdx as pdx,
+                 concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                
+
+                dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money,
                 ov.vsttime as vst_time,v.inc12 as v_drug,v.inc04 as v_xray,v.inc01 as v_lab,
                 (v.inc06+v.inc07+v.inc13) as v_icd9,
                 (v.inc05+v.inc09+v.inc02+v.inc03+v.inc08+v.inc11+v.inc14+v.inc15+v.inc16+v.inc17) as v_other
@@ -172,8 +193,29 @@ class ClaimController extends CommonController {
                     concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as dchdate,
                     a.hn,a.vn,concat(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) as ovst_date,
                     concat(p.pname,p.fname,'  ',p.lname) as patient_name, 
-                    s.name as sex,a.age_y,concat(a.pdx,'  ',a.dx0,'  ',a.dx1) as icd10,
-                    concat(a.op0,'  ',a.op1) as icd9,dr.name as doc_name,dr.licenseno,a.item_money, i.rw 
+                    s.name as sex,a.age_y,
+                    
+                    a.pdx as pdx,
+                    
+                    concat(
+                           if(a.dx0 is not null,concat(a.dx0,'   '),' '),
+                           if(a.dx1 is not null,concat(a.dx1,'   '),' '),
+                           if(a.dx2 is not null,concat(a.dx2,'   '),' '),
+                           if(a.dx3 is not null,concat(a.dx3,'   '),' '),
+                           if(a.dx4 is not null,concat(a.dx4,'   '),' '),
+                           if(a.dx5 is not null,concat(a.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(a.op0 is not null, concat(a.op0,'   '),' '),
+                            if(a.op1 is not null, concat(a.op1,'   '),' '),
+                            if(a.op2 is not null, concat(a.op2,'   '),' '),
+                            if(a.op3 is not null, concat(a.op3,'   '),' '),
+                            if(a.op4 is not null, concat(a.op4,'   '),' '),
+                            if(a.op5 is not null, concat(a.op5,'   '),' ')
+                            ) as icd9,
+                    
+                    
+                    dr.name as doc_name,dr.licenseno,a.item_money, i.rw 
                 FROM an_stat a 
                     left outer join patient p on p.hn=a.hn 
                     left outer join ovst ov on ov.vn=a.vn
@@ -210,7 +252,27 @@ class ClaimController extends CommonController {
 
         $report_name = "ประกันสังคมผู้ป่วยนอก สุราษฎร์ธานี";
         $sql = "SELECT concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                ,v.cid,s.name as sex,v.age_y,concat(ic.code,'  ',v.dx0,'  ',v.dx1,'  ',v.dx2,'  ',v.dx3,'  ',v.dx4,'  ',v.dx5) as icd10,concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,ov.vsttime as vst_time,v.income,v.paid_money,remain_money,uc_money,item_money,
+                ,v.cid,s.name as sex,v.age_y,
+                
+                v.pdx as pdx,
+                concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                
+                dr.name as doc_name,ov.vsttime as vst_time,v.income,v.paid_money,remain_money,uc_money,item_money,
                 v.inc12 as v_drug,v.inc04 as v_xray,v.inc01 as v_lab,(v.inc06+v.inc07+v.inc13) as v_icd9 ,(v.inc05+v.inc09+v.inc02+v.inc03+v.inc08+v.inc11+v.inc14+v.inc15+v.inc16+v.inc17) as v_other 
             FROM vn_stat v 
                 left outer join patient p on p.hn=v.hn 
@@ -252,7 +314,10 @@ class ClaimController extends CommonController {
         $sql = "SELECT
 
         concat(pt.pname,pt.fname,'   ',pt.lname) as ptname,pt.cid,pt.hn,concat(DAY(ov.vstdate),'/',MONTH(ov.vstdate),'/',(YEAR(ov.vstdate)+543)) as vst_date,
-        ov.pdx,ov.dx0,ov.dx1,ov.dx2,ov.dx3,ov.dx4,ov.dx5,ov.inc_drug,ov.inc03,
+     
+        ov.pdx,ov.dx0,ov.dx1,ov.dx2,ov.dx3,ov.dx4,ov.dx5,
+        
+        ov.inc_drug,ov.inc03,  
         ov.inc04,ov.dx_doctor, d.licenseno, d.name as doctor_name , ov.income,
 
         ov.inc12,
@@ -467,8 +532,26 @@ class ClaimController extends CommonController {
         $report_name = "ประกันสังคม ANC ผู้ป่วยนอก";
         $sql = "SELECT 
                     p.cid,v.hn,v.vn,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as ovst_date,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                    ,s.name as sex,v.age_y,concat(v.pdx,'  ',v.dx0,'  ',v.dx1,'  ',v.dx2,'  ',v.dx3,'  ',v.dx4,'  ',v.dx5) as icd10,
-                    concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,dr.licenseno,        
+                    ,s.name as sex,v.age_y,          
+                    v.pdx as pdx,              
+                    concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                    
+                    dr.name as doc_name,dr.licenseno,        
                     if(v.item_money>700,700,v.item_money) as item_money
                     
 
@@ -510,7 +593,28 @@ class ClaimController extends CommonController {
         $report_name = "สิทธิ์บัตรประกันสุขภาพถ้วนหน้า(UC) มีท,ไม่มีท เขตรอยต่อ(รวมผลวินิจฉัย E100 - E119 และ I10)";
         $sql = "SELECT 
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                    ,v.cid,s.name as sex,v.age_y,concat(ic.code,'  ',v.dx0,'  ',v.dx1,'  ',v.dx2,'  ',v.dx3,'   ',v.dx4,'  ',v.dx5) as icd10,concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money
+                    ,v.cid,s.name as sex,v.age_y,
+                    
+                    v.pdx as pdx,
+                    
+                    concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                    
+                    dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money
                 FROM vn_stat v
                     left outer join patient p on p.hn=v.hn 
                     left outer join ovst ov on ov.vn=v.vn 
@@ -549,7 +653,29 @@ class ClaimController extends CommonController {
         $report_name = "รายงานสิทธิ์บัตรประกันสุขภาพถ้วนหน้า(UC) มีท,ไม่มีท เขตรอยต่อ (ผลวินิจฉัย E100 - E119,I10)";
         $sql = "select 
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                    ,v.cid,s.name as sex,v.age_y,concat(ic.code,'  ',v.dx0,'  ',v.dx1,'  ',v.dx2,'  ',v.dx3,'  ',v.dx4,'  ',v.dx5) as icd10,concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money 
+                    ,v.cid,s.name as sex,v.age_y,
+                v.pdx as pdx,
+                
+                    concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                
+                dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money 
+                
+
                 FROM vn_stat v 
                     left outer join patient p on p.hn=v.hn 
                     left outer join ovst ov on ov.vn=v.vn 
@@ -594,7 +720,26 @@ class ClaimController extends CommonController {
         $sql = "
                 SELECT 
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                    ,v.cid,s.name as sex,v.age_y,concat(ic.code,'  ',v.dx0,'  ',v.dx1) as icd10,concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money
+                    ,v.cid,s.name as sex,v.age_y,
+                    v.pdx as pdx,
+                    concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                    
+                    dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money
                 FROM vn_stat v
                     left outer join patient p on p.hn=v.hn
                     left outer join ovst ov on ov.vn=v.vn
@@ -633,7 +778,26 @@ class ClaimController extends CommonController {
         $report_name = "รายงานคนไข้ที่ใช้สิทธิ์ อปท.เข้าโครงการจ่ายตรง (ผู้ป่วยนอก)";
         $sql = "SELECT 
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                    ,v.cid,s.name as sex,v.age_y,concat(ic.code,'  ',v.dx0,'  ',v.dx1) as icd10,concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,dr.licenseno,
+                    ,v.cid,s.name as sex,v.age_y,
+                    v.pdx as pdx,                  
+                    concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                    
+                    dr.name as doc_name,dr.licenseno,
                     v.income,v.paid_money,remain_money,uc_money,item_money
                 FROM vn_stat v
                     left outer join patient p on p.hn=v.hn
@@ -674,8 +838,28 @@ class ClaimController extends CommonController {
         $sql = "SELECT
                     p.cid,a.an,a.hn,a.vn,concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as ovst_date,
                     concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                    ,s.name as sex,a.age_y,concat(a.pdx,'  ',a.dx0,'  ',a.dx1,'  ',a.dx2,'  ',a.dx3,'  ',a.dx4,'  ',a.dx5) as icd10,
-                    concat(a.op0,'  ',a.op1) as icd9,dr.name as doc_name,dr.licenseno,a.item_money
+                    ,s.name as sex,a.age_y,
+                    
+                    a.pdx as pdx,
+                    
+                    concat(
+                           if(a.dx0 is not null,concat(a.dx0,'   '),' '),
+                           if(a.dx1 is not null,concat(a.dx1,'   '),' '),
+                           if(a.dx2 is not null,concat(a.dx2,'   '),' '),
+                           if(a.dx3 is not null,concat(a.dx3,'   '),' '),
+                           if(a.dx4 is not null,concat(a.dx4,'   '),' '),
+                           if(a.dx5 is not null,concat(a.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(a.op0 is not null, concat(a.op0,'   '),' '),
+                            if(a.op1 is not null, concat(a.op1,'   '),' '),
+                            if(a.op2 is not null, concat(a.op2,'   '),' '),
+                            if(a.op3 is not null, concat(a.op3,'   '),' '),
+                            if(a.op4 is not null, concat(a.op4,'   '),' '),
+                            if(a.op5 is not null, concat(a.op5,'   '),' ')
+                            ) as icd9,
+                    
+                    dr.name as doc_name,dr.licenseno,a.item_money
                 FROM an_stat a
                     left outer join patient p on p.hn=a.hn
                     left outer join ovst ov on ov.vn=a.vn
@@ -714,7 +898,28 @@ class ClaimController extends CommonController {
         $report_name = "E-Claim ผู้ป่วยนอก สิทธิ์ 56(UC นอกเขตต่างจังหวัดไม่มีท),57(UC ท นอกเขตต่างจังหวัดมี ท)";
         $sql = "SELECT
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                    ,v.cid,s.name as sex,v.age_y,concat(ic.code,'  ',v.dx0,'  ',v.dx1,'  ',v.dx2,'  ',v.dx3,'  ',v.dx4,'  ',v.dx5) as icd10,concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,
+                    ,v.cid,s.name as sex,v.age_y,
+                    
+                    v.pdx as pdx,
+                    
+                    concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                            
+                    dr.name as doc_name,
                     dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money
                 FROM vn_stat v
                     left outer join patient p on p.hn=v.hn
@@ -799,8 +1004,29 @@ class ClaimController extends CommonController {
                 select
                 concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,
                 v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name,
-                v.cid,s.name as sex,v.age_y,'' as icd10,
-                concat(v.op0,'  ',v.op1) as icd9,dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money
+                v.cid,s.name as sex,v.age_y,
+                
+                v.pdx as pdx,
+                
+                 concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                     concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                
+
+                dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money
 
                 from vn_stat v
                 left outer join patient p on p.hn=v.hn

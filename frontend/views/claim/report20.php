@@ -87,6 +87,7 @@ $this->registerJs("
 // จบ chart
 ?>
 
+<br/>
 
 <?php
 

@@ -56,8 +56,8 @@ echo GridView::widget([
             'header' => 'อายุ(ปี)'
         ],
         [
-            'attribute' => 'icd10',
-            'header' => 'การวินิจฉัยโรค(ICD10)'
+            'attribute' => 'pdx',
+            'header' => 'การวินิจฉัยหลัก'
         ],
         [
             'attribute' => 'icd9',

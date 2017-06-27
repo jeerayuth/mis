@@ -48,8 +48,12 @@ echo GridView::widget([
             'header' => 'ชื่อ-สกุล'
         ],
         [
-            'attribute' => 'icd10',
-            'header' => 'การวินิจฉัย(ICD10)'
+            'attribute' => 'pdx',
+            'header' => 'การวินิจฉัยหลัก'
+        ],
+        [
+            'attribute' => 'second_diag',
+            'header' => 'การวินิจฉัยรอง'
         ],
         [
             'attribute' => 'icd9',
