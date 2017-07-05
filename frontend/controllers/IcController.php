@@ -42,7 +42,8 @@ class IcController extends CommonController {
 
 
                     if(o.pmh is not null, o.pmh, '') as pmh ,
-                    if(op.icode = 3001141,'มีตรวจ EKG','')  as EKG
+                    (select 'มีตรวจ EKG' from opitemrece op where op.icode = 3001141 and op.vn = v.vn)  as EKG
+
                     
                 FROM vn_stat v
                 left outer join patient p on p.hn = v.hn

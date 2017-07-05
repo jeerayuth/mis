@@ -54,11 +54,11 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'weight',
-            'header' => 'นน.'
+            'header' => 'น้ำหนัก'
         ],
         [
             'attribute' => 'height',
-            'header' => 'สส.'
+            'header' => 'ส่วนสูง'
         ],
            [
             'attribute' => 'bp',
