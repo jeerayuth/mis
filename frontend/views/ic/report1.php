@@ -53,6 +53,30 @@ echo GridView::widget([
             'header' => 'PDX'
         ],
         [
+            'attribute' => 'dx0',
+            'header' => 'DX0'
+        ],
+        [
+            'attribute' => 'dx1',
+            'header' => 'DX1'
+        ],
+        [
+            'attribute' => 'dx2',
+            'header' => 'DX2'
+        ],
+        [
+            'attribute' => 'dx3',
+            'header' => 'DX3'
+        ],
+        [
+            'attribute' => 'dx4',
+            'header' => 'DX4'
+        ],
+        [
+            'attribute' => 'dx5',
+            'header' => 'DX5'
+        ],
+        [
             'attribute' => 'weight',
             'header' => 'น้ำหนัก'
         ],
@@ -61,9 +85,13 @@ echo GridView::widget([
             'header' => 'ส่วนสูง'
         ],
            [
-            'attribute' => 'bp',
-            'header' => 'BP'
-        ],        
+            'attribute' => 'bps',
+            'header' => 'BPS'
+        ],  
+         [
+            'attribute' => 'bpd',
+            'header' => 'BPD'
+        ], 
          [
             'attribute' => 'bmi',
             'header' => 'BMI'
