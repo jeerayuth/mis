@@ -46,6 +46,8 @@ class IcController extends CommonController {
                     (select lo12.lab_order_result  from lab_order lo12 where lo12.lab_order_number = lh.lab_order_number and lo12.lab_items_code = 48    group by lo12.lab_order_number )  as  HbA1C,
                     (select lo13.lab_order_result  from lab_order lo13 where lo13.lab_order_number = lh.lab_order_number and lo13.lab_items_code = 2176  group by lo13.lab_order_number )  as  Anti_HBs,
                     (select lo14.lab_order_result  from lab_order lo14 where lo14.lab_order_number = lh.lab_order_number and lo14.lab_items_code = 2174  group by lo14.lab_order_number )  as  HBsAg,
+                    
+                    (select if(lo15.lab_order_result is not null, 'ตรวจ UA', '')  from lab_order lo15 where lo15.lab_order_number = lh.lab_order_number and lo15.lab_items_code = 3035  group by lo15.lab_order_number )  as  UA,
 
 
                     if(o.pmh is not null, o.pmh, '') as pmh ,
@@ -60,7 +62,11 @@ class IcController extends CommonController {
                 left outer join opitemrece op on op.vn = v.vn
 
                 WHERE 
-                     v.vstdate between $datestart and $dateend  and v.pdx = 'z000' 
+                     v.vstdate between $datestart and $dateend  and 
+                         
+                    (
+                        v.pdx = 'z000' 
+                     )
                      
                 and p.hn in ('4501661','5500252','5701788','5302679','5503924',
                              '5201958','5301599','4801532','5401806','5500068',

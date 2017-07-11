@@ -1472,5 +1472,94 @@ class PcuController extends CommonController {
         ]);
     }
     
+    
+    public function actionReport30($datestart, $dateend,$details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report30', $this->getSession());
+
+        $report_name = "รายงานสรุปอายุของประชากรตามวันเกิด ในเขตรับผิดชอบ";
+        $sql = "SELECT
+                    v.village_id,v.village_moo, v.village_name ,                 
+                    (
+                      select count(p.cid) from person p
+
+                      where  p.birthdate  between $datestart AND $dateend   
+                          and p.village_id = v.village_id
+
+                      ) as count_by_birth
+
+
+                     FROM village v
+
+                WHERE v.village_id != 1 ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report30', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+        ]);
+    }
+    
+    
+    
+    public function actionReport31($datestart, $dateend,$village_id) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report31', $this->getSession());
+
+
+        $report_name = "รายงานรายชื่อประชากรตามวันเกิด ที่มีวันเกิด ระหว่างวันที่ $datestart ถึง $dateend ในเขตรับผิดชอบ";
+        $sql = "select
+                p.cid,
+                concat(p.pname,p.fname,'  ',p.lname) as pt_name ,v.village_moo,v.village_name,h.address,t.full_name,
+                p.age_y as age_year,p.house_regist_type_id, r.house_regist_type_name,
+                p.birthdate
+
+                from person p
+
+                left outer join village v on v.village_id = p.village_id
+                left outer join thaiaddress t on t.addressid = v.address_id
+                left outer join house h on h.house_id = p.house_id
+                left outer join house_regist_type r on r.house_regist_type_id = p.house_regist_type_id
+
+                where p.birthdate  between $datestart AND $dateend    and p.village_id = $village_id
+
+                ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report31', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'village_id' => $village_id,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+        ]);
+    }
+    
    
 }
