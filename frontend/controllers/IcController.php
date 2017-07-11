@@ -47,8 +47,9 @@ class IcController extends CommonController {
                     (select lo13.lab_order_result  from lab_order lo13 where lo13.lab_order_number = lh.lab_order_number and lo13.lab_items_code = 2176  group by lo13.lab_order_number )  as  Anti_HBs,
                     (select lo14.lab_order_result  from lab_order lo14 where lo14.lab_order_number = lh.lab_order_number and lo14.lab_items_code = 2174  group by lo14.lab_order_number )  as  HBsAg,
                     
-                    (select if(lo15.lab_order_result is not null, 'ตรวจ UA', '')  from lab_order lo15 where lo15.lab_order_number = lh.lab_order_number and lo15.lab_items_code = 3035  group by lo15.lab_order_number )  as  UA,
-
+                    (select if(lo15.lab_order_result is not null, 'มีตรวจ UA', '')  from lab_order lo15 where lo15.lab_order_number = lh.lab_order_number and lo15.lab_items_code = 3035  group by lo15.lab_order_number )  as  UA,
+                    
+                    (select  if(x.xray_items_code is not null, 'มี CXR PA', '') from xray_report  x where x.vn = v.vn and x.xray_items_code = 11  group by x.vn )  as  xray_cxr,
 
                     if(o.pmh is not null, o.pmh, '') as pmh ,
                     (select 'มีตรวจ EKG' from opitemrece op where op.icode = 3001141 and op.vn = v.vn)  as EKG

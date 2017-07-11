@@ -101,6 +101,10 @@ echo GridView::widget([
             'header' => 'เอว'
         ],
         [
+            'attribute' => 'xray_cxr',
+            'header' => 'CXR'
+        ],
+        [
             'attribute' => 'UA',
             'header' => 'UA'
         ],
