@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2017-07-05 14:41:40
+Date: 2017-07-12 10:17:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=351 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=353 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -322,3 +322,5 @@ INSERT INTO lamaereports VALUES ('347', '10', 'รายงานจำนวน
 INSERT INTO lamaereports VALUES ('348', '10', 'รายงานจำนวนผู้ป่วยเด็ก อายุ 1 เดือน - 5ปี  Re-admit ภายใน 28วัน ด้วยโรค j12-j18 ราย/ครั้ง', 'form1', 'report18', '2017-06-23', 'enable', 'ward', null);
 INSERT INTO lamaereports VALUES ('349', '14', 'รายงานสรุปยอดผู้มารับบริการ OPD แบบรายวัน แยกตามสิทธิ์การรักษา (ระหว่างพัฒนา)', 'form16', 'report20', '2017-06-26', 'enable', 'claim', 'วิธีการสรุปข้อมูลเป็นดังนี้ เช่น ผู้ใช้เลือกวันที่ที่ต้องการดูรายงานเป็นวันที่ 15 ม.ค.60 ระบบจะดึงข้อมูล ของวันที่ 14 ม.ค. 60 ระหว่างเวลา 16:01:00 น.  ถึง 23:59:59 น. มารวมกันวันที่ 15 ม.ค. 60 ระหว่างเวลา 00:00:00  ถึง 16:00:59');
 INSERT INTO lamaereports VALUES ('350', '20', 'รายงานตรวจสุขภาพเจ้าหน้าที่โรงพยาบาลละแม', 'form1', 'report1', '2017-07-05', 'enable', 'ic', null);
+INSERT INTO lamaereports VALUES ('351', '9', 'รายงานสรุปอายุของประชากรตามวันเกิด ในเขตรับผิดชอบ', 'form1', 'report30', '2017-07-11', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('352', '20', 'รายงานการฉีด HB VACCINE(Heberbiovac HB ) และผลตรวจแลป Anti-HBs เจ้าหน้าที่โรงพยาบาลละแม', 'form1', 'report2', '2017-07-12', 'enable', 'ic', null);

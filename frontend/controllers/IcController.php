@@ -135,5 +135,115 @@ class IcController extends CommonController {
                     'details' => $details,
         ]);
     }
+    
+    
+    
+    
+    
+    public function actionReport2($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
+
+        $report_name = "รายงานการฉีด HB VACCINE(Heberbiovac HB )และผลตรวจแลป Anti-HBs เจ้าหน้าที่โรงพยาบาลละแม";
+
+        $sql = "SELECT
+                    concat(p.pname,p.fname) as fname, p.lname as lname,
+                    p.hn,
+                   (select o1.vstdate from opitemrece o1 where o1.hn= p.hn and o1.icode = '1460182' and o1.vstdate between $datestart and $dateend order by o1.vstdate limit 0,1 ) as hb1 ,
+                   (select o2.vstdate from opitemrece o2 where o2.hn= p.hn and o2.icode = '1460182' and o2.vstdate between $datestart and $dateend order by o2.vstdate limit 1,1 ) as hb2 ,
+                   (select o3.vstdate from opitemrece o3 where o3.hn= p.hn and o3.icode = '1460182' and o3.vstdate between $datestart and $dateend order by o3.vstdate limit 2,1 ) as hb3 ,
+
+                   (
+                           select
+                              lh.order_date
+                           from lab_head lh
+                           left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                           where lo.lab_items_code = 2176  and lh.order_date between $datestart and $dateend and lh.hn = p.hn
+                           order by lh.order_date desc limit 0,1
+
+                   ) as lab_order_date,
+
+                      (
+                           select
+                              lo.lab_order_result
+                           from lab_head lh
+                           left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                           where lo.lab_items_code = 2176  and lh.order_date between $datestart and $dateend and lh.hn = p.hn
+                           order by lh.order_date desc limit 0,1
+
+                   ) as lab_order_result
+
+             FROM patient p
+
+             WHERE  p.hn in ('4501661','5500252','5701788','5302679','5503924',
+                             '5201958','5301599','4801532','5401806','5500068',
+                             '5902133','5902323','5902025','5902019','4702928',
+                             '4410623','4700504','4400765','4402710','4405177',
+                             '4600046','4706079','4807976','4400350','4405347',
+                             '4400525','4400748','5003731','4407741','4800313',
+                             '4900574','4405769','4705745','4702092','4405283',
+                             
+                             '4600119','4807494','4901678','4504082','4903681',
+                             '4900625','4403526','4500492','4800283','4401358',
+                             '4708050','4509002','4407985','4600941','4404900',
+                             '4401076','4400610','4400488','4408750','4400923',
+                             '4404488','4401371',
+                             
+                             '4400915','4705318','4700946','4401948','4400832',
+                             '4703808','4400513','5901945','4505377','4601594',
+                             '4900672','5700203','5800611','4401055','4900448',
+                             '4401685','4401351','4400422','4410886','4404574',
+                             '4400625','4404291','4707053','4400245',
+                             
+                             '5300143','4605430','4906012','4412878','4805845',
+                             '4504085','4405225','4411606','4405925','5501683',
+                             '5602487','5400312','5503444 ','5404482','5302377',
+                             '5202159','4505145','4902140','5805426','4905854',
+                             '5902406','4404004',
+                             
+                             '4400866','4401363','4411337','4501714','5600142',
+                             '5601740','5701253','5701307','5701494','5703871',
+                             '4500732','5803220','5004287','5801707','4400023',
+                             '5404784',
+                             
+                             '4707680','4602424','5002128','4400537','4504929',
+                             '4606911','4407608','4806443','4402827','4704584',
+                             '4401258','4401770','5103473','4800330','4406578',
+                             '4407643','4702497','4600280','4801684','4400448',
+                             '4404518','4700068',
+                             
+                             '5102697','5205141','5301662','4405925','4504760',
+                             '4409134','5102704','4905065','4603853','5202473',
+                             '4605903','5903779','4403536'
+                             
+
+                )
+
+             GROUP BY p.hn
+             ORDER BY p.hn";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report2', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
 
 }
