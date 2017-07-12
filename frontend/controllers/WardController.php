@@ -797,7 +797,7 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
                 FROM an_stat a
                 left outer join patient p on p.hn = a.hn
                 where a.ward = '01' and a.dchdate  is null  
-                and  p.birthday =  date(now()) ";                                
+                and  MONTH(p.birthday) = MONTH(now()) ";                                
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
