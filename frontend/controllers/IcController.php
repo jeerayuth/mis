@@ -220,7 +220,7 @@ class IcController extends CommonController {
                 )
 
              GROUP BY p.hn
-             ORDER BY p.hn";
+             ORDER BY p.hn ";
                          
 
         try {

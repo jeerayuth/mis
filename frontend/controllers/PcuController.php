@@ -1561,5 +1561,37 @@ class PcuController extends CommonController {
         ]);
     }
     
+    
+    
+     public function actionReport32() {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report32', $this->getSession());
+
+
+        $report_name = "รายงานสรุปคนไข้ที่มี Diag โรคมะเร็ง แยกตามที่อยู่ในแต่ละสถานบริการ(คน)";
+        $sql = "
+                ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+        /*
+        return $this->render('report32', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+
+        ]); */
+    }
+    
    
 }
