@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2017-07-12 10:17:04
+Date: 2017-07-12 13:54:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=353 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=356 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -324,3 +324,6 @@ INSERT INTO lamaereports VALUES ('349', '14', 'รายงานสรุปย
 INSERT INTO lamaereports VALUES ('350', '20', 'รายงานตรวจสุขภาพเจ้าหน้าที่โรงพยาบาลละแม', 'form1', 'report1', '2017-07-05', 'enable', 'ic', null);
 INSERT INTO lamaereports VALUES ('351', '9', 'รายงานสรุปอายุของประชากรตามวันเกิด ในเขตรับผิดชอบ', 'form1', 'report30', '2017-07-11', 'enable', 'pcu', null);
 INSERT INTO lamaereports VALUES ('352', '20', 'รายงานการฉีด HB VACCINE(Heberbiovac HB ) และผลตรวจแลป Anti-HBs เจ้าหน้าที่โรงพยาบาลละแม', 'form1', 'report2', '2017-07-12', 'enable', 'ic', null);
+INSERT INTO lamaereports VALUES ('353', '21', 'รายงานสรุปคนไข้ทะเบียนคลินิกโรคหลอดเลือดสมอง(CVA) แยกตามที่อยู่ในแต่ละสถานบริการ(คน)', 'form5', 'report1', '2017-07-12', 'enable', 'cva', null);
+INSERT INTO lamaereports VALUES ('354', '22', 'รายงานสรุปคนไข้ทะเบียนคลินิกโรคหัวใจ แยกตามที่อยู่ในแต่ละสถานบริการ(คน)', 'form5', 'report1', '2017-07-12', 'enable', 'hearth', null);
+INSERT INTO lamaereports VALUES ('355', '9', 'รายงานสรุปคนไข้โรคมะเร็ง ตาม ICD10 (c000  ถึง c97)  แยกตามที่อยู่ในแต่ละสถานบริการ(คน)', 'form5', 'report32', '2017-07-12', 'enable', 'pcu', null);

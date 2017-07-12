@@ -1568,9 +1568,95 @@ class PcuController extends CommonController {
         $this->SaveLog($this->dep_controller, 'report32', $this->getSession());
 
 
-        $report_name = "รายงานสรุปคนไข้ที่มี Diag โรคมะเร็ง แยกตามที่อยู่ในแต่ละสถานบริการ(คน)";
-        $sql = "
-                ";
+        $report_name = "รายงานสรุปคนไข้โรคมะเร็ง ตาม ICD10 (c000  ถึง c97)  แยกตามที่อยู่ในแต่ละสถานบริการ(คน)";
+        $sql = "SELECT
+                    '1' as hosp_area,'รพ.สต.ตำบลทุ่งหลวง' as hosp_name ,
+                    th.full_name as address,count(distinct(pt.hn)) as count_hn
+                    from patient pt
+                    LEFT OUTER JOIN ovstdiag ov on ov.hn = pt.hn
+                    LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                    where ov.icd10  between 'c000' and 'c97'
+                    AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860502'   and pt.moopart in (1,2,3,4,5,6,7,8,9)
+                    AND pt.hn not in (select hn from death)
+                    GROUP BY th.addressid
+
+                union
+                    select
+                    '2' as hosp_area,'รพ.สต.ตำบลสวนแตง' as hosp_name ,
+                    th.full_name as address,count(distinct(pt.hn)) as count_hn
+                    from patient pt
+                    LEFT OUTER JOIN ovstdiag ov on ov.hn = pt.hn
+                    LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                    where ov.icd10  between 'c000' and 'c97'
+                    AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (2,3,4,5,6,9)
+                    AND pt.hn not in (select hn from death)
+                    GROUP BY th.addressid
+                union
+                    select
+                    '3' as hosp_area,'รพ.สต.ตำบลทุ่งคาวัด' as hosp_name ,
+                    th.full_name as address,count(distinct(pt.hn)) as count_hn
+                    from patient pt
+                    LEFT OUTER JOIN ovstdiag ov on ov.hn = pt.hn
+                    LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                    where ov.icd10  between 'c000' and 'c97'
+                    AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =   '860504'   and pt.moopart in (1,2,3,4,6)
+                    AND pt.hn not in (select hn from death)
+                    GROUP BY th.addressid
+
+                union
+                    select
+                    '4' as hosp_area,'รพ.สต.บ้านคลองสง' as hosp_name ,
+                    th.full_name as address,count(distinct(pt.hn)) as count_hn
+                    from patient pt
+                    LEFT OUTER JOIN ovstdiag ov on ov.hn = pt.hn
+                    LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                    where ov.icd10  between 'c000' and 'c97'
+                    AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (8,11,13,15,17,18,20)
+                    AND pt.hn not in (select hn from death)
+                    GROUP BY th.addressid
+
+                union
+
+                    select
+                    '5' as hosp_area,'รพ.สต.บ้านทับใหม่' as hosp_name ,
+                    th.full_name as address,count(distinct(pt.hn)) as count_hn
+                    from patient pt
+                    LEFT OUTER JOIN ovstdiag ov on ov.hn = pt.hn
+                    LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                    where ov.icd10  between 'c000' and 'c97'
+                    AND (concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501' and pt.moopart in (16,19)
+                    OR concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504' and pt.moopart in (5,7,8))
+                    AND pt.hn not in (select hn from death)
+                    GROUP BY hosp_area
+                    
+                union
+
+                    select
+                    '6' as hosp_area,'รพ.สต.บ้านควรผาสุก' as hosp_name ,
+                    th.full_name as address,count(distinct(pt.hn)) as count_hn
+                    from patient pt
+                    LEFT OUTER JOIN ovstdiag ov on ov.hn = pt.hn
+                    LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                    where ov.icd10  between 'c000' and 'c97'
+                    AND concat(pt.chwpart,pt.amppart,pt.tmbpart) = '860503'   and pt.moopart in (1,7,8,10)
+                    AND pt.hn not in (select hn from death)
+                    GROUP BY th.addressid
+
+                union
+
+                    select
+                    '7' as hosp_area,'รพ.ละแม' as hosp_name ,
+                    th.full_name as address,count(distinct(pt.hn)) as count_hn
+                    from patient pt
+                    LEFT OUTER JOIN ovstdiag ov on ov.hn = pt.hn
+                    LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                    where ov.icd10  between 'c000' and 'c97'
+                    AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14)
+                    AND pt.hn not in (select hn from death)
+                    GROUP BY th.addressid
+
+
+                                    ";
 
 
         try {
@@ -1578,20 +1664,95 @@ class PcuController extends CommonController {
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
+        
 
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
         
-        /*
+        
         return $this->render('report32', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
 
-        ]); */
+        ]); 
     }
+    
+    
+    public function actionReport33($hosp_area) {
+        $this->SaveLog($this->dep_controller, 'report33', $this->getSession());
+        // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+        $hosp_area_condition = ""; 
+        $report_name = 'รายงานรายชื่อคนไข้โรคมะเร็ง ตาม ICD10(c000  ถึง c97)  แยกตามที่อยู่ในแต่ละสถานบริการ(คน)';
+                     
+            if($hosp_area == 1) {
+                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860502'   and pt.moopart in (1,2,3,4,5,6,7,8,9) ";
+            } else if ($hosp_area == 2) {
+                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (2,3,4,5,6,9)";
+            } else if ($hosp_area == 3) {
+                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'   and pt.moopart in (1,2,3,4,6) "; 
+            } else if ($hosp_area == 4) {
+                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (8,11,13,15,17,18,20) ";
+            } else if ($hosp_area == 5) {
+               $hosp_area_condition = " AND (concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'    and pt.moopart in (16,19)
+                                        OR concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'     and pt.moopart in (5,7,8)) ";
+            } else if ($hosp_area == 6) {
+                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (1,7,8,10) ";
+            } else if ($hosp_area == 7) {
+                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14) ";
+            }
+                                                                    
+                    
+            $sql = "         
+                    SELECT
+                    pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    concat( timestampdiff(year,pt.birthday,now()), ' ปี') as age_y,
+                    pt.cid,
+                    concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+                    pt.moopart
+
+                    FROM patient pt
+                    LEFT OUTER JOIN ovstdiag ov on ov.hn = pt.hn
+                    LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+            
+                    WHERE ov.icd10  between 'c000' and 'c97'   
+
+                    $hosp_area_condition
+
+                    AND pt.hn not in (select hn from death)
+
+                    GROUP BY pt.hn     
+                    ORDER BY pt.moopart
+
+                    ";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => FALSE,
+            ]);
+
+            return $this->render('report33', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+            ]);
+            
+  
+    }
+
+    
+    
+    
+    
     
    
 }
