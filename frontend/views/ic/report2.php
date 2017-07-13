@@ -40,6 +40,14 @@ echo GridView::widget([
             'attribute' => 'lname',
             'header' => 'สกุล'
         ],
+        [
+            'attribute' => 'pttype',
+            'header' => 'รหัสสิทธิ์'
+        ],
+        [
+            'attribute' => 'pttype_name',
+            'header' => 'ชื่อสิทธิ์'
+        ],
         
         [
             'attribute' => 'hb1',

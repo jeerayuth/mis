@@ -18,6 +18,7 @@ class IcController extends CommonController {
         $sql = "SELECT
                     concat(p.pname,p.fname) as fname, p.lname as lname, p.hn,
                     timestampdiff(year,p.birthday,v.vstdate)  as age_y , v.vstdate,
+                    v.pttype,pp.name as pttype_name,
                     v.pdx,
                     if(v.dx0 is not null, v.dx0, '') as dx0,
                     if(v.dx1 is not null, v.dx1, '') as dx1,
@@ -57,6 +58,7 @@ class IcController extends CommonController {
                     
                 FROM vn_stat v
                 left outer join patient p on p.hn = v.hn
+                left outer join pttype pp on pp.pttype = v.pttype
                 left outer join opdscreen o on o.vn = v.vn
                 left outer join lab_head lh on lh.vn = v.vn
                 left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
@@ -108,7 +110,7 @@ class IcController extends CommonController {
                              
                              '5102697','5205141','5301662','4405925','4504760',
                              '4409134','5102704','4905065','4603853','5202473',
-                             '4605903','5903779','4403536'
+                             '4605903','5903779','4403536','6001579'
                              
 
                 )
@@ -152,6 +154,15 @@ class IcController extends CommonController {
                    (select o1.vstdate from opitemrece o1 where o1.hn= p.hn and o1.icode = '1460182' and o1.vstdate between $datestart and $dateend order by o1.vstdate limit 0,1 ) as hb1 ,
                    (select o2.vstdate from opitemrece o2 where o2.hn= p.hn and o2.icode = '1460182' and o2.vstdate between $datestart and $dateend order by o2.vstdate limit 1,1 ) as hb2 ,
                    (select o3.vstdate from opitemrece o3 where o3.hn= p.hn and o3.icode = '1460182' and o3.vstdate between $datestart and $dateend order by o3.vstdate limit 2,1 ) as hb3 ,
+                   (select v1.pttype from vn_stat v1 where v1.hn= p.hn and v1.vstdate between $datestart and $dateend order by v1.vstdate desc limit 0,1 ) as pttype ,
+                   (
+                        select 
+                            pp.name 
+                        from vn_stat v2 
+                        left outer join pttype pp on pp.pttype = v2.pttype
+                        where v2.hn = p.hn and v2.vstdate between $datestart and $dateend 
+                        order by v2.vstdate desc limit 0,1 
+                    ) as pttype_name ,
 
                    (
                            select
@@ -214,7 +225,7 @@ class IcController extends CommonController {
                              
                              '5102697','5205141','5301662','4405925','4504760',
                              '4409134','5102704','4905065','4603853','5202473',
-                             '4605903','5903779','4403536'
+                             '4605903','5903779','4403536','6001579'
                              
 
                 )

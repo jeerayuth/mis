@@ -49,6 +49,14 @@ echo GridView::widget([
             'header' => 'วันที่รับบริการ'
         ],
          [
+            'attribute' => 'pttype',
+            'header' => 'รหัสสิทธิ์'
+        ],
+        [
+            'attribute' => 'pttype_name',
+            'header' => 'ชื่อสิทธิ์'
+        ],
+         [
             'attribute' => 'pdx',
             'header' => 'PDX'
         ],
