@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : SERVER_MASTER
+Source Server         : SERVER_MASTER_192.168.1.253
 Source Server Version : 50532
 Source Host           : 192.168.1.253:3306
 Source Database       : hos
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2016-11-09 13:21:44
+Date: 2017-07-17 08:12:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,3 +41,11 @@ INSERT INTO lamaedepartment VALUES ('11', 'แพทย์แผนไทย');
 INSERT INTO lamaedepartment VALUES ('12', '??');
 INSERT INTO lamaedepartment VALUES ('13', 'กายภาพบำบัด');
 INSERT INTO lamaedepartment VALUES ('14', 'ประกันสุขภาพ');
+INSERT INTO lamaedepartment VALUES ('15', 'คุ้มครองและป้องกันวัณโรค');
+INSERT INTO lamaedepartment VALUES ('16', 'คลินิกฝากครรภ์');
+INSERT INTO lamaedepartment VALUES ('17', 'การเงิน');
+INSERT INTO lamaedepartment VALUES ('18', 'คลินิก ARV');
+INSERT INTO lamaedepartment VALUES ('19', 'X-Ray');
+INSERT INTO lamaedepartment VALUES ('20', 'งานป้องกันและควบคุมการติดเชื้อในโรงพยาบาล (IC)');
+INSERT INTO lamaedepartment VALUES ('21', 'คลินิกโรคหลอดเลือดสมอง');
+INSERT INTO lamaedepartment VALUES ('22', 'คลินิกโรคหัวใจ');

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2017-07-12 10:17:12
+Date: 2017-07-17 08:12:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,7 +25,7 @@ CREATE TABLE `lamaereportslog` (
   `username` varchar(100) NOT NULL,
   `viewlog` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2449 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=2590 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereportslog
@@ -1644,3 +1644,144 @@ INSERT INTO lamaereportslog VALUES ('2445', 'ic', 'report2', 'admin', '2017-07-1
 INSERT INTO lamaereportslog VALUES ('2446', 'ic', 'report2', 'admin', '2017-07-12 10:10:59');
 INSERT INTO lamaereportslog VALUES ('2447', 'ic', 'report2', 'admin', '2017-07-12 10:11:56');
 INSERT INTO lamaereportslog VALUES ('2448', 'ic', 'report1', 'admin', '2017-07-12 10:15:05');
+INSERT INTO lamaereportslog VALUES ('2449', 'cva', 'report1', 'admin', '2017-07-12 10:45:06');
+INSERT INTO lamaereportslog VALUES ('2450', 'cva', 'report1', 'admin', '2017-07-12 10:48:14');
+INSERT INTO lamaereportslog VALUES ('2451', 'dm', 'report2', 'admin', '2017-07-12 10:48:56');
+INSERT INTO lamaereportslog VALUES ('2452', 'cva', 'report1', 'admin', '2017-07-12 10:52:36');
+INSERT INTO lamaereportslog VALUES ('2453', 'cva', 'report2', 'admin', '2017-07-12 10:52:39');
+INSERT INTO lamaereportslog VALUES ('2454', 'cva', 'report2', 'admin', '2017-07-12 10:52:58');
+INSERT INTO lamaereportslog VALUES ('2455', 'cva', 'report2', 'admin', '2017-07-12 10:53:25');
+INSERT INTO lamaereportslog VALUES ('2456', 'cva', 'report2', 'admin', '2017-07-12 10:53:31');
+INSERT INTO lamaereportslog VALUES ('2457', 'cva', 'report2', 'admin', '2017-07-12 10:53:40');
+INSERT INTO lamaereportslog VALUES ('2458', 'cva', 'report2', 'admin', '2017-07-12 10:54:10');
+INSERT INTO lamaereportslog VALUES ('2459', 'cva', 'report2', 'admin', '2017-07-12 10:54:31');
+INSERT INTO lamaereportslog VALUES ('2460', 'cva', 'report2', 'admin', '2017-07-12 10:54:38');
+INSERT INTO lamaereportslog VALUES ('2461', 'cva', 'report2', 'admin', '2017-07-12 10:54:47');
+INSERT INTO lamaereportslog VALUES ('2462', 'claim', 'report7', 'riam', '2017-07-12 10:57:56');
+INSERT INTO lamaereportslog VALUES ('2463', 'hearth', 'report1', 'admin', '2017-07-12 11:01:12');
+INSERT INTO lamaereportslog VALUES ('2464', 'hearth', 'report1', 'admin', '2017-07-12 11:01:44');
+INSERT INTO lamaereportslog VALUES ('2465', 'hearth', 'report2', 'admin', '2017-07-12 11:01:46');
+INSERT INTO lamaereportslog VALUES ('2466', 'hearth', 'report2', 'admin', '2017-07-12 11:01:58');
+INSERT INTO lamaereportslog VALUES ('2467', 'hearth', 'report2', 'admin', '2017-07-12 11:02:05');
+INSERT INTO lamaereportslog VALUES ('2468', 'hearth', 'report2', 'admin', '2017-07-12 11:02:11');
+INSERT INTO lamaereportslog VALUES ('2469', 'hearth', 'report2', 'admin', '2017-07-12 11:02:22');
+INSERT INTO lamaereportslog VALUES ('2470', 'hearth', 'report2', 'admin', '2017-07-12 11:02:42');
+INSERT INTO lamaereportslog VALUES ('2471', 'hearth', 'report2', 'admin', '2017-07-12 11:02:46');
+INSERT INTO lamaereportslog VALUES ('2472', 'hearth', 'report1', 'admin', '2017-07-12 11:03:26');
+INSERT INTO lamaereportslog VALUES ('2473', 'hearth', 'report2', 'admin', '2017-07-12 11:03:30');
+INSERT INTO lamaereportslog VALUES ('2474', 'hearth', 'report2', 'admin', '2017-07-12 11:03:43');
+INSERT INTO lamaereportslog VALUES ('2475', 'hearth', 'report2', 'admin', '2017-07-12 11:03:51');
+INSERT INTO lamaereportslog VALUES ('2476', 'hearth', 'report2', 'admin', '2017-07-12 11:03:59');
+INSERT INTO lamaereportslog VALUES ('2477', 'hearth', 'report2', 'admin', '2017-07-12 11:06:58');
+INSERT INTO lamaereportslog VALUES ('2478', 'hearth', 'report2', 'admin', '2017-07-12 11:07:49');
+INSERT INTO lamaereportslog VALUES ('2479', 'hearth', 'report2', 'admin', '2017-07-12 11:07:56');
+INSERT INTO lamaereportslog VALUES ('2480', 'pcu', 'report32', 'admin', '2017-07-12 13:29:21');
+INSERT INTO lamaereportslog VALUES ('2481', 'pcu', 'report32', 'admin', '2017-07-12 13:29:50');
+INSERT INTO lamaereportslog VALUES ('2482', 'pcu', 'report32', 'admin', '2017-07-12 13:30:26');
+INSERT INTO lamaereportslog VALUES ('2483', 'pcu', 'report32', 'admin', '2017-07-12 13:30:42');
+INSERT INTO lamaereportslog VALUES ('2484', 'pcu', 'report32', 'admin', '2017-07-12 13:31:12');
+INSERT INTO lamaereportslog VALUES ('2485', 'pcu', 'report32', 'admin', '2017-07-12 13:31:37');
+INSERT INTO lamaereportslog VALUES ('2486', 'pcu', 'report32', 'admin', '2017-07-12 13:40:09');
+INSERT INTO lamaereportslog VALUES ('2487', 'pcu', 'report32', 'admin', '2017-07-12 13:52:33');
+INSERT INTO lamaereportslog VALUES ('2488', 'pcu', 'report33', 'admin', '2017-07-12 13:52:35');
+INSERT INTO lamaereportslog VALUES ('2489', 'pcu', 'report33', 'admin', '2017-07-12 13:52:47');
+INSERT INTO lamaereportslog VALUES ('2490', 'pcu', 'report33', 'admin', '2017-07-12 13:52:50');
+INSERT INTO lamaereportslog VALUES ('2491', 'pcu', 'report33', 'admin', '2017-07-12 13:53:03');
+INSERT INTO lamaereportslog VALUES ('2492', 'pcu', 'report33', 'admin', '2017-07-12 13:53:10');
+INSERT INTO lamaereportslog VALUES ('2493', 'pcu', 'report33', 'admin', '2017-07-12 13:53:18');
+INSERT INTO lamaereportslog VALUES ('2494', 'pcu', 'report32', 'admin', '2017-07-12 13:57:19');
+INSERT INTO lamaereportslog VALUES ('2495', 'ward', 'report16', 'ปวิมล', '2017-07-12 13:57:38');
+INSERT INTO lamaereportslog VALUES ('2496', 'ward', 'report16', 'ปวิมล', '2017-07-12 13:57:48');
+INSERT INTO lamaereportslog VALUES ('2497', 'pcu', 'report32', 'admin', '2017-07-12 13:57:51');
+INSERT INTO lamaereportslog VALUES ('2498', 'ward', 'report16', 'ปวิมล', '2017-07-12 13:58:08');
+INSERT INTO lamaereportslog VALUES ('2499', 'ward', 'report16', 'ปวิมล', '2017-07-12 13:59:28');
+INSERT INTO lamaereportslog VALUES ('2500', 'ward', 'report16', 'admin', '2017-07-12 14:02:46');
+INSERT INTO lamaereportslog VALUES ('2501', 'ward', 'report16', 'admin', '2017-07-12 14:03:07');
+INSERT INTO lamaereportslog VALUES ('2502', 'ward', 'report16', 'admin', '2017-07-12 14:03:28');
+INSERT INTO lamaereportslog VALUES ('2503', 'ward', 'report16', 'admin', '2017-07-12 14:04:47');
+INSERT INTO lamaereportslog VALUES ('2504', 'ward', 'report16', 'admin', '2017-07-12 14:05:17');
+INSERT INTO lamaereportslog VALUES ('2505', 'ward', 'report16', 'admin', '2017-07-12 14:06:05');
+INSERT INTO lamaereportslog VALUES ('2506', 'ward', 'report16', 'admin', '2017-07-12 14:06:10');
+INSERT INTO lamaereportslog VALUES ('2507', 'ward', 'report16', 'admin', '2017-07-12 14:06:14');
+INSERT INTO lamaereportslog VALUES ('2508', 'ward', 'report16', 'admin', '2017-07-12 14:06:28');
+INSERT INTO lamaereportslog VALUES ('2509', 'ward', 'report16', 'admin', '2017-07-12 14:06:42');
+INSERT INTO lamaereportslog VALUES ('2510', 'ward', 'report16', 'admin', '2017-07-12 14:06:55');
+INSERT INTO lamaereportslog VALUES ('2511', 'ward', 'report16', 'admin', '2017-07-12 14:07:00');
+INSERT INTO lamaereportslog VALUES ('2512', 'ward', 'report16', 'admin', '2017-07-12 14:07:05');
+INSERT INTO lamaereportslog VALUES ('2513', 'ward', 'report16', 'admin', '2017-07-12 14:07:13');
+INSERT INTO lamaereportslog VALUES ('2514', 'ward', 'report16', 'admin', '2017-07-12 14:07:18');
+INSERT INTO lamaereportslog VALUES ('2515', 'ward', 'report16', 'admin', '2017-07-12 14:08:00');
+INSERT INTO lamaereportslog VALUES ('2516', 'ward', 'report16', 'admin', '2017-07-12 14:08:46');
+INSERT INTO lamaereportslog VALUES ('2517', 'ward', 'report16', 'admin', '2017-07-12 14:09:20');
+INSERT INTO lamaereportslog VALUES ('2518', 'ward', 'report16', 'admin', '2017-07-12 14:11:40');
+INSERT INTO lamaereportslog VALUES ('2519', 'medical', 'report1', 'admin', '2017-07-12 14:14:52');
+INSERT INTO lamaereportslog VALUES ('2520', 'ic', 'report1', 'admin', '2017-07-12 14:18:19');
+INSERT INTO lamaereportslog VALUES ('2521', 'ic', 'report2', 'admin', '2017-07-12 14:23:37');
+INSERT INTO lamaereportslog VALUES ('2522', 'ward', 'report16', 'admin', '2017-07-12 14:39:31');
+INSERT INTO lamaereportslog VALUES ('2523', 'ward', 'report16', 'admin', '2017-07-12 14:39:44');
+INSERT INTO lamaereportslog VALUES ('2524', 'ward', 'report16', 'admin', '2017-07-12 14:42:01');
+INSERT INTO lamaereportslog VALUES ('2525', 'ic', 'report2', 'admin', '2017-07-12 14:47:29');
+INSERT INTO lamaereportslog VALUES ('2526', 'pcu', 'report32', 'admin', '2017-07-12 14:48:32');
+INSERT INTO lamaereportslog VALUES ('2527', 'pcu', 'report33', 'admin', '2017-07-12 14:48:40');
+INSERT INTO lamaereportslog VALUES ('2528', 'pcu', 'report33', 'admin', '2017-07-12 14:49:04');
+INSERT INTO lamaereportslog VALUES ('2529', 'pcu', 'report32', 'admin', '2017-07-12 14:58:37');
+INSERT INTO lamaereportslog VALUES ('2530', 'ic', 'report1', 'สุธีรา', '2017-07-13 09:24:38');
+INSERT INTO lamaereportslog VALUES ('2531', 'ic', 'report1', 'สุธีรา', '2017-07-13 09:25:29');
+INSERT INTO lamaereportslog VALUES ('2532', 'ic', 'report1', 'admin', '2017-07-13 09:59:28');
+INSERT INTO lamaereportslog VALUES ('2533', 'ic', 'report1', 'admin', '2017-07-13 10:01:24');
+INSERT INTO lamaereportslog VALUES ('2534', 'ic', 'report1', 'admin', '2017-07-13 10:01:52');
+INSERT INTO lamaereportslog VALUES ('2535', 'ic', 'report1', 'admin', '2017-07-13 10:03:20');
+INSERT INTO lamaereportslog VALUES ('2536', 'ic', 'report2', 'admin', '2017-07-13 10:08:09');
+INSERT INTO lamaereportslog VALUES ('2537', 'ic', 'report2', 'admin', '2017-07-13 10:10:25');
+INSERT INTO lamaereportslog VALUES ('2538', 'dm', 'report1', 'นิธิกานต์', '2017-07-13 10:26:38');
+INSERT INTO lamaereportslog VALUES ('2539', 'dm', 'report1', 'นิธิกานต์', '2017-07-13 10:28:17');
+INSERT INTO lamaereportslog VALUES ('2540', 'ht', 'report1', 'นิธิกานต์', '2017-07-13 10:28:50');
+INSERT INTO lamaereportslog VALUES ('2541', 'hearth', 'report1', 'นิธิกานต์', '2017-07-13 10:29:27');
+INSERT INTO lamaereportslog VALUES ('2542', 'cva', 'report1', 'นิธิกานต์', '2017-07-13 10:29:55');
+INSERT INTO lamaereportslog VALUES ('2543', 'pcu', 'report32', 'นิธิกานต์', '2017-07-13 10:30:22');
+INSERT INTO lamaereportslog VALUES ('2544', 'ic', 'report1', 'สุธีรา', '2017-07-13 11:10:00');
+INSERT INTO lamaereportslog VALUES ('2545', 'ic', 'report1', 'สุธีรา', '2017-07-13 11:10:21');
+INSERT INTO lamaereportslog VALUES ('2546', 'ic', 'report1', 'สุธีรา', '2017-07-13 11:10:47');
+INSERT INTO lamaereportslog VALUES ('2547', 'ic', 'report1', 'admin', '2017-07-13 11:15:24');
+INSERT INTO lamaereportslog VALUES ('2548', 'ic', 'report2', 'admin', '2017-07-13 11:15:45');
+INSERT INTO lamaereportslog VALUES ('2549', 'ic', 'report2', 'admin', '2017-07-13 11:16:32');
+INSERT INTO lamaereportslog VALUES ('2550', 'ic', 'report2', 'admin', '2017-07-13 11:17:16');
+INSERT INTO lamaereportslog VALUES ('2551', 'ic', 'report2', 'admin', '2017-07-13 11:22:50');
+INSERT INTO lamaereportslog VALUES ('2552', 'ic', 'report2', 'admin', '2017-07-13 11:23:44');
+INSERT INTO lamaereportslog VALUES ('2553', 'ic', 'report2', 'admin', '2017-07-13 11:24:38');
+INSERT INTO lamaereportslog VALUES ('2554', 'pcu', 'report32', 'admin', '2017-07-13 11:43:33');
+INSERT INTO lamaereportslog VALUES ('2555', 'pcu', 'report33', 'admin', '2017-07-13 11:43:40');
+INSERT INTO lamaereportslog VALUES ('2556', 'pcu', 'report33', 'admin', '2017-07-13 11:58:17');
+INSERT INTO lamaereportslog VALUES ('2557', 'pcu', 'report33', 'admin', '2017-07-13 11:59:59');
+INSERT INTO lamaereportslog VALUES ('2558', 'pcu', 'report33', 'admin', '2017-07-13 12:00:09');
+INSERT INTO lamaereportslog VALUES ('2559', 'dm', 'report1', 'admin', '2017-07-13 12:00:24');
+INSERT INTO lamaereportslog VALUES ('2560', 'dm', 'report2', 'admin', '2017-07-13 12:00:30');
+INSERT INTO lamaereportslog VALUES ('2561', 'dm', 'report2', 'admin', '2017-07-13 12:00:47');
+INSERT INTO lamaereportslog VALUES ('2562', 'ward', 'report16', 'ปวิมล', '2017-07-13 13:19:36');
+INSERT INTO lamaereportslog VALUES ('2563', 'ward', 'report16', 'ปวิมล', '2017-07-13 13:20:15');
+INSERT INTO lamaereportslog VALUES ('2564', 'ward', 'report16', 'ปวิมล', '2017-07-13 13:20:23');
+INSERT INTO lamaereportslog VALUES ('2565', 'ward', 'report16', 'ปวิมล', '2017-07-13 13:20:37');
+INSERT INTO lamaereportslog VALUES ('2566', 'hearth', 'report1', 'นิธิกานต์', '2017-07-13 13:43:05');
+INSERT INTO lamaereportslog VALUES ('2567', 'hearth', 'report2', 'นิธิกานต์', '2017-07-13 13:43:10');
+INSERT INTO lamaereportslog VALUES ('2568', 'ic', 'report1', 'นิธิกานต์', '2017-07-13 13:45:51');
+INSERT INTO lamaereportslog VALUES ('2569', 'ic', 'report1', 'นิธิกานต์', '2017-07-13 13:47:51');
+INSERT INTO lamaereportslog VALUES ('2570', 'ic', 'report3', 'admin', '2017-07-13 14:12:48');
+INSERT INTO lamaereportslog VALUES ('2571', 'ic', 'report3', 'admin', '2017-07-13 14:13:08');
+INSERT INTO lamaereportslog VALUES ('2572', 'ic', 'report3', 'admin', '2017-07-13 14:14:13');
+INSERT INTO lamaereportslog VALUES ('2573', 'ic', 'report3', 'admin', '2017-07-13 14:22:13');
+INSERT INTO lamaereportslog VALUES ('2574', 'ic', 'report3', 'admin', '2017-07-13 14:22:25');
+INSERT INTO lamaereportslog VALUES ('2575', 'ic', 'report3', 'admin', '2017-07-13 14:22:43');
+INSERT INTO lamaereportslog VALUES ('2576', 'ic', 'report3', 'admin', '2017-07-13 14:25:05');
+INSERT INTO lamaereportslog VALUES ('2577', 'ic', 'report3', 'admin', '2017-07-13 14:35:53');
+INSERT INTO lamaereportslog VALUES ('2578', 'ic', 'report3', 'admin', '2017-07-13 14:37:00');
+INSERT INTO lamaereportslog VALUES ('2579', 'ic', 'report3', 'admin', '2017-07-13 14:37:56');
+INSERT INTO lamaereportslog VALUES ('2580', 'ic', 'report3', 'admin', '2017-07-13 14:38:27');
+INSERT INTO lamaereportslog VALUES ('2581', 'ic', 'report3', 'admin', '2017-07-13 14:38:56');
+INSERT INTO lamaereportslog VALUES ('2582', 'ic', 'report3', 'admin', '2017-07-13 14:46:50');
+INSERT INTO lamaereportslog VALUES ('2583', 'claim', 'report3', 'admin', '2017-07-13 15:22:29');
+INSERT INTO lamaereportslog VALUES ('2584', 'ic', 'report1', 'สุธีรา', '2017-07-13 15:22:33');
+INSERT INTO lamaereportslog VALUES ('2585', 'claim', 'report3', 'lukkana', '2017-07-13 15:48:54');
+INSERT INTO lamaereportslog VALUES ('2586', 'claim', 'report3', 'lukkana', '2017-07-13 15:50:11');
+INSERT INTO lamaereportslog VALUES ('2587', 'claim', 'report3', 'lukkana', '2017-07-13 15:54:28');
+INSERT INTO lamaereportslog VALUES ('2588', 'pcu', 'report20', 'siro', '2017-07-14 15:54:58');
+INSERT INTO lamaereportslog VALUES ('2589', 'ic', 'report3', 'admin', '2017-07-17 07:45:40');

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2017-07-12 13:54:03
+Date: 2017-07-17 08:12:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=356 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=357 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -317,7 +317,7 @@ INSERT INTO lamaereports VALUES ('342', '10', 'รายงานจำนวน
 INSERT INTO lamaereports VALUES ('343', '10', 'รายงานจำนวนครั้งคนไข้(IPD) ที่มีรหัสวินิจฉัย MI (I210-I219) ,Diag Type 3', 'form1', 'report13', '2017-05-16', 'enable', 'ward', null);
 INSERT INTO lamaereports VALUES ('344', '10', 'รายงานจำนวนครั้งคนไข้(IPD) สั่งใช้ PRC1,PRC2', 'form1', 'report14', '2017-05-18', 'enable', 'ward', null);
 INSERT INTO lamaereports VALUES ('345', '10', 'รายงานจำนวนคนไข้ที่มี Diag Hypoglycemia และได้รับการ Admit (Diag = E162)', 'form1', 'report15', '2017-05-18', 'enable', 'ward', null);
-INSERT INTO lamaereports VALUES ('346', '10', 'รายงานตรวจสอบวันเกิดคนไข้ ณ วันที่ปัจจุบัน', 'form5', 'report16', '2017-06-14', 'enable', 'ward', null);
+INSERT INTO lamaereports VALUES ('346', '10', 'รายงานตรวจสอบวันเกิดคนไข้ ณ เดือนปัจจุบัน', 'form5', 'report16', '2017-06-14', 'enable', 'ward', null);
 INSERT INTO lamaereports VALUES ('347', '10', 'รายงานจำนวนผู้ป่วยเด็ก อายุ 1 เดือน - 5ปี admit ด้วยโรค j12-j18 ราย/ครั้ง', 'form1', 'report17', '2017-06-23', 'enable', 'ward', null);
 INSERT INTO lamaereports VALUES ('348', '10', 'รายงานจำนวนผู้ป่วยเด็ก อายุ 1 เดือน - 5ปี  Re-admit ภายใน 28วัน ด้วยโรค j12-j18 ราย/ครั้ง', 'form1', 'report18', '2017-06-23', 'enable', 'ward', null);
 INSERT INTO lamaereports VALUES ('349', '14', 'รายงานสรุปยอดผู้มารับบริการ OPD แบบรายวัน แยกตามสิทธิ์การรักษา (ระหว่างพัฒนา)', 'form16', 'report20', '2017-06-26', 'enable', 'claim', 'วิธีการสรุปข้อมูลเป็นดังนี้ เช่น ผู้ใช้เลือกวันที่ที่ต้องการดูรายงานเป็นวันที่ 15 ม.ค.60 ระบบจะดึงข้อมูล ของวันที่ 14 ม.ค. 60 ระหว่างเวลา 16:01:00 น.  ถึง 23:59:59 น. มารวมกันวันที่ 15 ม.ค. 60 ระหว่างเวลา 00:00:00  ถึง 16:00:59');
@@ -327,3 +327,4 @@ INSERT INTO lamaereports VALUES ('352', '20', 'รายงานการฉี
 INSERT INTO lamaereports VALUES ('353', '21', 'รายงานสรุปคนไข้ทะเบียนคลินิกโรคหลอดเลือดสมอง(CVA) แยกตามที่อยู่ในแต่ละสถานบริการ(คน)', 'form5', 'report1', '2017-07-12', 'enable', 'cva', null);
 INSERT INTO lamaereports VALUES ('354', '22', 'รายงานสรุปคนไข้ทะเบียนคลินิกโรคหัวใจ แยกตามที่อยู่ในแต่ละสถานบริการ(คน)', 'form5', 'report1', '2017-07-12', 'enable', 'hearth', null);
 INSERT INTO lamaereports VALUES ('355', '9', 'รายงานสรุปคนไข้โรคมะเร็ง ตาม ICD10 (c000  ถึง c97)  แยกตามที่อยู่ในแต่ละสถานบริการ(คน)', 'form5', 'report32', '2017-07-12', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('356', '20', 'รายงานตรวจสอบ แลป Culture คนไข้ IPD  (อยู่ระหว่างพัฒนา)', 'form1', 'report3', '2017-07-13', 'enable', 'ic', null);
