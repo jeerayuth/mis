@@ -279,7 +279,8 @@ class IcController extends CommonController {
                     if(lhe.lab_items_code = '3252', lhe.order_date,'') as sputum_cs,
                     if(lhe.lab_items_code = '3213', lhe.order_date,'') as stool_cs,
                     if(lhe.lab_items_code = '3250', lhe.order_date,'') as urine_cs,
-                    a.dchdate
+                    a.dchdate,
+                    a.admdate
 
               FROM an_stat a
               left outer join patient pt on pt.hn = a.hn
@@ -306,6 +307,7 @@ class IcController extends CommonController {
             throw new \yii\web\ConflictHttpException('sql error');
         }
 
+        
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,

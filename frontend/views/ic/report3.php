@@ -57,6 +57,10 @@ echo GridView::widget([
             'header' => 'วันที่จำหน่าย'
         ],
         [
+            'attribute' => 'admdate',
+            'header' => 'จำนวนวันนอน'
+        ],
+        [
             'attribute' => 'pttype',
             'header' => 'รหัสสิทธิ์'
         ],

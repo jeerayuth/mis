@@ -99,7 +99,7 @@ $this->title = 'MIS :: ระบบรายงานสารสนเทศ';
         
         var pw = prompt("กรุณาระบุรหัสผ่านสำหรับดูรายงาน!!", "");
         
-        if(pw == 'p11381') {
+        if(pw == 'cher') {
          window.open('http://192.168.1.252:8080/mis/frontend/web/index.php?r=<?= $ctrl ?>/<?= $point ?>&datestart=' + datestart + '&dateend=' + dateend + '&details=<?= $details; ?>');
        }else {
            alert('กรุณาระบุรหัสผ่านให้ถูกต้อง!!');
