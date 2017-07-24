@@ -1146,18 +1146,20 @@ class ClaimController extends CommonController {
 
         $report_name = "รายงานสรุปยอดผู้มารับบริการ OPD แยกรายวันตามสิทธิ์การรักษา";
         
+        /* แบบเดิม วิธีการสรุปข้อมูลเป็นดังนี้ เช่น ผู้ใช้เลือกวันที่ที่ต้องการดูรายงานเป็นวันที่ 15 ม.ค.60 ระบบจะดึงข้อมูล ของวันที่ 14 ม.ค. 60 ระหว่างเวลา 16:01:00 น.  ถึง 23:59:59 น. มารวมกันวันที่ 15 ม.ค. 60 ระหว่างเวลา 00:00:00  ถึง 16:00:59 */
         $sql = "SELECT
                     v.pttype , p.name as pttype_name,count(distinct(v.vn)) as count_vn  ,
                     sum(income) as sum_income
                 FROM vn_stat  v
                 left outer join pttype p on p.pttype = v.pttype
                 left outer join service_time s on s.vn = v.vn
-                WHERE
+                WHERE v.vstdate = $datestart
+                /*
                   (
                     (v.vstdate = date_sub($datestart,interval 1 day) and s.service3 between '16:01:00' and '23:59:59')
                       or
                      (v.vstdate = $datestart and s.service3 between '00:00:00' and '16:00:59')
-                   )
+                   ) */
                     GROUP BY v.pttype ";
 
                                                        

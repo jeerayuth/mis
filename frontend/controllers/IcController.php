@@ -151,8 +151,8 @@ class IcController extends CommonController {
         $sql = "SELECT
                     concat(p.pname,p.fname) as fname, p.lname as lname,
                     p.hn,
-                   (select o1.vstdate from opitemrece o1 where o1.hn= p.hn and o1.icode = '1460182' and o1.vstdate between $datestart and $dateend order by o1.vstdate limit 0,1 ) as hb1 ,
-                   (select o2.vstdate from opitemrece o2 where o2.hn= p.hn and o2.icode = '1460182' and o2.vstdate between $datestart and $dateend order by o2.vstdate limit 1,1 ) as hb2 ,
+                   (select o1.vstdate from opitemrece o1 where o1.hn= p.hn and o1.icode in ('1460182','1460181') and o1.vstdate between $datestart and $dateend order by o1.vstdate limit 0,1 ) as hb1 ,
+                   (select o2.vstdate from opitemrece o2 where o2.hn= p.hn and o2.icode  = '1460182' and o2.vstdate between $datestart and $dateend order by o2.vstdate limit 1,1 ) as hb2 ,
                    (select o3.vstdate from opitemrece o3 where o3.hn= p.hn and o3.icode = '1460182' and o3.vstdate between $datestart and $dateend order by o3.vstdate limit 2,1 ) as hb3 ,
                    (select v1.pttype from vn_stat v1 where v1.hn= p.hn and v1.vstdate between $datestart and $dateend order by v1.vstdate desc limit 0,1 ) as pttype ,
                    (
@@ -296,8 +296,7 @@ class IcController extends CommonController {
               ) lhe on lhe.vn = a.an
 
 
-              WHERE a.dchdate between $datestart and $dateend   and a.ward = '01'
-
+              WHERE a.dchdate between $datestart and $dateend   
               GROUP BY a.an ORDER BY a.regdate ";
                          
 
