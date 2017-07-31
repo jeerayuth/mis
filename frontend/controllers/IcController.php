@@ -322,6 +322,64 @@ class IcController extends CommonController {
     
     
     
+    public function actionReport4($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
+
+        $report_name = "รายงานผลการใช้ยาปฏิชีวนะ ในผู้ป่วยติดเชื้อดื้อยา";
+
+        $sql = " select
+                o.hn,o.an,concat(p.pname,p.fname, '  ',p.lname) as pt_name,a.age_y,
+                p.addrpart,p.moopart,
+                th.full_name,
+                o.vstdate,o.rxdate,
+                a.regdate,a.admdate,a.dchdate,
+                a.pdx ,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5,
+                d.name as drug_name,
+                if(lhe.lab_items_code = '3166', lhe.order_date,'') as hemo_cs,
+                if(lhe.lab_items_code = '3259', lhe.order_date,'') as pus_cs,
+                if(lhe.lab_items_code = '3250', lhe.order_date,'') as urine_cs,
+                if(lhe.lab_items_code = '3252', lhe.order_date,'') as sputum_cs,
+                if(lhe.lab_items_code = '3213', lhe.order_date,'') as stool_cs
+
+                    
+                from opitemrece  o
+                left outer join an_stat a on a.an = o.an
+                left outer join patient p on p.hn = o.hn
+                left outer join thaiaddress th on th.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+                left outer join drugitems d on d.icode = o.icode
+              
+              left outer join (
+                   select lh.vn,lh.order_date,lo.lab_order_number, lo.lab_items_code,lo.lab_order_result
+                   from lab_head lh
+                   left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                   where lh.order_date between  $datestart and $dateend  and lo.lab_items_code in ('3166','3259','3250','3252','3213')
+              ) lhe on lhe.vn = a.an
+              
+                where o.icode in ('1560011','1580019','1590011','1560013')
+                and a.dchdate between $datestart and $dateend 
+                order by  o.hn ,o.vstdate ";
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report4', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+    
     
 
 }

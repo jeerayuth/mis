@@ -226,7 +226,7 @@ from opitemrece  o
 left outer join an_stat a on a.an = o.an
 left outer join patient p on p.hn = o.hn
 left outer join drugitems d on d.icode = o.icode
-where o.icode in ('1560011','1580019','1590011')
+where o.icode in ('1560011','1580019','1590011','1560013')
 and o.vstdate between $datestart and $dateend
 order by  o.hn ,o.vstdate ";
 
@@ -240,7 +240,7 @@ left outer join an_stat a on a.an = o.an
 left outer join patient p on p.hn = o.hn
 left outer join drugitems d on d.icode = o.icode
 
-where o.icode in ('1560011','1580019','1590011')
+where o.icode in ('1560011','1580019','1590011','1560013')
 
 and o.vstdate between $datestart and $dateend
 
@@ -265,8 +265,6 @@ group by o.icode ";
         ]);
 
 
-
-
         return $this->render('report5', [
                     'dataProvider' => $dataProvider,
                     'dataProvider2' => $dataProvider2,
@@ -279,6 +277,7 @@ group by o.icode ";
         ]);
     }
 
+    
     public function actionReport6($datestart, $dateend, $details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
