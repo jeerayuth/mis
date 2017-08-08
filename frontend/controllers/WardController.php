@@ -910,6 +910,79 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     
     
     
+     public function actionReport19($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report19', $this->getSession());
+
+        $report_name = "รายงานตรวจสอบแลป DTX ผู้ป่วยใน ที่มีรหัสวินิจฉัย E100-E149";
+
+        $sql = "SELECT
+                    a.hn,
+                    a.an,
+                    concat(pt.pname,pt.fname) as fname,
+                    pt.lname,
+                    a.age_y,
+                    a.regdate,
+                    a.pttype,
+                    pp.name as pttype_name,
+                    a.pdx,
+                    a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5,
+                    if(lhe.lab_items_code = '3246', lhe.order_date,'') as dtx_order_date,
+                    if(lhe.lab_items_code = '3246', lhe.lab_order_result,'') as dtx_result,
+                    a.dchdate,
+                    a.admdate
+
+              FROM an_stat a
+              left outer join patient pt on pt.hn = a.hn
+              left outer join pttype pp on pp.pttype = a.pttype
+
+              left outer join (
+
+                   select lh.vn,lh.order_date,lo.lab_order_number, lo.lab_items_code,lo.lab_order_result
+                   from lab_head lh
+                   left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                   where lh.order_date between  $datestart AND $dateend  and lo.lab_items_code in ('3246')
+                       and lo.confirm='Y'
+
+              ) lhe on lhe.vn = a.an
+
+
+              WHERE a.dchdate between $datestart AND $dateend   
+                    and  (
+                      a.pdx between 'e100' and 'e149' or
+                      a.dx0 between 'e100' and 'e149' or
+                      a.dx1 between 'e100' and 'e149' or
+                      a.dx2 between 'e100' and 'e149' or
+                      a.dx3 between 'e100' and 'e149' or
+                      a.dx4 between 'e100' and 'e149' or
+                      a.dx5 between 'e100' and 'e149'
+                  )
+                  
+                  and if(lhe.lab_items_code = '3246', lhe.order_date,'') != ''
+
+              ORDER BY a.an ,if(lhe.lab_items_code = '3246', lhe.order_date,'') ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report19', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
     
     
     
