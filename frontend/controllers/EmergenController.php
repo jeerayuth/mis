@@ -2257,7 +2257,7 @@ limit 40 ";
 
         $report_name = "รายงานจำนวนครั้งในการใช้ยา ERIG";
         $sql = "SELECT
-                        op.icode,COUNT(distinct(op.vn)) AS total_usage,
+                        op.icode,COUNT(op.icode) AS total_usage,
                         concat(dr.name,' ',dr.strength,' ',dr.units) AS drugname
                   FROM
                       opitemrece op
