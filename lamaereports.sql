@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2017-07-17 08:12:30
+Date: 2017-08-17 12:58:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=357 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=361 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -320,11 +320,15 @@ INSERT INTO lamaereports VALUES ('345', '10', 'รายงานจำนวน
 INSERT INTO lamaereports VALUES ('346', '10', 'รายงานตรวจสอบวันเกิดคนไข้ ณ เดือนปัจจุบัน', 'form5', 'report16', '2017-06-14', 'enable', 'ward', null);
 INSERT INTO lamaereports VALUES ('347', '10', 'รายงานจำนวนผู้ป่วยเด็ก อายุ 1 เดือน - 5ปี admit ด้วยโรค j12-j18 ราย/ครั้ง', 'form1', 'report17', '2017-06-23', 'enable', 'ward', null);
 INSERT INTO lamaereports VALUES ('348', '10', 'รายงานจำนวนผู้ป่วยเด็ก อายุ 1 เดือน - 5ปี  Re-admit ภายใน 28วัน ด้วยโรค j12-j18 ราย/ครั้ง', 'form1', 'report18', '2017-06-23', 'enable', 'ward', null);
-INSERT INTO lamaereports VALUES ('349', '14', 'รายงานสรุปยอดผู้มารับบริการ OPD แบบรายวัน แยกตามสิทธิ์การรักษา (ระหว่างพัฒนา)', 'form16', 'report20', '2017-06-26', 'enable', 'claim', 'วิธีการสรุปข้อมูลเป็นดังนี้ เช่น ผู้ใช้เลือกวันที่ที่ต้องการดูรายงานเป็นวันที่ 15 ม.ค.60 ระบบจะดึงข้อมูล ของวันที่ 14 ม.ค. 60 ระหว่างเวลา 16:01:00 น.  ถึง 23:59:59 น. มารวมกันวันที่ 15 ม.ค. 60 ระหว่างเวลา 00:00:00  ถึง 16:00:59');
-INSERT INTO lamaereports VALUES ('350', '20', 'รายงานตรวจสุขภาพเจ้าหน้าที่โรงพยาบาลละแม', 'form1', 'report1', '2017-07-05', 'enable', 'ic', null);
+INSERT INTO lamaereports VALUES ('349', '14', 'รายงานสรุปยอดผู้มารับบริการ OPD แบบรายวัน แยกตามสิทธิ์การรักษา', 'form16', 'report20', '2017-06-26', 'enable', 'claim', null);
+INSERT INTO lamaereports VALUES ('357', '20', 'รายงานผลการใช้ยาปฏิชีวนะ ในผู้ป่วยติดเชื้อดื้อยา (กำลังพัฒนา)', 'form1', 'report4', '2017-07-31', 'enable', 'ic', null);
+INSERT INTO lamaereports VALUES ('358', '10', 'รายงานตรวจสอบแลป DTX คนไข้ IPD ที่มีรหัสวินิจฉัย E100-E149', 'form1', 'report19', '2017-08-08', 'disable', 'ward', null);
+INSERT INTO lamaereports VALUES ('350', '20', 'รายงานตรวจสุขภาพเจ้าหน้าที่โรงพยาบาลละแม', 'form17', 'report1', '2017-07-05', 'enable', 'ic', null);
 INSERT INTO lamaereports VALUES ('351', '9', 'รายงานสรุปอายุของประชากรตามวันเกิด ในเขตรับผิดชอบ', 'form1', 'report30', '2017-07-11', 'enable', 'pcu', null);
-INSERT INTO lamaereports VALUES ('352', '20', 'รายงานการฉีด HB VACCINE(Heberbiovac HB ) และผลตรวจแลป Anti-HBs เจ้าหน้าที่โรงพยาบาลละแม', 'form1', 'report2', '2017-07-12', 'enable', 'ic', null);
+INSERT INTO lamaereports VALUES ('352', '20', 'รายงานการฉีด HB VACCINE(Heberbiovac HB ) และผลตรวจแลป Anti-HBs เจ้าหน้าที่โรงพยาบาลละแม', 'form17', 'report2', '2017-07-12', 'enable', 'ic', null);
 INSERT INTO lamaereports VALUES ('353', '21', 'รายงานสรุปคนไข้ทะเบียนคลินิกโรคหลอดเลือดสมอง(CVA) แยกตามที่อยู่ในแต่ละสถานบริการ(คน)', 'form5', 'report1', '2017-07-12', 'enable', 'cva', null);
 INSERT INTO lamaereports VALUES ('354', '22', 'รายงานสรุปคนไข้ทะเบียนคลินิกโรคหัวใจ แยกตามที่อยู่ในแต่ละสถานบริการ(คน)', 'form5', 'report1', '2017-07-12', 'enable', 'hearth', null);
 INSERT INTO lamaereports VALUES ('355', '9', 'รายงานสรุปคนไข้โรคมะเร็ง ตาม ICD10 (c000  ถึง c97)  แยกตามที่อยู่ในแต่ละสถานบริการ(คน)', 'form5', 'report32', '2017-07-12', 'enable', 'pcu', null);
-INSERT INTO lamaereports VALUES ('356', '20', 'รายงานตรวจสอบ แลป Culture คนไข้ IPD  (อยู่ระหว่างพัฒนา)', 'form1', 'report3', '2017-07-13', 'enable', 'ic', null);
+INSERT INTO lamaereports VALUES ('356', '20', 'รายงานตรวจสอบ แลป Culture คนไข้ IPD', 'form1', 'report3', '2017-07-13', 'enable', 'ic', null);
+INSERT INTO lamaereports VALUES ('359', '3', 'รายงานจำนวนคนไข้คลินิคเบาหวาน ที่มี Diag Hypoglycemia และได้รับการ Re-Admit', 'form3', 'report24', '2017-08-08', 'enable', 'dm', null);
+INSERT INTO lamaereports VALUES ('360', '7', 'รายงานจำนวนครั้งการสั่งใช้ยา ERIG', 'form1', 'report22', '2017-08-17', 'enable', 'emergen', null);

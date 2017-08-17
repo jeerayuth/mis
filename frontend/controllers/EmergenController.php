@@ -2251,6 +2251,41 @@ limit 40 ";
         ]);
     }
     
-    
+    public function actionReport22($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report22', $this->getSession());
+
+        $report_name = "รายงานจำนวนครั้งในการใช้ยา ERIG";
+        $sql = "SELECT
+                        op.icode,COUNT(distinct(op.vn)) AS total_usage,
+                        concat(dr.name,' ',dr.strength,' ',dr.units) AS drugname
+                  FROM
+                      opitemrece op
+                  LEFT OUTER JOIN drugitems dr ON dr.icode = op.icode
+                  WHERE
+                       op.icode
+                       IN ('1460156','1460061')
+                  AND
+                       op.vstdate BETWEEN $datestart and $dateend AND vn!=''
+                  GROUP BY op.icode
+                  ORDER BY total_usage DESC ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report22', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
 
 }
