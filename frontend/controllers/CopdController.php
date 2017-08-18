@@ -360,27 +360,25 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
      
             $report_name = 'รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง แยกกลุ่มผู้ป่วยตาม GOLD 11';
       
-            $sql = "SELECT  n.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name, n.plain_text,n.note_datetime,n.note_staff
+            $sql = "SELECT  
+                            n.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name, 
+                            n.plain_text,n.note_datetime,n.note_staff
+                    FROM ptnote n
+                    LEFT OUTER JOIN patient p ON p.hn = n.hn
+                    WHERE
+                    n.note_datetime between $datestart and $dateend
 
-FROM ptnote n
+                    and n.hn in
 
-LEFT OUTER JOIN patient p ON p.hn = n.hn
+                    (
+                        select c.hn from clinicmember c
+                        left outer join clinic_member_status cl on cl.clinic_member_status_id = c.clinic_member_status_id
+                        where c.hn = n.hn and c.clinic = '005'  /* and cl.provis_typedis = '03' */
 
-WHERE
+                    )  and n.plain_text like  '%$item%'
 
-n.note_datetime between $datestart and $dateend
-
-and n.hn in
-
-(
-    select c.hn from clinicmember c
-    left outer join clinic_member_status cl on cl.clinic_member_status_id = c.clinic_member_status_id
-    where c.hn = n.hn and c.clinic = '005'  /* and cl.provis_typedis = '03' */
-
-)  and n.plain_text like  '%$item%'
-
-GROUP BY n.hn
-ORDER BY n.note_datetime ";
+                    GROUP BY n.hn
+                    ORDER BY n.note_datetime ";
 
 
             try {
@@ -402,6 +400,177 @@ ORDER BY n.note_datetime ";
   
             ]); 
         } // จบ function
+        
+        
+        
+        public function actionReport9($datestart, $dateend, $details) {
+                        // save log
+            $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
+     
+            $report_name = 'รายงานจำนวนคนไข้ที่มีรหัสวินิจฉัย j440-j449 ทั้งโรงพยาบาล(รายคน)';
+      
+            $sql = "SELECT
+                            a.hn,a.pt_name
+                    FROM
+                     (
+                            select distinct(v.hn) ,concat(p.pname,p.fname,'  ',p.lname) as pt_name
+                                from vn_stat v
+                                left outer join patient p on p.hn = v.hn
+                                where v.vstdate between $datestart and $dateend   and
+                                (
+                                      v.pdx between 'j440' and 'j449' or
+                                      v.dx0 between 'j440' and 'j449' or
+                                      v.dx1 between 'j440' and 'j449' or
+                                      v.dx2 between 'j440' and 'j449' or
+                                      v.dx3 between 'j440' and 'j449' or
+                                      v.dx4 between 'j440' and 'j449' or
+                                      v.dx5 between 'j440' and 'j449'
+                                )
+                        union  all
+                                select distinct(v.hn) ,concat(p.pname,p.fname,'  ',p.lname) as pt_name
+                                from an_stat v
+                                left outer join patient p on p.hn = v.hn
+                                where v.dchdate between $datestart and $dateend  and
+
+                                (
+                                      v.pdx between 'j440' and 'j449' or
+                                      v.dx0 between 'j440' and 'j449' or
+                                      v.dx1 between 'j440' and 'j449' or
+                                      v.dx2 between 'j440' and 'j449' or
+                                      v.dx3 between 'j440' and 'j449' or
+                                      v.dx4 between 'j440' and 'j449' or
+                                      v.dx5 between 'j440' and 'j449'
+                                )
+
+                             )   a
+
+                           GROUP BY a.hn   ";
+                         
+                  
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+           return $this->render('report9', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+  
+            ]); 
+        } // จบ function
+        
+        
+        
+        public function actionReport10($datestart, $dateend, $details) {
+                        // save log
+            $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
+     
+            $report_name = 'รายงานจำนวนคนไข้ re-admit ด้วยรหัสวินิจฉัย j440-j449';
+      
+            $sql = "select
+                    q3.hn,concat(patient.pname,patient.fname,'  ',patient.lname) as ptname,
+                    patient.birthday,
+                    timestampdiff(year,patient.birthday,q3.regdate_AN_New) as age_y,
+                    q3.AN_new ,q3.regdate_AN_New ,q3.dcdate_AN_New ,q3.AN_Old as AN_old
+                   ,q3.regdate_AN_Old ,q3.dcdate_AN_Old ,q3.icd10_1,q3.ReAdmitDate
+
+               from patient inner join
+
+                    (select q1.hn ,q1.an as AN_new ,q1.regdate as regdate_AN_New,q1.dchdate as dcdate_AN_New,q2.an as AN_old ,q2.regdate as regdate_AN_Old 
+                    ,q2.dchdate as dcdate_AN_Old,q1.icd10 as icd10_1,TIMESTAMPDIFF(day,substring(q2.dchdate,1,10),substring(q1.regdate,1,10)) as ReAdmitDate
+
+                   from (select ipt.hn ,ipt.an ,ipt.regdate,ipt.dchdate,iptdiag.icd10 ,iptdiag.diagtype from
+
+                    ipt  inner join iptdiag on ipt.an = iptdiag.an where ipt.hn != ' ' and iptdiag.diagtype = '1') as q1
+
+                    inner join 
+
+                   (select ipt1.hn ,ipt1.an ,ipt1.regdate,ipt1.dchdate,iptdiag1.icd10 ,iptdiag1.diagtype from ipt as ipt1 
+                   inner join iptdiag as iptdiag1 on ipt1.an = iptdiag1.an where ipt1.hn != ' ' and iptdiag1.diagtype ='1' ) as q2
+                    where q1.hn = q2.hn and q1.an <> q2.an and q1.icd10 = q2.icd10 and
+
+                   TIMESTAMPDIFF(day,substring(q2.dchdate,1,10),substring(q1.regdate,1,10)) > 0 and 
+                   TIMESTAMPDIFF(day,substring(q2.dchdate,1,10),substring(q1.regdate,1,10)) <= 28 and
+
+                   q1.regdate between $datestart and $dateend  ) as q3  on q3.hn = patient.hn   AND q3.icd10_1 between 'j440' and 'j449' ";
+                    
+
+                   
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+           return $this->render('report10', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+  
+            ]); 
+        } // จบ function
+    
+
+
+        
+        public function actionReport11($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
+
+        $report_name = "รายงานจำนวนคนไข้ ที่มีรหัสวินิจฉัย j440-j449  Re-visit ภายใน 48 ชั่วโมง";
+
+        $sql = "SELECT
+                    v.vn,v.hn,v.vstdate,v.age_y,
+                    concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name ,
+                    v.pdx,v.dx0 ,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
+                    v.moopart,t.full_name as address,
+                    v.lastvisit_hour
+                FROM vn_stat  v
+                left outer join patient p on p.hn = v.hn
+                left outer join spclty s on s.spclty = v.spclty
+                left OUTER join thaiaddress t on t.addressid=v.aid
+                left outer join sex se on se.code = p.sex
+                WHERE 
+                    v.old_diagnosis = 'Y' and v.lastvisit_hour <= 48
+                    and v.vstdate between $datestart and $dateend
+                    and v.pdx between 'j440'  and 'j449'
+                GROUP BY v.hn
+                ORDER BY v.aid, v.moopart, v.hn, v.vstdate ";
+        
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+        
+        return $this->render('report11', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    } // จบ function
     
 
 
