@@ -1282,6 +1282,48 @@ class ClaimController extends CommonController {
       }
      
      
+      
+      public function actionReport23($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report23', $this->getSession());
+
+        $report_name = "รายงานผู้ป่วยที่จำหน่ายแล้ว";
+        
+        $sql = "SELECT
+                    a.an,a.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,a.pttype,
+                    a.regdate,a.dchdate,a.pdx,
+                    if(a.dx0 is not null,a.dx0,' ') as dx0,
+                    if(a.dx1 is not null,a.dx1,' ') as dx1,
+                    if(a.dx2 is not null,a.dx2,' ') as dx2,
+                    if(a.dx3 is not null,a.dx3,' ') as dx3,
+                    if(a.dx4 is not null,a.dx4,' ') as dx4,
+                    if(a.dx5 is not null,a.dx5,' ') as dx5,
+                    a.income,a.rw    
+                    
+                FROM an_stat  a 
+                left outer join patient p on p.hn=a.hn 
+                WHERE 
+                    a.dchdate BETWEEN $datestart AND $dateend
+                ORDER BY a.an ";
+                
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report23', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
      
      
      
