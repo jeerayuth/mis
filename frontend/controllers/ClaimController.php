@@ -16,7 +16,8 @@ class ClaimController extends CommonController {
         $sql = "SELECT
             v.vn,v.hn,v.cid,
             concat(p.pname,p.fname,'  ',p.lname) as patient_name ,
-            v.pttype,pp.name as pttype_name,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate  
+            v.pttype,pp.name as pttype_name,
+            concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate  
         FROM vn_stat v	
         LEFT OUTER JOIN patient p ON p.hn = v.hn
         LEFT OUTER JOIN pttype pp ON pp.pttype = v.pttype
@@ -1185,6 +1186,100 @@ class ClaimController extends CommonController {
         
         
      }
+     
+     
+     
+      public function actionReport21($pttype,$date_start) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
+
+        $report_name = "รายงานยอดผู้มารับบริการ OPD แยกรายวันตามสิทธิ์การรักษา";
+        
+        /* แบบเดิม วิธีการสรุปข้อมูลเป็นดังนี้ เช่น ผู้ใช้เลือกวันที่ที่ต้องการดูรายงานเป็นวันที่ 15 ม.ค.60 ระบบจะดึงข้อมูล ของวันที่ 14 ม.ค. 60 ระหว่างเวลา 16:01:00 น.  ถึง 23:59:59 น. มารวมกันวันที่ 15 ม.ค. 60 ระหว่างเวลา 00:00:00  ถึง 16:00:59 */
+        $sql = "SELECT
+                        v.vn,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,
+                        v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        v.pttype,t.name as pttype_name,
+                        v.income,r.total_amount,
+                        if(r.total_amount is not null,r.total_amount,'-') as net_total
+                        
+                  FROM vn_stat v
+                  left outer join  rcpt_print r on r.vn = v.vn
+                  left outer join  pttype t on t.pttype=v.pttype
+                  left outer join patient pt on pt.hn = v.hn
+                  
+                  WHERE
+                       v.vstdate = $date_start   and v.pttype = $pttype
+                  ORDER BY v.hn ";
+
+                                                       
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report21', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $date_start,
+                    'report_name' => $report_name,
+
+        ]);
+      
+          
+      }
+      
+      
+      public function actionReport22($date_start) {
+            // save log
+        $this->SaveLog($this->dep_controller, 'report22', $this->getSession());
+
+        $report_name = "รายงานยอดผู้มารับบริการ OPD แยกรายวัน";
+        
+        $sql = "SELECT
+                        v.vn,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,
+                        v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        v.pttype,t.name as pttype_name,
+                        v.income,r.total_amount,
+                        if(r.total_amount is not null,r.total_amount,'-') as net_total
+                        
+                  FROM vn_stat v
+                  left outer join  rcpt_print r on r.vn = v.vn
+                  left outer join  pttype t on t.pttype=v.pttype
+                  left outer join patient pt on pt.hn = v.hn
+                  
+                  WHERE
+                       v.vstdate = $date_start 
+                  ORDER BY v.pttype ";
+
+                                                       
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report22', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $date_start,
+                    'report_name' => $report_name,
+
+        ]);
+      
+          
+      }
      
      
      

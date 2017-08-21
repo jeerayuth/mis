@@ -89,6 +89,10 @@ $this->registerJs("
 
 <br/>
 
+<center>
+ <button type="button" class="btn btn-danger" onclick = "javascript:url()"><i class="fa fa-search"></i> คลิกที่นี่!! ดูรายละเอียดค่ารักษาทุกสิทธิ์ </button>
+</center>
+ 
 <?php
 
 echo GridView::widget([
@@ -122,6 +126,18 @@ echo GridView::widget([
             'attribute' => 'sum_income',
             'header' => 'ยอดเงิน(บาท)'
         ],
+        [
+            'attribute' => '',
+            'header' => 'รายละเอียดค่ารักษา',
+            'format' => 'raw',
+            'value' => function($model) use ($date_start) {
+                $pttype = $model['pttype'];
+                $title = 'คลิกดูรายละเอียด';
+   
+                return Html::a(Html::encode($title), 
+                    ['claim/report21', 'pttype' => $pttype,'date_start'=>$date_start],['target'=>'_blank']);
+                    }
+                ]
       
        
       
@@ -129,3 +145,23 @@ echo GridView::widget([
 ])
 ?>
 
+
+
+<script type="text/javascript">
+
+    //function เรียกหน้ารายงาน
+    function url() {
+     
+        window.open('http://192.168.1.252:8080/mis/frontend/web/index.php?r=claim/report22&date_start=' + <?=$date_start ?> );
+    }
+
+
+
+
+    window.onload = function () {
+        //your jQuery code here
+        // jquery here     
+    };
+
+
+</script>
