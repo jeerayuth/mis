@@ -573,7 +573,47 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
     } // จบ function
     
 
+    
+    
+           
+        public function actionReport12($datestart, $dateend, $details) {
+                        // save log
+            $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
+     
+            $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี ';
+      
+            $sql = "
+                    SELECT
+                           v.hn ,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                           v.age_y
+                     FROM vn_stat v
+                     LEFT OUTER JOIN patient p on p.hn = v.hn
+                     WHERE 
+                        v.vstdate between $datestart and $dateend  
+                        and v.pdx = 'j441' and v.age_y > 15 
+                     GROUP BY v.hn ";
+            
+                                                
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
 
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+           return $this->render('report12', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+  
+            ]); 
+        } // จบ function
+        
     
     
 
