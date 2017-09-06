@@ -1,7 +1,6 @@
 <?php
 
 /* @var $this yii\web\View */
-
 use kartik\grid\GridView;
 use yii\helpers\Html;
 
@@ -26,51 +25,75 @@ echo GridView::widget([
     ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
+    
         [
             'attribute' => 'cid',
             'header' => 'บัตรประชาชน'
         ],
-        [
+         [
             'attribute' => 'hn',
             'header' => 'HN'
         ],
-        [
+          [
             'attribute' => 'vst_date',
-            'header' => 'รับบริการ'
+            'header' => 'วันที่รับบริการ'
         ],
-        [
+           [
+            'attribute' => 'vst_time',
+            'header' => 'เวลารับบริการ'
+        ],
+          [
             'attribute' => 'patient_name',
             'header' => 'ชื่อ-สกุล'
+        ], 
+        [
+            'attribute' => 'pdx',
+            'header' => 'การวินิจฉัยหลัก'
         ],
         [
-            'attribute' => 'Birth_date',
-            'header' => 'วันเกิด'
+            'attribute' => 'second_diag',
+            'header' => 'การวินิจฉัยรอง'
         ],
         [
-            'attribute' => 'icd10',
-            'header' => 'การวินิจฉัยโรค(icd10)'
+            'attribute' => 'icd9',
+            'header' => 'หัตถการ(ICD9)'
         ],
         [
-            'attribute' => 'icd_name',
-            'header' => 'ชื่อโรค'
-        ],
-        [
-            'attribute' => 'ttcode',
-            'header' => 'ซี่ฟัน'
-        ],
-        [
-            'attribute' => 'tmcode_name',
-            'header' => 'การรักษา'
-        ],
-        [
-            'attribute' => 'doctor',
+            'attribute' => 'doc_name',
             'header' => 'แพทย์'
         ],
         [
-            'attribute' => 'income',
+            'attribute' => 'licenseno',
+            'header' => 'ทะเบียน'
+        ],
+         [
+            'attribute' => 'v_drug',
+            'header' => 'ค่ายา'
+        ],
+         [
+            'attribute' => 'v_xray',
+            'header' => 'x-ray'
+        ],
+         [
+            'attribute' => 'v_lab',
+            'header' => 'Lab'
+        ],
+        [
+            'attribute' => 'v_icd9',
+                'header' => 'หัตถการ'
+        ],
+            [
+            'attribute' => 'v_other',
+                'header' => 'อื่นๆ'
+        ],
+        [
+            'attribute' => 'item_money',
             'header' => 'ค่าบริการ'
         ],
+       
       
+       
+          
     ]
 ])
 ?>

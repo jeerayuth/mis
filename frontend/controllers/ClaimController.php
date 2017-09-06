@@ -495,17 +495,41 @@ class ClaimController extends CommonController {
         $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
         $report_name = "ประกันสังคมทันตกรรม";
-        $sql = "select p.cid,d.hn,d.vn,concat(DAY(d.vstdate),'/',MONTH(d.vstdate),'/',(YEAR(d.vstdate)+543)) as vst_date,concat(p.pname,p.fname,'  ',p.lname) as patient_name,p.fname as FName,p.lname as LName,
-                concat(DAY(p.birthday),'/',MONTH(p.birthday),'/',(YEAR(p.birthday)+543)) as Birth_date, 
-                i.code as icd10,i.name as icd_name,d.ttcode,dr.name as doctor,v.income,dm.name as tmcode_name 
-                from dtmain d 
-                left outer join doctor dr on dr.code=d.doctor
-                left outer join patient p on p.hn=d.hn 
-                left outer join icd101 i on i.code=d.icd 
-                left outer join vn_stat v on v.vn=d.vn 
-                left outer join dttm dm on dm.code=d.tmcode 
-                where  v.pcode='A7' and d.vstdate between $datestart and $dateend
-                group by d.vn order by d.vstdate ";
+        $sql = "SELECT 
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,
+                    v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
+                    ,v.cid,s.name as sex,v.age_y,v.pdx as pdx,
+                    concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                           )  as second_diag,
+                    concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                            dr.name as doc_name,dr.licenseno,v.income,v.paid_money,remain_money,uc_money,item_money,
+                            ov.vsttime as vst_time,v.inc12 as v_drug,v.inc04 as v_xray,v.inc01 as v_lab,
+                            (v.inc06+v.inc07+v.inc13) as v_icd9,
+                            (v.inc05+v.inc09+v.inc02+v.inc03+v.inc08+v.inc11+v.inc14+v.inc15+v.inc16+v.inc17) as v_other
+                    FROM vn_stat v
+                    left outer join patient p on p.hn=v.hn 
+                    left outer join ovst ov on ov.vn=v.vn 
+                    left outer join icd101 ic on ic.code=v.pdx
+                    left outer join doctor dr on dr.code=ov.doctor
+                    left outer join sex s on s.code=v.sex
+
+                    WHERE  
+                        v.pttype='34' and v.vstdate between $datestart and $dateend
+                    GROUP BY v.vn 
+                    ORDER BY v.vstdate,v.hn ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
