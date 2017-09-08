@@ -9,24 +9,48 @@ use frontend\components\CommonController;
 class AsthmaController extends CommonController {
     public $dep_controller = 'asthma';
 
-    public function actionReport1() {
+    public function actionReport1($uclinic) {
                 // save log
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
+        
+        if ($uclinic != "") { // เริ่มต้นตรวจสอบประเภทคนไข้ในคลินิก
+            // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+            // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+            if ($uclinic == 1) {
+                $cryteria = '';
+                $report_name = 'รายงานสรุปคนไข้ทะเบียน Asthma ทั้งหมด(รวมที่เป็น DM,HT)';
+            } else if ($uclinic == 2) {
+                $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                              AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                                 
+                $report_name = 'รายงานสรุปคนไข้ทะเบียน ASthma อย่างเดียว(ไม่รวมที่เป็น DM,HT)';
+                
+            } else if ($uclinic == 3) {
+                   $cryteria = " AND cm.hn  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                                 AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                 
+                $report_name = 'รายงานสรุปคนไข้ทะเบียน Asthma WITH DM (WITH DM, NO HT)';
+            } else if ($uclinic == 4) {
+                   $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                                 AND cm.hn   in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                 
+                $report_name = 'รายงานสรุปคนไข้ทะเบียน Asthma WITH HT (WITH HT, NO DM)';
+            }
+        }
 
-        $report_name = "รายงานสรุปคนไข้ทะเบียนคลินิกหอบหืดแยกตามที่อยู่";
         $sql = "         
-SELECT 
-th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
-FROM clinicmember  cm
-LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
-LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
-LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
-LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
-WHERE 
-    cm.clinic = '019'
-AND pd.code in('3','03')
-GROUP BY th.addressid 
-ORDER BY count(distinct(cm.hn)) DESC ";
+                SELECT 
+                th.addressid,th.name as tumbol , th.full_name as address,count(distinct(cm.hn)) as count_hn
+                FROM clinicmember  cm
+                LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+                LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+                LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                WHERE 
+                    cm.clinic = '019'
+                
+                $cryteria    
+
+                AND pd.code in('3','03')
+                GROUP BY th.addressid 
+                ORDER BY count(distinct(cm.hn)) DESC ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -42,37 +66,63 @@ ORDER BY count(distinct(cm.hn)) DESC ";
         return $this->render('report1', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
+                    'uclinic' => $uclinic,
                     'report_name' => $report_name,
         ]);
     }
 
     /* รายงานสรุปคนไข้ทะเบียนคลินิกหอบหืดแยกตามที่อยู่ (แสดงรายชื่อคนไข้) */
-    public function actionReport2($addressid) {
+    public function actionReport2($addressid, $uclinic) {
                 // save log
         $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
         $report_name = "รายงานสรุปคนไข้ทะเบียนคลินิกหอบหืดแยกตามที่อยู่";
+        
+         if ($uclinic != "") { // เริ่มต้นตรวจสอบประเภทคนไข้ในคลินิก
+            // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+            // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+            if ($uclinic == 1) {
+                $cryteria = '';
+                $report_name = 'รายงานสรุปคนไข้ทะเบียน Asthma ทั้งหมด(รวมที่เป็น DM,HT)';
+            } else if ($uclinic == 2) {
+                $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                              AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                                 
+                $report_name = 'รายงานสรุปคนไข้ทะเบียน ASthma อย่างเดียว(ไม่รวมที่เป็น DM,HT)';
+                
+            } else if ($uclinic == 3) {
+                   $cryteria = " AND cm.hn  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                                 AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                 
+                $report_name = 'รายงานสรุปคนไข้ทะเบียน Asthma WITH DM (WITH DM, NO HT)';
+            } else if ($uclinic == 4) {
+                   $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                                 AND cm.hn   in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                 
+                $report_name = 'รายงานสรุปคนไข้ทะเบียน Asthma WITH HT (WITH HT, NO DM)';
+            }
+        }
 
         $sql = "         
-SELECT
-pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
-concat( timestampdiff(year,pt.birthday,now()), ' ปี') as age_y,
-pt.cid,cm.regdate,cm.begin_year,
-concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
-pt.moopart
-FROM clinicmember  cm
-LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
-LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
-LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
-LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
-WHERE 
-     cm.clinic = '019'
-AND pd.code in('3','03')
-AND concat(pt.chwpart,pt.amppart,pt.tmbpart) = '$addressid'
-GROUP BY pt.hn     
-ORDER BY pt.moopart,age_y
+                SELECT
+                pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                concat( timestampdiff(year,pt.birthday,now()), ' ปี') as age_y,
+                pt.cid,cm.regdate,cm.begin_year,
+                concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+                pt.moopart
+                FROM clinicmember  cm
+                LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+                LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+                LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+                LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                WHERE 
+                     cm.clinic = '019'
+                     
+                $cryteria 
+                        
+                AND pd.code in('3','03')
+                AND concat(pt.chwpart,pt.amppart,pt.tmbpart) = '$addressid'
+                GROUP BY pt.hn     
+                ORDER BY pt.moopart,age_y
 
-";
+                ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();

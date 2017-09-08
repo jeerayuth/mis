@@ -108,10 +108,10 @@ echo GridView::widget([
             'attribute' => 'count_hn',
             'header' => 'จำนวนคนไข้',
             'format' => 'raw',
-            'value' => function($model) {
+            'value' => function($model) use ($uclinic) {
                 $addressid = $model['addressid'];
                 $count_hn = $model['count_hn'];
-                return Html::a(Html::encode($count_hn), ['copd/report2', 'addressid' => $addressid]);
+                return Html::a(Html::encode($count_hn), ['copd/report2', 'addressid' => $addressid, 'uclinic' => $uclinic]);
             }
                 ]
             ]
