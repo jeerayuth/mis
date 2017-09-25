@@ -2295,11 +2295,9 @@ limit 40 ";
         $this->SaveLog($this->dep_controller, 'report23', $this->getSession());
 
         $report_name1 = "รายงานผู้ป่วยอุบัติเหตุฉุกเฉิน แยกตามประเภทผู้ป่วย";
-        $report_name2 = "รายงานผู้ป่วยอุบัติเหตุฉุกเฉิน แยกตามสถานะภาพ";
-        
-        
+               
         $sql1 = "SELECT
-                    er.er_pt_type,ep.name as type_name, 
+                    er.er_pt_type, ep.name as type_name, 
                     count(distinct(er.vn)) as count_vn
                 FROM er_regist er
                 LEFT OUTER JOIN er_pt_type ep on ep.er_pt_type = er.er_pt_type               
@@ -2308,20 +2306,8 @@ limit 40 ";
                     er.er_pt_type ";
 
 
-        $sql2 = "SELECT
-                    er.er_dch_type,ed.name as dch_type_name, 
-                    count(distinct(er.vn)) as count_vn
-                 FROM er_regist er
-                 LEFT OUTER JOIN er_dch_type ed on ed.er_dch_type = er.er_dch_type
-                 WHERE er.vstdate BETWEEN $datestart and $dateend 
-                 GROUP BY 
-                    er.er_dch_type ";
-
-      
-
         try {
             $rawData1 = \yii::$app->db->createCommand($sql1)->queryAll();
-            $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
            
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
@@ -2332,23 +2318,93 @@ limit 40 ";
             'pagination' => FALSE,
         ]);
 
-        $dataProvider2 = new \yii\data\ArrayDataProvider([
-            'allModels' => $rawData2,
-            'pagination' => FALSE,
-        ]);
-
-    
+      
         return $this->render('report23', [
                     'dataProvider1' => $dataProvider1,
-                    'dataProvider2' => $dataProvider2,
-                    'rawData1' => $rawData1,
-                    'rawData2' => $rawData2,              
+                    'rawData1' => $rawData1,           
                     'report_name1' => $report_name1,
-                    'report_name2' => $report_name2,
                     'details' => $details,
                     'datestart' => $datestart,
                     'dateend' => $dateend,
         ]);
     }
+    
+    
+      public function actionReport24($er_pt_type, $datestart, $dateend) {
+            // save log
+            $this->SaveLog($this->dep_controller, 'report24', $this->getSession());
+            
+            $report_name = "รายงานสรุปผู้ป่วยอุบัติเหตุฉุกเฉินแยกตาม สถานะการจำหน่าย";
+               
+            $sql = "SELECT
+                        er.er_dch_type,ed.name as dch_type_name, 
+                        count(distinct(er.vn)) as count_vn
+                    FROM er_regist er
+                    LEFT OUTER JOIN er_dch_type ed on ed.er_dch_type = er.er_dch_type
+                    WHERE 
+                        er.vstdate BETWEEN $datestart and $dateend AND
+                        er.er_pt_type = $er_pt_type
+                         
+                    GROUP BY 
+                        er.er_dch_type  ";
+            
+            
+             $sql2 = "SELECT
+                     v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,er.vstdate,
+                    ep.name as type_name, 
+                    ed.name as dch_type_name
 
+                    FROM er_regist er
+                    LEFT OUTER JOIN er_pt_type ep on ep.er_pt_type = er.er_pt_type 
+                    LEFT OUTER JOIN er_dch_type ed on ed.er_dch_type = er.er_dch_type
+                    LEFT OUTER JOIN vn_stat v on v.vn = er.vn
+                    LEFT OUTER JOIN patient pt on pt.hn = v.hn
+                    WHERE 
+                        er.vstdate BETWEEN $datestart and $dateend  AND
+                        er.er_pt_type = $er_pt_type 
+                    ORDER BY er.er_dch_type ";
+                        
+            
+            
+               try {
+                   $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+               } catch (\yii\db\Exception $e) {
+                   throw new \yii\web\ConflictHttpException('sql error');
+               }
+               
+               
+               try {
+                   $rawData2 = \yii::$app->db->createCommand($sql2)->queryAll();
+               } catch (\yii\db\Exception $e) {
+                   throw new \yii\web\ConflictHttpException('sql error');
+               }
+               
+               
+
+               $dataProvider = new \yii\data\ArrayDataProvider([
+                   'allModels' => $rawData,
+                   'pagination' => FALSE,
+               ]);
+               
+               
+               $dataProvider2 = new \yii\data\ArrayDataProvider([
+                   'allModels' => $rawData2,
+                   'pagination' => FALSE,
+               ]);
+
+                
+
+                return $this->render('report24', [
+                    'dataProvider' => $dataProvider,
+                    'dataProvider2' => $dataProvider2,
+                    'rawData' => $rawData, 
+                    'rawData2' => $rawData2,
+                    'report_name' => $report_name,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+                ]);
+                                     
+      }
+      
+      
 }

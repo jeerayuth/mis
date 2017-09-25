@@ -6,7 +6,7 @@ use kartik\grid\GridView;
 use yii\helpers\Html;
 use miloschuman\highcharts\Highcharts;
 
-$this->title = $report_name1;
+$this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -36,9 +36,9 @@ $this->title = $report_name1;
 //เตรียมชุดข้อมูลไปใส่ให้กราฟ แกน x,y
 $data = [];
 $sum = 0;
-foreach($rawData1 as $r){
+foreach($rawData as $r){
     $data[] = [
-        'name' => $r['type_name'],
+        'name' => $r['dch_type_name'],
         'y' => intval($r['count_vn']),
     ];
     $sum += $r['count_vn'];
@@ -61,7 +61,7 @@ $this->registerJs("
             enabled: false
         },
         title: {
-            text: '$report_name1'
+            text: '$report_name'
         },
         
         tooltip: {
@@ -116,14 +116,13 @@ $this->registerJs("
 
 <br/>
 
-
-            
+           
            <?php
                 echo GridView::widget([
-                    'dataProvider' => $dataProvider1,
+                    'dataProvider' => $dataProvider,
                     'panel' => [
-                        'heading' => $report_name1,
-                        'before' => $details,
+                        'heading' => $report_name,
+                        'before' => '',
                         'type' => 'primary',
                         'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
                     ],
@@ -135,21 +134,15 @@ $this->registerJs("
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
                         [
-                            'attribute' => 'type_name',
-                            'header' => 'ประเภทผู้ป่วย'
+                            'attribute' => 'dch_type_name',
+                            'header' => 'ประเภทการจำหน่ายผู้ป่วย'
+                        ],
+                         [
+                            'attribute' => 'count_vn',
+                            'header' => 'จำนวนครั้งผู้ป่วย'
                         ],
            
-                          [
-                            'attribute' => 'count_vn',
-                            'header' => 'จำนวนครั้งรับบริการทั้งหมด',
-                            'format' => 'raw',
-                            'value' => function($model) use ($datestart,$dateend) {
-                                $er_pt_type = $model['er_pt_type'];
-                                $count_vn = $model['count_vn'];
-                                return Html::a(Html::encode($count_vn), 
-                                    ['emergen/report24', 'er_pt_type' => $er_pt_type, 'datestart' => $datestart, 'dateend' => $dateend],['target'=>'_blank']);
-                                    }
-                        ]
+                          
 
                     ]
                 ])
@@ -157,7 +150,57 @@ $this->registerJs("
                 ?>
 
   
+   <br/>
    
+   
+   
+<br/>
+
+           
+           <?php
+                echo GridView::widget([
+                    'dataProvider' => $dataProvider2,
+                    'panel' => [
+                        'heading' => $report_name,
+                        'before' => '',
+                        'type' => 'primary',
+                        'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
+                    ],
+                    'export' => [
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK
+                    ],
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        [
+                            'attribute' => 'hn',
+                            'header' => 'HN'
+                        ],
+                         [
+                            'attribute' => 'pt_name',
+                            'header' => 'ชื่อ-สกุล'
+                        ],
+                         [
+                            'attribute' => 'vstdate',
+                            'header' => 'วันที่รับบริการ'
+                        ],
+                         [
+                            'attribute' => 'type_name',
+                            'header' => 'ประเภทผู้ป่วย'
+                        ],
+                          
+                         [
+                            'attribute' => 'dch_type_name',
+                            'header' => 'ประเภทการจำหน่าย'
+                        ],
+                          
+
+                    ]
+                ])
+
+                ?>
+
 
 
 
