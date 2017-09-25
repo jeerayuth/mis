@@ -139,7 +139,7 @@ $this->registerJs("
                         ],
                          [
                             'attribute' => 'count_vn',
-                            'header' => 'จำนวนครั้งผู้ป่วย'
+                            'header' => 'จำนวนครั้งการรับบริการ'
                         ],
            
                           
@@ -192,7 +192,7 @@ $this->registerJs("
                           
                          [
                             'attribute' => 'dch_type_name',
-                            'header' => 'ประเภทการจำหน่าย'
+                            'header' => 'สถานะการจำหน่าย'
                         ],
                           
 
