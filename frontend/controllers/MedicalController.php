@@ -523,6 +523,59 @@ ORDER BY v.vstdate ";
                     'details' => $details,
         ]);
     }
+    
+    
+    
+    public function actionReport12($datestart, $dateend,$details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
+    
+            $report_name = "ทะเบียนรับเวชระเบียนผู้ป่วยใน (Chart)";
+             $sql = "SELECT
+                        doc.name as doc_name,a.hn,a.an,
+                        concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                        a.regdate,a.dchdate,a.pttype,a.pdx,
+                        (
+                             select  concat(i.staff,'  ',i.log_datetime)
+                             from ipt_chart_location_log i
+                             where i.an = a.an  order by ipt_cll_id limit 1,1
+                        ) as sentfromward ,
+                        (
+                             select  concat(i.staff,'  ',i.log_datetime)
+                             from ipt_chart_location_log i
+                             where i.an = a.an  order by ipt_cll_id limit 2,1) as sentfromdoctor
+
+                    FROM an_stat a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join ipt on ipt.an = a.an
+                    left outer join doctor doc on doc.code = ipt.dch_doctor
+                    WHERE  a.dchdate between $datestart AND $dateend
+                    ORDER BY a.an ";
+                
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+
+        
+        return $this->render('report12', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
 
 
 }
