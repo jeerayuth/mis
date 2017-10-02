@@ -543,13 +543,27 @@ ORDER BY v.vstdate ";
                         (
                              select  concat(i.staff,'  ',i.log_datetime)
                              from ipt_chart_location_log i
-                             where i.an = a.an  order by ipt_cll_id limit 2,1) as sentfromdoctor
+                             where i.an = a.an  order by ipt_cll_id limit 2,1) as sentfromdoctor,
+                             
+                        (
+                            select max(k.logtime) from ksklog k
+                            where k.tablename = 'IPTDIAG' and k.modifytype = 'EDIT'  and k.detail = a.an
+                        ) as max_logtime ,
+
+                         (
+                            select o.name as user_name from ksklog k
+                            left outer join opduser o on o.loginname=k.loginname
+                            where k.tablename = 'IPTDIAG' and k.modifytype = 'EDIT'  and k.detail = a.an
+                            and k.loginname = 'ศุภนารี' limit 1
+                        ) as user_name
 
                     FROM an_stat a
                     left outer join patient p on p.hn = a.hn
                     left outer join ipt on ipt.an = a.an
                     left outer join doctor doc on doc.code = ipt.dch_doctor
+                    left outer join ksklog k on k.detail = a.an
                     WHERE  a.dchdate between $datestart AND $dateend
+                    GROUP BY a.an
                     ORDER BY a.an ";
                 
         

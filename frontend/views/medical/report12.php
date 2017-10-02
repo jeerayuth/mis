@@ -65,6 +65,14 @@ echo GridView::widget([
             'attribute' => 'sentfromdoctor',
             'header' => 'รับจากแพทย์'
         ],
+         [
+            'attribute' => 'max_logtime',
+            'header' => 'เวลาบันทึก Diag'
+        ],
+        [
+            'attribute' => 'user_name',
+            'header' => 'บันทึก Diag โดย'
+        ],
           [
             'attribute' => 'doc_name',
             'header' => 'หมายเหตุ'
