@@ -450,11 +450,25 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
         
         
         
-        public function actionReport9($datestart, $dateend, $details) {
+        public function actionReport9($uclinic,$datestart, $dateend, $details) {
                         // save log
             $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
-     
-            $report_name = 'รายงานจำนวนคนไข้ที่มีรหัสวินิจฉัย j440-j449 ทั้งโรงพยาบาล(รายคน)';
+      
+            
+  if ($uclinic != "") { 
+      
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $join_ipd = ' ';
+                $criteria = ' ';
+                $report_name = 'รายงานจำนวนคนไข้ที่มีรหัสวินิจฉัย j440-j449 ทั้งโรงพยาบาล(คลินิก COPD+ คนไข้ทั่วไป) (รายคน)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $join_ipd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "005" ';
+                $report_name = 'รายงานจำนวนคนไข้ที่มีรหัสวินิจฉัย j440-j449 ทั้งโรงพยาบาล(เฉพาะคนไข้ในคลินิก COPD) (รายคน)';
+            }
+            
       
             $sql = "SELECT
                             a.hn,a.pt_name
@@ -463,6 +477,7 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                             select distinct(v.hn) ,concat(p.pname,p.fname,'  ',p.lname) as pt_name
                                 from vn_stat v
                                 left outer join patient p on p.hn = v.hn
+                                $join_opd
                                 where v.vstdate between $datestart and $dateend   and
                                 (
                                       v.pdx between 'j440' and 'j449' or
@@ -472,11 +487,12 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                                       v.dx3 between 'j440' and 'j449' or
                                       v.dx4 between 'j440' and 'j449' or
                                       v.dx5 between 'j440' and 'j449'
-                                )
+                                ) $criteria
                         union  all
                                 select distinct(v.hn) ,concat(p.pname,p.fname,'  ',p.lname) as pt_name
                                 from an_stat v
                                 left outer join patient p on p.hn = v.hn
+                                $join_ipd
                                 where v.dchdate between $datestart and $dateend  and
 
                                 (
@@ -487,7 +503,7 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                                       v.dx3 between 'j440' and 'j449' or
                                       v.dx4 between 'j440' and 'j449' or
                                       v.dx5 between 'j440' and 'j449'
-                                )
+                                ) $criteria
 
                              )   a
 
@@ -512,6 +528,9 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                         'details' => $details,
   
             ]); 
+           
+   }
+             
         } // จบ function
         
         
@@ -575,72 +594,44 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
 
 
         
-        public function actionReport11($datestart, $dateend, $details) {
+        public function actionReport11($uclinic,$datestart, $dateend, $details) {
                 // save log
         $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
+  
+        if ($uclinic != "") { 
 
-        $report_name = "รายงานจำนวนคนไข้ ที่มีรหัสวินิจฉัย j440-j449  Re-visit ภายใน 48 ชั่วโมง";
+                if ($uclinic == 1) {
+                    $join_opd = ' ';
+                    $criteria = ' ';
+                    $report_name = 'รายงานจำนวนคนไข้ ที่มีรหัสวินิจฉัย j440-j449  Re-visit ภายใน 48 ชั่วโมง (คลินิก COPD+คนไข้ทั่วไป) (รายคน)';
+                } else if ($uclinic == 2) {
+                    $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                    $criteria = ' and c.clinic = "005" ';
+                    $report_name = 'รายงานจำนวนคนไข้ ที่มีรหัสวินิจฉัย j440-j449  Re-visit ภายใน 48 ชั่วโมง (เฉพาะคนไข้ในคลินิก COPD) (รายคน)';
+                }
 
-        $sql = "SELECT
-                    v.vn,v.hn,v.vstdate,v.age_y,
-                    concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name ,
-                    v.pdx,v.dx0 ,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
-                    v.moopart,t.full_name as address,
-                    v.lastvisit_hour
-                FROM vn_stat  v
-                left outer join patient p on p.hn = v.hn
-                left outer join spclty s on s.spclty = v.spclty
-                left OUTER join thaiaddress t on t.addressid=v.aid
-                left outer join sex se on se.code = p.sex
-                WHERE 
-                    v.old_diagnosis = 'Y' and v.lastvisit_hour <= 48
-                    and v.vstdate between $datestart and $dateend
-                    and v.pdx between 'j440'  and 'j449'
-                GROUP BY v.hn
-                ORDER BY v.aid, v.moopart, v.hn, v.vstdate ";
-        
 
-        try {
-            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-        } catch (\yii\db\Exception $e) {
-            throw new \yii\web\ConflictHttpException('sql error');
-        }
+            $sql = "SELECT
+                        v.vn,v.hn,v.vstdate,v.age_y,
+                        concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name ,
+                        v.pdx,v.dx0 ,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
+                        v.moopart,t.full_name as address,
+                        v.lastvisit_hour
+                    FROM vn_stat  v
+                    left outer join patient p on p.hn = v.hn
+                    left outer join spclty s on s.spclty = v.spclty
+                    left OUTER join thaiaddress t on t.addressid=v.aid
+                    left outer join sex se on se.code = p.sex
+                    $join_opd
+                    WHERE                
+                        v.old_diagnosis = 'Y' and v.lastvisit_hour <= 48
+                        and v.vstdate between $datestart and $dateend
+                        and v.pdx between 'j440'  and 'j449'
+                        $criteria
+                    GROUP BY v.hn
+                    ORDER BY v.aid, v.moopart, v.hn, v.vstdate ";
 
-        $dataProvider = new \yii\data\ArrayDataProvider([
-            'allModels' => $rawData,
-            'pagination' => False,
-        ]);
 
-        
-        return $this->render('report11', [
-                    'dataProvider' => $dataProvider,
-                    'report_name' => $report_name,
-                    'details' => $details,
-        ]);
-    } // จบ function
-    
-
-    
-    
-           
-        public function actionReport12($datestart, $dateend, $details) {
-                        // save log
-            $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
-     
-            $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี ';
-      
-            $sql = "
-                    SELECT
-                           v.hn ,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
-                           v.age_y
-                     FROM vn_stat v
-                     LEFT OUTER JOIN patient p on p.hn = v.hn
-                     WHERE 
-                        v.vstdate between $datestart and $dateend  
-                        and v.pdx = 'j441' and v.age_y > 15 
-                     GROUP BY v.hn ";
-            
-                                                
             try {
                 $rawData = \yii::$app->db->createCommand($sql)->queryAll();
             } catch (\yii\db\Exception $e) {
@@ -653,12 +644,70 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
             ]);
 
 
-           return $this->render('report12', [
+            return $this->render('report11', [
                         'dataProvider' => $dataProvider,
                         'report_name' => $report_name,
                         'details' => $details,
-  
-            ]); 
+            ]);
+        }
+    } // จบ function
+    
+
+    
+    
+           
+        public function actionReport12($uclinic,$datestart, $dateend, $details) {
+                        // save log
+            $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
+     
+            $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี ';
+                                   
+            if ($uclinic != "") { 
+
+                      if ($uclinic == 1) {
+                          $join_opd = ' ';
+                          $criteria = ' ';
+                          $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี  (คลินิก COPD+ คนไข้ทั่วไป) (รายคน)';
+                      } else if ($uclinic == 2) {
+                          $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                          $criteria = ' and c.clinic = "005" ';
+                          $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี  (เฉพาะคนไข้ในคลินิก COPD) (รายคน)';
+                      }
+
+
+                      $sql = "
+                              SELECT
+                                     v.hn ,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                                     v.age_y
+                               FROM vn_stat v
+                               LEFT OUTER JOIN patient p on p.hn = v.hn
+                               $join_opd
+                               WHERE 
+                                  v.vstdate between $datestart and $dateend  
+                                  and v.pdx = 'j441' and v.age_y > 15  $criteria
+                               GROUP BY v.hn ";
+
+
+                      try {
+                          $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+                      } catch (\yii\db\Exception $e) {
+                          throw new \yii\web\ConflictHttpException('sql error');
+                      }
+
+                      $dataProvider = new \yii\data\ArrayDataProvider([
+                          'allModels' => $rawData,
+                          'pagination' => False,
+                      ]);
+
+
+                     return $this->render('report12', [
+                                  'dataProvider' => $dataProvider,
+                                  'report_name' => $report_name,
+                                  'details' => $details,
+
+                           ]); 
+
+                      }
         } // จบ function
         
     
