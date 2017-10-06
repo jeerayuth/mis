@@ -38,7 +38,7 @@ for ($i = 0; $i < count($rawData); $i++) {
 
 $js_data = json_encode($data);
 
-$report_name = $report_name . " ณ วันที่ " .  $date_start;
+$report_name = $report_name . " ณ ระหว่างวันที่ " .  $date_start . "ถึง " . $date_end;
         
 // chart
 $this->registerJs(" 
@@ -126,16 +126,24 @@ echo GridView::widget([
             'attribute' => 'sum_income',
             'header' => 'ยอดเงิน(บาท)'
         ],
+         [
+            'attribute' => 'sum_uc_money',
+            'header' => 'ลูกหนี้ค่ารักษา'
+        ],
+        
+        
+        
+        
         [
             'attribute' => '',
             'header' => 'รายละเอียดค่ารักษา',
             'format' => 'raw',
-            'value' => function($model) use ($date_start) {
+            'value' => function($model) use ($date_start,$date_end) {
                 $pttype = $model['pttype'];
                 $title = 'คลิกดูรายละเอียด';
    
                 return Html::a(Html::encode($title), 
-                    ['claim/report21', 'pttype' => $pttype,'date_start'=>$date_start],['target'=>'_blank']);
+                    ['claim/report21', 'pttype' => $pttype,'date_start'=>$date_start,'date_end'=>$date_end],['target'=>'_blank']);
                     }
                 ]
       
@@ -152,7 +160,7 @@ echo GridView::widget([
     //function เรียกหน้ารายงาน
     function url() {
      
-        window.open('http://192.168.1.252:8080/mis/frontend/web/index.php?r=claim/report22&date_start=' + <?=$date_start ?> );
+        window.open('http://192.168.1.252:8080/mis/frontend/web/index.php?r=claim/report22&date_start=' + <?=$date_start ?> + '&date_end=' + <?=$date_end ?> );
     }
 
 

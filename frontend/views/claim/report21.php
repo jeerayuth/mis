@@ -40,6 +40,10 @@ echo GridView::widget([
     ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
+         [
+            'attribute' => 'department_name',
+            'header' => 'แผนก'
+        ],
         [
             'attribute' => 'hn',
             'header' => 'HN'
@@ -63,6 +67,10 @@ echo GridView::widget([
          [
             'attribute' => 'income',
             'header' => 'รวมค่าใช้จ่าย'
+        ],
+             [
+            'attribute' => 'uc_money',
+            'header' => 'ลูกหนี้'
         ],
            [
             'attribute' => 'net_total',

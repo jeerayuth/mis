@@ -1165,7 +1165,7 @@ class ClaimController extends CommonController {
         ]);
      }
      
-      public function actionReport20($datestart, $details) {
+      public function actionReport20($datestart, $dateend, $details) {
          // save log
         $this->SaveLog($this->dep_controller, 'report20', $this->getSession());
 
@@ -1174,11 +1174,12 @@ class ClaimController extends CommonController {
         /* แบบเดิม วิธีการสรุปข้อมูลเป็นดังนี้ เช่น ผู้ใช้เลือกวันที่ที่ต้องการดูรายงานเป็นวันที่ 15 ม.ค.60 ระบบจะดึงข้อมูล ของวันที่ 14 ม.ค. 60 ระหว่างเวลา 16:01:00 น.  ถึง 23:59:59 น. มารวมกันวันที่ 15 ม.ค. 60 ระหว่างเวลา 00:00:00  ถึง 16:00:59 */
         $sql = "SELECT
                     v.pttype , p.name as pttype_name,count(distinct(v.vn)) as count_vn  ,
-                    sum(income) as sum_income
+                    sum(income) as sum_income,
+                    sum(v.uc_money) as sum_uc_money
                 FROM vn_stat  v
                 left outer join pttype p on p.pttype = v.pttype
                 left outer join service_time s on s.vn = v.vn
-                WHERE v.vstdate = $datestart
+                WHERE v.vstdate between $datestart and $dateend
                 /*
                   (
                     (v.vstdate = date_sub($datestart,interval 1 day) and s.service3 between '16:01:00' and '23:59:59')
@@ -1198,11 +1199,13 @@ class ClaimController extends CommonController {
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-
+        
+      
         return $this->render('report20', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'date_start' => $datestart,
+                    'date_end' => $dateend,
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
@@ -1213,7 +1216,7 @@ class ClaimController extends CommonController {
      
      
      
-      public function actionReport21($pttype,$date_start) {
+      public function actionReport21($pttype,$date_start,$date_end) {
             // save log
         $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
 
@@ -1225,16 +1228,20 @@ class ClaimController extends CommonController {
                         v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                         v.pttype,t.name as pttype_name,
                         v.income,r.total_amount,
-                        if(r.total_amount is not null,r.total_amount,'-') as net_total
+                        if(v.paid_money is not null,v.paid_money,'-') as net_total,
+                         v.uc_money,
+                         ks.department as department_name
                         
                   FROM vn_stat v
                   left outer join  rcpt_print r on r.vn = v.vn
                   left outer join  pttype t on t.pttype=v.pttype
                   left outer join patient pt on pt.hn = v.hn
+                  left outer join ovst ov on ov.vn=v.vn 
+                  left outer join kskdepartment ks on ks.depcode = ov.main_dep
                   
                   WHERE
-                       v.vstdate = $date_start   and v.pttype = $pttype
-                  ORDER BY v.hn ";
+                       v.vstdate between $date_start and $date_end   and v.pttype = $pttype
+                  ORDER BY v.vstdate ";
 
                                                        
         try {
@@ -1252,6 +1259,7 @@ class ClaimController extends CommonController {
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'date_start' => $date_start,
+                    'date_end' => $date_end,
                     'report_name' => $report_name,
 
         ]);
@@ -1260,27 +1268,31 @@ class ClaimController extends CommonController {
       }
       
       
-      public function actionReport22($date_start) {
+      public function actionReport22($date_start, $date_end) {
             // save log
         $this->SaveLog($this->dep_controller, 'report22', $this->getSession());
 
-        $report_name = "รายงานยอดผู้มารับบริการ OPD แยกรายวัน";
+        $report_name = "รายงานยอดผู้มารับบริการ OPD แยกรายวัน ระหว่างวันที่ $date_start ถึงวันที่ $date_end";
         
         $sql = "SELECT
                         v.vn,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,
                         v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                         v.pttype,t.name as pttype_name,
                         v.income,r.total_amount,
-                        if(r.total_amount is not null,r.total_amount,'-') as net_total
+                        if(v.paid_money,v.paid_money,'-') as net_total,
+                        v.uc_money,
+                        ks.department as department_name
                         
                   FROM vn_stat v
                   left outer join  rcpt_print r on r.vn = v.vn
                   left outer join  pttype t on t.pttype=v.pttype
                   left outer join patient pt on pt.hn = v.hn
+                  left outer join ovst ov on ov.vn=v.vn 
+                  left outer join kskdepartment ks on ks.depcode=ov.main_dep
                   
                   WHERE
-                       v.vstdate = $date_start 
-                  ORDER BY v.pttype ";
+                       v.vstdate between $date_start  and $date_end
+                  ORDER BY v.pttype, v.vstdate ";
 
                                                        
         try {
