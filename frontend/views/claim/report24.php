@@ -32,7 +32,7 @@ $data = [];
 for ($i = 0; $i < count($rawData); $i++) {
     $data[] = [
         'name' => $rawData[$i]['pttype_name'],
-        'y' => $rawData[$i]['count_vn'] * 1,
+        'y' => $rawData[$i]['count_an'] * 1,
     ];
 }
 
@@ -57,7 +57,7 @@ $this->registerJs("
          yAxis: {
             min: 0,
             title: {
-                text: 'จำนวน visit คนไข้ opd(ครั้ง) แยกตามสิทธิ์'
+                text: 'จำนวน visit คนไข้ ipd (ครั้ง) แยกตามสิทธิ์'
             },
             
         },
@@ -119,7 +119,7 @@ echo GridView::widget([
             'header' => 'ชื่อสิทธิ์'
         ],
         [
-            'attribute' => 'count_vn',
+            'attribute' => 'count_an',
             'header' => 'ยอดผู้รับบริการ(รายครั้ง)'
         ],
         [
@@ -143,7 +143,7 @@ echo GridView::widget([
                 $title = 'คลิกดูรายละเอียด';
    
                 return Html::a(Html::encode($title), 
-                    ['claim/report21', 'pttype' => $pttype,'date_start'=>$date_start,'date_end'=>$date_end],['target'=>'_blank']);
+                    ['claim/report25', 'pttype' => $pttype,'date_start'=>$date_start,'date_end'=>$date_end],['target'=>'_blank']);
                     }
                 ]
       
@@ -160,7 +160,7 @@ echo GridView::widget([
     //function เรียกหน้ารายงาน
     function url() {
      
-        window.open('http://192.168.1.252:8080/mis/frontend/web/index.php?r=claim/report22&date_start=' + <?=$date_start ?> + '&date_end=' + <?=$date_end ?> );
+        window.open('http://192.168.1.252:8080/mis/frontend/web/index.php?r=claim/report26&date_start=' + <?=$date_start ?> + '&date_end=' + <?=$date_end ?> );
     }
 
 

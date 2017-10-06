@@ -1362,5 +1362,169 @@ class ClaimController extends CommonController {
     
      
      
+    
+     public function actionReport24($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report24', $this->getSession());
+
+        $report_name = "รายงานสรุปยอดผู้มารับบริการ IPD แยกรายวันตามสิทธิ์การรักษา";
+        
+        /* แบบเดิม วิธีการสรุปข้อมูลเป็นดังนี้ เช่น ผู้ใช้เลือกวันที่ที่ต้องการดูรายงานเป็นวันที่ 15 ม.ค.60 ระบบจะดึงข้อมูล ของวันที่ 14 ม.ค. 60 ระหว่างเวลา 16:01:00 น.  ถึง 23:59:59 น. มารวมกันวันที่ 15 ม.ค. 60 ระหว่างเวลา 00:00:00  ถึง 16:00:59 */
+        
+        $sql = "SELECT
+                    a.pttype , p.name as pttype_name,count(distinct(a.an)) as count_an  ,
+                    sum(a.income) as sum_income,
+                    sum(a.uc_money) as sum_uc_money
+                FROM an_stat  a
+                left outer join pttype p on p.pttype = a.pttype
+                WHERE a.dchdate BETWEEN $datestart AND $dateend
+                GROUP BY a.pttype ";
+        
+                
+        $sql2 = "SELECT
+                    w.name as ward_name, a.an, p.hn, 
+                    CONCAT(p.pname, p.fname,' ',p.lname) AS pt_name,
+                    CONCAT(o.hospmain,' ', h.hosptype, h.name) AS hosp_name,
+                    a.regdate,a.dchdate,
+                    concat(a.pttype,' ',pp.name) as pttype_name,
+                    a.income, a.uc_money, a.paid_money
+                FROM an_stat  a
+                LEFT OUTER JOIN patient p on p.hn = a.hn
+                LEFT OUTER JOIN ward w on w.ward = a.ward
+                LEFT OUTER JOIN ovst o on o.an = a.an
+                LEFT OUTER JOIN hospcode h on h.hospcode = o.hospmain
+                LEFT OUTER JOIN pttype pp on pp.pttype = a.pttype
+                WHERE 
+                    a.dchdate BETWEEN $datestart AND $dateend ";
+
+                                                       
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+      
+        return $this->render('report24', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $datestart,
+                    'date_end' => $dateend,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+      
+              
+     }
+     
+     
+     
+     
+     
+     public function actionReport25($pttype,$date_start, $date_end) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report25', $this->getSession());
+
+        $report_name = "รายงานสรุปยอดผู้มารับบริการ IPD แยกรายวันตามสิทธิ์การรักษา ที่จำหน่าย ระหว่างวันที่ $date_start ถึงวันที่ $date_end";
+   
+        $sql = "SELECT
+                    w.name as ward_name, a.an, p.hn, 
+                    CONCAT(p.pname, p.fname,' ',p.lname) AS pt_name,
+                    CONCAT(o.hospmain,' ', h.hosptype, h.name) AS hosp_name,
+                    a.regdate,a.dchdate,
+                    a.pttype,
+                    pp.name as pttype_name,
+                    a.income, a.uc_money,
+                    if(a.paid_money is not null,a.paid_money,'-') as net_total
+                FROM an_stat  a
+                LEFT OUTER JOIN patient p on p.hn = a.hn
+                LEFT OUTER JOIN ward w on w.ward = a.ward
+                LEFT OUTER JOIN ovst o on o.an = a.an
+                LEFT OUTER JOIN hospcode h on h.hospcode = o.hospmain
+                LEFT OUTER JOIN pttype pp on pp.pttype = a.pttype
+                WHERE 
+                    a.dchdate BETWEEN $date_start AND $date_end  and a.pttype = $pttype ";
+
+                                                       
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+      
+        return $this->render('report25', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $date_start,
+                    'date_end' => $date_end,
+                    'report_name' => $report_name,
+
+        ]);
+      
+ 
+     }
+     
+     
+       public function actionReport26($date_start, $date_end) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report25', $this->getSession());
+
+        $report_name = "รายงานสรุปยอดผู้มารับบริการ IPD แยกรายวันตามสิทธิ์การรักษา ที่จำหน่าย ระหว่างวันที่ $date_start ถึงวันที่ $date_end";
+   
+        $sql = "SELECT
+                    w.name as ward_name, a.an, p.hn, 
+                    CONCAT(p.pname, p.fname,' ',p.lname) AS pt_name,
+                    CONCAT(o.hospmain,' ', h.hosptype, h.name) AS hosp_name,
+                    a.regdate,a.dchdate,
+                    a.pttype,
+                    pp.name as pttype_name,
+                    a.income, a.uc_money,
+                    if(a.paid_money is not null,a.paid_money,'-') as net_total
+                FROM an_stat  a
+                LEFT OUTER JOIN patient p on p.hn = a.hn
+                LEFT OUTER JOIN ward w on w.ward = a.ward
+                LEFT OUTER JOIN ovst o on o.an = a.an
+                LEFT OUTER JOIN hospcode h on h.hospcode = o.hospmain
+                LEFT OUTER JOIN pttype pp on pp.pttype = a.pttype
+                WHERE 
+                    a.dchdate BETWEEN $date_start AND $date_end ";
+
+                                                       
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+      
+        return $this->render('report26', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $date_start,
+                    'date_end' => $date_end,
+                    'report_name' => $report_name,
+
+        ]);
+      
+ 
+     }
+     
+     
      
 }
