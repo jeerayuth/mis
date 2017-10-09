@@ -1241,6 +1241,7 @@ class ClaimController extends CommonController {
                   
                   WHERE
                        v.vstdate between $date_start and $date_end   and v.pttype = $pttype
+                  GROUP BY v.vn
                   ORDER BY v.vstdate ";
 
                                                        
@@ -1292,6 +1293,7 @@ class ClaimController extends CommonController {
                   
                   WHERE
                        v.vstdate between $date_start  and $date_end
+                  GROUP BY v.vn
                   ORDER BY v.pttype, v.vstdate ";
 
                                                        
@@ -1380,24 +1382,7 @@ class ClaimController extends CommonController {
                 WHERE a.dchdate BETWEEN $datestart AND $dateend
                 GROUP BY a.pttype ";
         
-                
-        $sql2 = "SELECT
-                    w.name as ward_name, a.an, p.hn, 
-                    CONCAT(p.pname, p.fname,' ',p.lname) AS pt_name,
-                    CONCAT(o.hospmain,' ', h.hosptype, h.name) AS hosp_name,
-                    a.regdate,a.dchdate,
-                    concat(a.pttype,' ',pp.name) as pttype_name,
-                    a.income, a.uc_money, a.paid_money
-                FROM an_stat  a
-                LEFT OUTER JOIN patient p on p.hn = a.hn
-                LEFT OUTER JOIN ward w on w.ward = a.ward
-                LEFT OUTER JOIN ovst o on o.an = a.an
-                LEFT OUTER JOIN hospcode h on h.hospcode = o.hospmain
-                LEFT OUTER JOIN pttype pp on pp.pttype = a.pttype
-                WHERE 
-                    a.dchdate BETWEEN $datestart AND $dateend ";
-
-                                                       
+                                                              
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -1448,7 +1433,9 @@ class ClaimController extends CommonController {
                 LEFT OUTER JOIN hospcode h on h.hospcode = o.hospmain
                 LEFT OUTER JOIN pttype pp on pp.pttype = a.pttype
                 WHERE 
-                    a.dchdate BETWEEN $date_start AND $date_end  and a.pttype = $pttype ";
+                    a.dchdate BETWEEN $date_start AND $date_end 
+                    and a.pttype = $pttype
+                GROUP BY a.an ";
 
                                                        
         try {
@@ -1498,7 +1485,8 @@ class ClaimController extends CommonController {
                 LEFT OUTER JOIN hospcode h on h.hospcode = o.hospmain
                 LEFT OUTER JOIN pttype pp on pp.pttype = a.pttype
                 WHERE 
-                    a.dchdate BETWEEN $date_start AND $date_end ";
+                    a.dchdate BETWEEN $date_start AND $date_end
+                GROUP BY a.an ";
 
                                                        
         try {
