@@ -14,8 +14,8 @@ class SiteController extends \yii\web\Controller {
         $report_name3 = "กราฟสรุปคนไข้ทะเบียนคลินิกความดัน ภายใน อ.ละแม จ.ชุมพร";
         $report_name4 = "กราฟสรุปคนไข้ทะเบียนคลินิกถุงลมโป่งพอง ภายใน อ.ละแม จ.ชุมพร";
         $report_name5 = "กราฟสรุปคนไข้ทะเบียนคลินิกหอบหืด ภายใน อ.ละแม จ.ชุมพร";
-        $report_name6 = "กราฟสรุปจำนวน visit คนไข้ OPD แยกรายเดือน ปีงบประมาณ 2560";
-        $report_name7 = "กราฟสรุปจำนวนผู้มารับบริการผู้ป่วยใน (Ward+LR) แยกรายเดือน ปีงบประมาณ 2560";
+        $report_name6 = "กราฟสรุปจำนวน visit คนไข้ OPD แยกรายเดือน ปีงบประมาณ 2561";
+        $report_name7 = "กราฟสรุปจำนวนผู้มารับบริการผู้ป่วยใน (Ward+LR) แยกรายเดือน ปีงบประมาณ 2561";
         $report_name8 = "กราฟสรุปจำนวนรายงานสารสนเทศในระบบ HOSxP";
 
 
@@ -113,15 +113,15 @@ class SiteController extends \yii\web\Controller {
 
 
 
-        // sql กราฟสรุปจำนวน visit คนไข้ OPD แยกรายเดือน ปีงบประมาณ 2559
-        //$report_name6 = "กราฟสรุปจำนวนผู้มารับบริการผู้ป่วยนอก แยกรายเดือน ปีงบประมาณ 2559";
+        // sql กราฟสรุปจำนวน visit คนไข้ OPD แยกรายเดือน ปีงบประมาณ 2561
+        //$report_name6 = "กราฟสรุปจำนวนผู้มารับบริการผู้ป่วยนอก แยกรายเดือน ปีงบประมาณ 2561";
         $sql6 = "SELECT
 
         CONCAT(MONTH(v.vstdate),'-',YEAR(v.vstdate))  as vstmonth ,
         COUNT(v.vn) as count_vn_opd  
 
         FROM vn_stat v
-        WHERE  v.vstdate BETWEEN '2016-10-01' AND '2017-09-30'
+        WHERE  v.vstdate BETWEEN '2017-10-01' AND '2018-09-30'
         GROUP BY  CONCAT(YEAR(v.vstdate),'-',MONTH(v.vstdate))
         ORDER BY  v.vstdate ";
 
@@ -135,7 +135,7 @@ class SiteController extends \yii\web\Controller {
 
                 FROM an_stat a
 
-                WHERE  a.dchdate BETWEEN '2016-10-01' AND '2017-09-30'
+                WHERE  a.dchdate BETWEEN '2017-10-01' AND '2018-09-30'
 
                 group by  CONCAT(YEAR(a.dchdate),'-',MONTH(a.dchdate))
 
