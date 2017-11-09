@@ -1770,16 +1770,17 @@ class PcuController extends CommonController {
                   if(wbc.vaccine_opv3_date is not null,concat(wbc.vaccine_opv3_date,'   '),' ') as opv3 ,
                   if(wbc.vaccine_mmr_date is not null,concat(wbc.vaccine_mmr_date,'   '),' ') as mmr1 ,
 
-                  epi.vaccine_je1_lived_date as laje1 ,
-                  epi.vaccine_dtp4_date as dtp4,
-                  epi.vaccine_opv4_date as opv4,
-                  epi.vaccine_je2_lived_date as laje2,
-                  epi.vaccine_mmr2_date as mmr2 ,
-                  epi.vaccine_dtp5_date as dtp5 ,
-                  epi.vaccine_opv5_date as opv5 ,
-                  v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 ,
+                  if(epi.vaccine_je1_lived_date is not null,concat(epi.vaccine_je1_lived_date,'   '),' ') as laje1 ,                
+                  if(epi.vaccine_dtp4_date is not null,concat(epi.vaccine_dtp4_date,'   '),' ') as dtp4 ,
+                  if(epi.vaccine_opv4_date is not null,concat(epi.vaccine_opv4_date,'   '),' ') as opv4 ,
+                  if(epi.vaccine_je2_lived_date is not null,concat(epi.vaccine_je2_lived_date,'   '),' ') as laje2 ,
+                  if(epi.vaccine_mmr2_date is not null,concat(epi.vaccine_mmr2_date,'   '),' ') as mmr2 ,
+                  if(epi.vaccine_dtp5_date is not null,concat(epi.vaccine_dtp5_date,'   '),' ') as dtp5 ,
+                  if(epi.vaccine_opv5_date is not null,concat(epi.vaccine_opv5_date,'   '),' ') as opv5 ,
+            
+                  v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4, v.dx5 ,
                   v.op0,v.op1,v.op2,v.op3,v.op4,v.op5
-
+                                                                                                                                                                                                                             
             FROM vn_stat  v
 
             LEFT OUTER JOIN patient p ON p.hn = v.hn

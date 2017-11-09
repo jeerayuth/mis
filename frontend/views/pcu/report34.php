@@ -85,6 +85,101 @@ echo GridView::widget([
             'header' => 'MMR1'
         ],
         
+          [
+            'attribute' => 'laje1',
+            'header' => 'LAJE1'
+        ],
+        
+          [
+            'attribute' => 'dtp4',
+            'header' => 'DTP4'
+        ],
+        
+          [
+            'attribute' => 'opv4',
+            'header' => 'OPV4'
+        ],
+        
+          [
+            'attribute' => 'laje2',
+            'header' => 'LAJE2'
+        ],
+         [
+            'attribute' => 'mmr2',
+            'header' => 'MMR2'
+        ],
+         [
+            'attribute' => 'dtp5',
+            'header' => 'DTP5'
+        ],
+         [
+            'attribute' => 'opv5',
+            'header' => 'OPV5'
+        ],
+         [
+            'attribute' => 'vstdate',
+            'header' => 'วันที่รับบริการ'
+        ],
+        
+           [
+            'attribute' => 'pdx',
+            'header' => 'PDX'
+        ],
+          [
+            'attribute' => 'dx0',
+            'header' => 'dx0'
+        ],
+          [
+            'attribute' => 'dx1',
+            'header' => 'dx1'
+        ],
+          [
+            'attribute' => 'dx2',
+            'header' => 'dx2'
+        ],
+          [
+            'attribute' => 'dx3',
+            'header' => 'dx3'
+        ],
+          [
+            'attribute' => 'dx4',
+            'header' => 'dx4'
+        ], [
+            'attribute' => 'dx5',
+            'header' => 'dx5'
+        ],
+        [
+            'attribute' => 'op0',
+            'header' => 'op0'
+        ],
+        [
+            'attribute' => 'op1',
+            'header' => 'op1'
+        ],
+        
+        [
+            'attribute' => 'op2',
+            'header' => 'op2'
+        ],
+        
+        [
+            'attribute' => 'op3',
+            'header' => 'op3'
+        ],
+        
+        [
+            'attribute' => 'op4',
+            'header' => 'op4'
+        ],
+        
+        [
+            'attribute' => 'op5',
+            'header' => 'op5'
+        ],
+        
+        
+        
+        
         
          
                      
