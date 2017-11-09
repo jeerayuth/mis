@@ -1751,6 +1751,75 @@ class PcuController extends CommonController {
 
     
     
+    public function actionReport34($datestart, $dateend, $details) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report34', $this->getSession());
+
+        $report_name = "รายงานสรุปวัคซีนที่ให้บริการ";
+        $sql = "SELECT
+                  ps.cid,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                  v.age_y,v.age_m, s.name as sex,
+                  v.vstdate,
+                  if(wbc.vaccine_bcg_date is not null,concat(wbc.vaccine_bcg_date,'   '),' ') as bcg ,
+                  if(wbc.vaccine_hbv1_date is not null,concat(wbc.vaccine_hbv1_date,'   '),' ') as hb1 ,                
+                  if(wbc.vaccine_dtphb1_date is not null,concat(wbc.vaccine_dtphb1_date,'   '),' ') as dtphb1 ,               
+                  if(wbc.vaccine_opv1_date is not null,concat(wbc.vaccine_opv1_date,'   '),' ') as opv1 ,
+                  if(wbc.vaccine_dtphb2_date is not null,concat(wbc.vaccine_dtphb2_date,'   '),' ') as dtphb2 ,
+                  if(wbc.vaccine_opv2_date is not null,concat(wbc.vaccine_opv2_date,'   '),' ') as opv2 ,
+                  if(wbc.vaccine_dtphb3_date is not null,concat(wbc.vaccine_dtphb3_date,'   '),' ') as dtphb3 ,
+                  if(wbc.vaccine_opv3_date is not null,concat(wbc.vaccine_opv3_date,'   '),' ') as opv3 ,
+                  if(wbc.vaccine_mmr_date is not null,concat(wbc.vaccine_mmr_date,'   '),' ') as mmr1 ,
+
+                  epi.vaccine_je1_lived_date as laje1 ,
+                  epi.vaccine_dtp4_date as dtp4,
+                  epi.vaccine_opv4_date as opv4,
+                  epi.vaccine_je2_lived_date as laje2,
+                  epi.vaccine_mmr2_date as mmr2 ,
+                  epi.vaccine_dtp5_date as dtp5 ,
+                  epi.vaccine_opv5_date as opv5 ,
+                  v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5 ,
+                  v.op0,v.op1,v.op2,v.op3,v.op4,v.op5
+
+            FROM vn_stat  v
+
+            LEFT OUTER JOIN patient p ON p.hn = v.hn
+            LEFT OUTER JOIN sex s ON s.code = v.sex
+            LEFT OUTER JOIN person  ps ON ps.cid = p.cid
+            LEFT OUTER JOIN person_wbc wbc  ON wbc.person_id = ps.person_id
+            LEFT OUTER JOIN person_epi epi ON epi.person_id = ps.person_id
+
+
+            WHERE v.vstdate BETWEEN $datestart AND $dateend  AND
+
+                                     (v.pdx ='z001' or
+                                      v.dx0 ='z001' or
+                                      v.dx1 ='z001' or
+                                      v.dx2 ='z001' or
+                                      v.dx3 ='z001' or
+                                      v.dx4 ='z001' or
+                                      v.dx5 ='z001')
+
+            ";
+            
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report34', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
     
     
     
