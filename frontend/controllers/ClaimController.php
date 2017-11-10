@@ -1471,7 +1471,7 @@ class ClaimController extends CommonController {
      
        public function actionReport26($date_start, $date_end) {
          // save log
-        $this->SaveLog($this->dep_controller, 'report25', $this->getSession());
+        $this->SaveLog($this->dep_controller, 'report26', $this->getSession());
 
         $report_name = "รายงานสรุปยอดผู้มารับบริการ IPD แยกรายวันตามสิทธิ์การรักษา ที่จำหน่าย ระหว่างวันที่ $date_start ถึงวันที่ $date_end";
    
@@ -1518,6 +1518,463 @@ class ClaimController extends CommonController {
       
  
      }
+     
+     
+       public function actionReport27($datestart, $dateend) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report27', $this->getSession());
+
+        $report_name = "สรุปรายงานลูกหนี้ค่ารักษา OPD/IPD ระหว่างวันที่ $datestart ถึงวันที่ $dateend";
+   
+        
+        $sql = "SELECT
+                   'ลูกหนี้ค่ารักษา-กองทุนทันตกรรม' as pttype_name,
+                    '1102050194.305' as q1,
+                    '4301020106.311' as q2,
+                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                    count(distinct(v.vn)) as count_visit
+                FROM vn_stat  v
+
+                WHERE v.vstdate between $datestart and $dateend AND v.pttype in (34)
+
+                UNION ALL
+
+
+
+                SELECT
+                                   'ลูกหนี้ค่ารักษา-เบิกต้นสังกัด-IPD' as pttype_name,
+                                    '1102050194.111' as q1,
+                                   '4301020104.105' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend AND a.pttype in (13)
+
+
+                UNION ALL
+
+
+                SELECT
+                                  'ลูกหนี้ค่ารักษา-บุคคลปัญหาสิทธิ์ฯ-OPD' as pttype_name,
+                                   '1102050194.701' as q1,
+                                   '4301020106.709' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend AND v.pttype in (99)
+
+
+                UNION ALL
+
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษา-บุคคลปัญหาสิทธิ์ฯ-IPD' as pttype_name,
+                                     '1102050194.704' as q1,
+                                   '4301020106.71' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend AND a.pttype in (99)
+
+
+
+                 UNION ALL
+
+
+                 SELECT
+                                  'ลูกหนี้ค่ารักษา OPD-UC ใน CUP (เฉพาะ 11381)' as pttype_name,
+                                    '1102050194.201' as q1,
+                                   '4301020105.201' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
+                               AND v.hospmain = '11381'
+
+
+                 UNION ALL
+
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษา IPD' as pttype_name,
+                                     '1102050194.202' as q1,
+                                   '4301020105.202' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (52,54,56,57,60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
+
+
+                 UNION ALL
+
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา OPD-UC นอก CUP (ในจังหวัด)ไม่ใช่ 11381' as pttype_name,
+                                    '1102050194.204' as q1,
+                                   '4301020105.203' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
+                               AND v.hospmain != '11381'
+
+
+                  UNION ALL
+
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา OPD-UC นอก CUP (ต่างจังหวัด)' as pttype_name,
+                                    '1102050194.205' as q1,
+                                   '4301020105.205' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (52,54,56,57)
+
+
+                   UNION ALL
+
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา UC - P&P Expressed demand( OPD)' as pttype_name,
+                                    '1102050194.203' as q1,
+                                   '4301020105.241' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (71,73)
+
+
+                  UNION ALL
+
+                      /* no map code */
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา UC OPD-AE' as pttype_name,
+                                    '1102050194.207' as q1,
+                                   '4301020105.244' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                    'no code map' as count_visit
+                                  /* count(distinct(v.vn)) as count_visit  */
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (99999)
+
+
+                UNION ALL
+
+                           /* no map code */
+                 SELECT
+                                   'ลูกหนี้ค่ารักษา UC IPD-AE' as pttype_name,
+                                     '1102050194.208' as q1,
+                                   '4301020105.245' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                    'no code map' as count_visit
+                                  /* count(distinct(a.an)) as count_visit  */
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (99999)
+
+
+
+                 UNION ALL
+
+                      /* no map code */
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา UC -OPD-HC' as pttype_name,
+                                    '1102050194.209' as q1,
+                                   '4301020105.246' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                    'no code map' as count_visit
+                                   /* count(distinct(v.vn)) as count_visit */
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (99999)
+
+
+
+                 UNION ALL
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษาประกันสังคม OPD-เครือข่าย' as pttype_name,
+                                    '1102050194.301' as q1,
+                                   '4301020106.305' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (31)
+
+
+
+
+                  UNION ALL
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษาประกันสังคม IPD-เครือข่าย' as pttype_name,
+                                     '1102050194.302' as q1,
+                                   '4301020106.306' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (31)
+
+
+
+                UNION ALL
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษาประกันสังคม OPD-นอกเครือข่าย' as pttype_name,
+                                    '1102050194.303' as q1,
+                                   '4301020106.307' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (32)
+
+
+                  UNION ALL
+
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษาประกันสังคม IPD-นอกเครือข่าย' as pttype_name,
+                                     '1102050194.304' as q1,
+                                     '4301020106.308' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (32,33)
+
+
+
+                UNION ALL
+
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษาประกันสังคม 72 ชั่วโมงแรก (IPD)' as pttype_name,
+                                     '1102050194.306' as q1,
+                                     '4301020106.312' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (35)
+
+
+
+                  UNION ALL
+
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา-เบิกจ่ายตรงกรมบัญชีกลาง OPD' as pttype_name,
+                                    '1102050194.401' as q1,
+                                   '4301020104.401' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (11)
+
+
+                   UNION ALL
+
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษา-เบิกจ่ายตรงกรมบัญชีกลาง IPD' as pttype_name,
+                                     '1102050194.402' as q1,
+                                     '4301020104.402' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (11,12)
+
+
+
+                 UNION ALL
+
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา-แรงงานต่างด้าว OPD' as pttype_name,
+                                    '1102050194.501' as q1,
+                                   '4301020106.503' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (42,44)
+
+
+                UNION ALL
+
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษา-แรงงานต่างด้าว IPD' as pttype_name,
+                                     '1102050194.502' as q1,
+                                     '4301020106.504' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (42,44)
+
+
+                UNION ALL
+
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา-เบิกจ่ายตรง อปท. OPD' as pttype_name,
+                                    '1105050194.801' as q1,
+                                   '4301020104.801' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (14)
+
+
+               UNION ALL
+
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษา-เบิกจ่ายตรง อปท. IPD' as pttype_name,
+                                     '1102050194.802' as q1,
+                                     '4301020104.802' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (14)
+
+
+                UNION ALL
+
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา-ชำระเงิน OPD' as pttype_name,
+                                    '1102050194.112' as q1,
+                                   '4301020104.106' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (01,10,12,13,16,33,37,39,43,45,56,57)
+
+
+               UNION ALL
+
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษา-ชำระเงิน IPD' as pttype_name,
+                                     '1102050194.113' as q1,
+                                     '4301020104.107' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (01,10,43,39,45,47)
+
+
+                  UNION ALL
+
+
+                  SELECT
+                                  'ลูกหนี้ค่ารักษา-พรบ. OPD' as pttype_name,
+                                    '1102050194.601' as q1,
+                                   '4301020104.602' as q2,
+                                    if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
+                                    if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(v.vn)) as count_visit
+                               FROM vn_stat  v
+
+                               WHERE v.vstdate between $datestart and $dateend
+                               AND v.pttype in (36,38)
+
+
+               UNION ALL
+
+
+                 SELECT
+                                   'ลูกหนี้ค่ารักษา-พรบ. IPD' as pttype_name,
+                                     '1102050194.602' as q1,
+                                     '4301020104.603' as q2,
+                                    if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
+                                    if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
+                                   count(distinct(a.an)) as count_visit
+                               FROM an_stat  a
+                               WHERE a.dchdate between $datestart and $dateend
+                               AND a.pttype in (36,38,37) ";
+                
+                                                     
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+      
+        return $this->render('report27', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $datestart,
+                    'date_end' => $dateend,
+                    'report_name' => $report_name,
+
+        ]); 
+      
+ 
+     }
+     
      
      
      

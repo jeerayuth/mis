@@ -1990,8 +1990,8 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
                                             
                     (
                         SELECT CASE 
-                          WHEN (height_last_divide2 < ops.waist) THEN 'ปกติ'
-                          WHEN (height_last_divide2 > ops.waist) THEN 'ไม่ปกติ'
+                          WHEN (height_last_divide2 > ops.waist) THEN 'ปกติ'
+                          WHEN (height_last_divide2 < ops.waist) THEN 'ไม่ปกติ'
                           WHEN (height_last_divide2 = ops.waist) THEN 'ปกติ'
                           ELSE ' ' END
                     ) AS screen_result_report 
