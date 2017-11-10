@@ -65,6 +65,31 @@ echo GridView::widget([
             'attribute' => 'count_visit',
             'header' => 'จำนวนรับบริการ(ครั้ง)'
         ],
+        /*
+         [
+            'attribute' => 'ptt_code',
+            'header' => 'MAPCODE'
+        ],
+         [
+            'attribute' => 'ptt_type',
+            'header' => 'PTTTYPE'
+        ], */
+        
+        [
+            'attribute' => '',
+            'header' => 'รายละเอียดค่ารักษา',
+            'format' => 'raw',
+            'value' => function($model) use ($date_start,$date_end) {
+                $ptt_code = $model['ptt_code'];
+                $ptt_type = $model['ptt_type'];
+                $head = $model['pttype_name'];
+                $cup_status = $model['cup_status'];
+                $title = 'คลิกดูรายละเอียด';
+   
+                return Html::a(Html::encode($title), 
+                    ['claim/report28', 'head'=>$head ,'ptt_code' => $ptt_code  ,'ptt_type' => $ptt_type,'date_start'=>$date_start,'date_end'=>$date_end,'cup_status'=>$cup_status],['target'=>'_blank']);
+                    }
+                ]
         
         
       

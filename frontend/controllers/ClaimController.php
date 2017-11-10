@@ -1533,7 +1533,10 @@ class ClaimController extends CommonController {
                     '4301020106.311' as q2,
                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                    count(distinct(v.vn)) as count_visit
+                    count(distinct(v.vn)) as count_visit,
+                    '34' as ptt_code,
+                    'opd' as ptt_type,
+                    '99999' as cup_status
                 FROM vn_stat  v
 
                 WHERE v.vstdate between $datestart and $dateend AND v.pttype in (34)
@@ -1548,7 +1551,10 @@ class ClaimController extends CommonController {
                                    '4301020104.105' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                   '13' as ptt_code,
+                                   'ipd' as ptt_type,
+                                   '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend AND a.pttype in (13)
 
@@ -1562,7 +1568,10 @@ class ClaimController extends CommonController {
                                    '4301020106.709' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '99' as ptt_code,
+                                   'opd' as ptt_type,
+                                   '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend AND v.pttype in (99)
@@ -1577,7 +1586,10 @@ class ClaimController extends CommonController {
                                    '4301020106.71' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                    '99' as ptt_code,
+                                    'ipd' as ptt_type,
+                                    '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend AND a.pttype in (99)
 
@@ -1592,7 +1604,10 @@ class ClaimController extends CommonController {
                                    '4301020105.201' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '11381' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1609,7 +1624,10 @@ class ClaimController extends CommonController {
                                    '4301020105.202' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                     '52,54,56,57,60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
+                                     'ipd' as ptt_type,
+                                     '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
                                AND a.pttype in (52,54,56,57,60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
@@ -1624,7 +1642,10 @@ class ClaimController extends CommonController {
                                    '4301020105.203' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
+                                   'opd' as ptt_type,
+                                   '11381_n' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1641,7 +1662,10 @@ class ClaimController extends CommonController {
                                    '4301020105.205' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '52,54,56,57' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1657,7 +1681,10 @@ class ClaimController extends CommonController {
                                    '4301020105.241' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '71,73' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1673,7 +1700,10 @@ class ClaimController extends CommonController {
                                    '4301020105.244' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                    'no code map' as count_visit
+                                    'no code map' as count_visit,
+                                    '99999' as ptt_code,
+                                     'opd' as ptt_type,
+                                     '99999' as cup_status
                                   /* count(distinct(v.vn)) as count_visit  */
                                FROM vn_stat  v
 
@@ -1690,7 +1720,10 @@ class ClaimController extends CommonController {
                                    '4301020105.245' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                    'no code map' as count_visit
+                                    'no code map' as count_visit,
+                                    '99999' as ptt_code,
+                                     'ipd' as ptt_type,
+                                     '99999' as cup_status
                                   /* count(distinct(a.an)) as count_visit  */
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
@@ -1707,7 +1740,10 @@ class ClaimController extends CommonController {
                                    '4301020105.246' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                    'no code map' as count_visit
+                                    'no code map' as count_visit,
+                                    '99999' as ptt_code,
+                                     'opd' as ptt_type,
+                                     '99999' as cup_status
                                    /* count(distinct(v.vn)) as count_visit */
                                FROM vn_stat  v
 
@@ -1724,7 +1760,10 @@ class ClaimController extends CommonController {
                                    '4301020106.305' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '31' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1741,7 +1780,10 @@ class ClaimController extends CommonController {
                                    '4301020106.306' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                   '31' as ptt_code,
+                                    'ipd' as ptt_type,
+                                    '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
                                AND a.pttype in (31)
@@ -1756,7 +1798,10 @@ class ClaimController extends CommonController {
                                    '4301020106.307' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '32' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1772,7 +1817,10 @@ class ClaimController extends CommonController {
                                      '4301020106.308' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                   '32,33' as ptt_code,
+                                    'ipd' as ptt_type,
+                                    '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
                                AND a.pttype in (32,33)
@@ -1788,7 +1836,10 @@ class ClaimController extends CommonController {
                                      '4301020106.312' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                   '35' as ptt_code,
+                                    'ipd' as ptt_type,
+                                    '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
                                AND a.pttype in (35)
@@ -1804,7 +1855,10 @@ class ClaimController extends CommonController {
                                    '4301020104.401' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '11' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1820,7 +1874,10 @@ class ClaimController extends CommonController {
                                      '4301020104.402' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                   '11,12' as ptt_code,
+                                    'ipd' as ptt_type,
+                                    '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
                                AND a.pttype in (11,12)
@@ -1836,7 +1893,10 @@ class ClaimController extends CommonController {
                                    '4301020106.503' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '42,44' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1852,7 +1912,10 @@ class ClaimController extends CommonController {
                                      '4301020106.504' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                   '42,44' as ptt_code,
+                                    'ipd' as ptt_type,
+                                    '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
                                AND a.pttype in (42,44)
@@ -1867,7 +1930,10 @@ class ClaimController extends CommonController {
                                    '4301020104.801' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '14' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1883,7 +1949,10 @@ class ClaimController extends CommonController {
                                      '4301020104.802' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                   '14' as ptt_code,
+                                    'ipd' as ptt_type,
+                                    '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
                                AND a.pttype in (14)
@@ -1898,7 +1967,10 @@ class ClaimController extends CommonController {
                                    '4301020104.106' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '01,10,12,13,16,33,37,39,43,45,56,57' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1914,7 +1986,10 @@ class ClaimController extends CommonController {
                                      '4301020104.107' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                   '01,10,43,39,45,47' as ptt_code,
+                                    'ipd' as ptt_type,
+                                    '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
                                AND a.pttype in (01,10,43,39,45,47)
@@ -1929,7 +2004,10 @@ class ClaimController extends CommonController {
                                    '4301020104.602' as q2,
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(v.vn)) as count_visit
+                                   count(distinct(v.vn)) as count_visit,
+                                   '36,38' as ptt_code,
+                                    'opd' as ptt_type,
+                                    '99999' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
@@ -1945,7 +2023,10 @@ class ClaimController extends CommonController {
                                      '4301020104.603' as q2,
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
-                                   count(distinct(a.an)) as count_visit
+                                   count(distinct(a.an)) as count_visit,
+                                   '36,38,37' as ptt_code,
+                                    'ipd' as ptt_type,
+                                    '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
                                AND a.pttype in (36,38,37) ";
@@ -1969,12 +2050,107 @@ class ClaimController extends CommonController {
                     'date_start' => $datestart,
                     'date_end' => $dateend,
                     'report_name' => $report_name,
+               
 
         ]); 
       
  
      }
      
+     
+     
+      public function actionReport28($head,$ptt_code,$ptt_type,$date_start, $date_end,$cup_status) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report28', $this->getSession());
+
+        $report_name = "มารับบริการ $ptt_type  ระหว่างวันที่ $date_start ถึงวันที่ $date_end";
+        $view = '';
+        $cup = '';
+        
+        if($cup_status == '11381') {
+            $cup =  "AND v.hospmain = '11381' ";
+        } else if ($cup_status == '11381_n') {
+             $cup = "AND v.hospmain != '11381' ";
+        } else {
+            $cup = '';
+        }
+        if($ptt_type == 'opd') {
+            $sql = "SELECT
+                        v.vn,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,
+                        v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        v.pttype,t.name as pttype_name,
+                        v.income,r.total_amount,
+                        if(v.paid_money is not null,v.paid_money,'-') as net_total,
+                         v.uc_money,
+                         ks.department as department_name
+                        
+                  FROM vn_stat v
+                  left outer join  rcpt_print r on r.vn = v.vn
+                  left outer join  pttype t on t.pttype=v.pttype
+                  left outer join patient pt on pt.hn = v.hn
+                  left outer join ovst ov on ov.vn=v.vn 
+                  left outer join kskdepartment ks on ks.depcode = ov.main_dep
+                  
+                  WHERE
+                       v.vstdate between $date_start and $date_end
+                       and v.pttype in ($ptt_code)
+                          $cup
+                  GROUP BY v.vn
+                  ORDER BY v.pttype,v.vstdate ";
+            
+            $view = 'report28';
+                  
+            
+        } else if ($ptt_type == 'ipd') {
+            $sql = "SELECT
+                    w.name as ward_name, a.an, p.hn, 
+                    CONCAT(p.pname, p.fname,' ',p.lname) AS pt_name,
+                    CONCAT(o.hospmain,' ', h.hosptype, h.name) AS hosp_name,
+                    a.regdate,a.dchdate,
+                    a.pttype,
+                    pp.name as pttype_name,
+                    a.income, a.uc_money,
+                    if(a.paid_money is not null,a.paid_money,'-') as net_total
+                FROM an_stat  a
+                LEFT OUTER JOIN patient p on p.hn = a.hn
+                LEFT OUTER JOIN ward w on w.ward = a.ward
+                LEFT OUTER JOIN ovst o on o.an = a.an
+                LEFT OUTER JOIN hospcode h on h.hospcode = o.hospmain
+                LEFT OUTER JOIN pttype pp on pp.pttype = a.pttype
+                WHERE 
+                    a.dchdate BETWEEN $date_start AND $date_end 
+                    and a.pttype in ($ptt_code)
+                GROUP BY a.an 
+                ORDER BY a.pttype,dchdate
+                    ";
+            
+            $view = 'report29';
+        }
+        
+                               
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+      
+        return $this->render($view, [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $date_start,
+                    'date_end' => $date_end,
+                    'report_name' => $report_name,
+                    'head' => $head
+
+        ]);
+            
+     }
      
      
      
