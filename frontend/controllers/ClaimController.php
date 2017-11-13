@@ -1605,13 +1605,13 @@ class ClaimController extends CommonController {
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
                                    count(distinct(v.vn)) as count_visit,
-                                   '60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
+                                   '60,61,62,63,64,65,66,67,68,69,70,72,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
                                     'opd' as ptt_type,
                                     '11381' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
-                               AND v.pttype in (60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
+                               AND v.pttype in (60,61,62,63,64,65,66,67,68,69,70,72,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
                                AND v.hospmain = '11381'
 
 
@@ -1625,12 +1625,12 @@ class ClaimController extends CommonController {
                                     if(sum(a.income) is not null,concat(sum(a.income),'   '),' ') as sum_income ,
                                     if(sum(a.uc_money) is not null,concat(sum(a.uc_money),'   '),' ') as sum_uc_money ,
                                    count(distinct(a.an)) as count_visit,
-                                     '52,54,56,57,60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
+                                     '52,54,56,57,60,61,62,63,64,65,66,67,68,69,70,72,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
                                      'ipd' as ptt_type,
                                      '99999' as cup_status
                                FROM an_stat  a
                                WHERE a.dchdate between $datestart and $dateend
-                               AND a.pttype in (52,54,56,57,60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
+                               AND a.pttype in (52,54,56,57,60,61,62,63,64,65,66,67,68,69,70,72,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
 
 
                  UNION ALL
@@ -1643,13 +1643,13 @@ class ClaimController extends CommonController {
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
                                    count(distinct(v.vn)) as count_visit,
-                                   '60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
+                                   '60,61,62,63,64,65,66,67,68,69,70,72,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
                                    'opd' as ptt_type,
                                    '11381_n' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
-                               AND v.pttype in (60,61,62,63,64,65,66,67,68,69,70,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
+                               AND v.pttype in (60,61,62,63,64,65,66,67,68,69,70,72,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
                                AND v.hospmain != '11381'
 
 
