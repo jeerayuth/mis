@@ -72,6 +72,11 @@ echo GridView::widget([
             'attribute' => 'pttype_name',
             'header' => 'ชื่อสิทธิ์'
         ],
+        /*
+        [
+            'attribute' => 'hospmain',
+            'header' => 'รหัสสถานพยาบาลหลัก (ตอนเปิด visit)'
+        ], */
          [
             'attribute' => 'income',
             'header' => 'รวมค่าใช้จ่าย'

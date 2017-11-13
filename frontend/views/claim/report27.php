@@ -21,7 +21,10 @@ $this->title = $report_name;
     ]);
     ?>  
 </div>
-
+<h4>
+อ้างอิง: ตรวจสอบรหัสสิทธิ์ที่ใช้จับคู่ระหว่างโปรแกรมทางบัญชีกับโปรแกรม HOSxP &nbsp;
+<a href="http://192.168.1.252:8080/mis/files_upload/pttype_lamae11381.pdf">>>> คลิกที่นี่ <<<</a>
+</h4>
 
 <?php
 
@@ -29,7 +32,7 @@ echo GridView::widget([
     'dataProvider' => $dataProvider,
     'panel' => [
         'heading' => $report_name ,
-        'before' => '',
+        'before' => "",
         'type' => 'primary',
         'after' => 'ประมวลผล ณ วันที่ ' . date('Y-m-d H:i:s')
     ],
@@ -43,11 +46,12 @@ echo GridView::widget([
          
         [
             'attribute' => 'pttype_name',
-            'header' => 'ชื่อบัญชี'
+            'header' => 'ชื่อบัญชี',
         ],
         [
             'attribute' => 'q1',
-            'header' => 'รหัสบัญชี'
+            'header' => 'รหัสบัญชี',
+            'format' => 'text'
         ],
          [
             'attribute' => 'q2',
@@ -55,25 +59,20 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'sum_income',
-            'header' => 'จำนวนเงิน(บาท)'
+            'header' => 'จำนวนเงิน(บาท)',
+
         ],
          [
             'attribute' => 'sum_uc_money',
-            'header' => 'ลูกหนี้ค่ารักษา(บาท)'
+            'header' => 'ลูกหนี้ค่ารักษา(บาท)',
+               'format'=>'text', 
         ],
           [
             'attribute' => 'count_visit',
             'header' => 'จำนวนรับบริการ(ครั้ง)'
+              
         ],
-        /*
-         [
-            'attribute' => 'ptt_code',
-            'header' => 'MAPCODE'
-        ],
-         [
-            'attribute' => 'ptt_type',
-            'header' => 'PTTTYPE'
-        ], */
+   
         
         [
             'attribute' => '',

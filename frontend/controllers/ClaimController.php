@@ -1520,7 +1520,7 @@ class ClaimController extends CommonController {
      }
      
      
-       public function actionReport27($datestart, $dateend) {
+       public function actionReport27($datestart, $dateend,$details) {
          // save log
         $this->SaveLog($this->dep_controller, 'report27', $this->getSession());
 
@@ -2050,6 +2050,7 @@ class ClaimController extends CommonController {
                     'date_start' => $datestart,
                     'date_end' => $dateend,
                     'report_name' => $report_name,
+                    'details' => $details,
                
 
         ]); 
@@ -2080,6 +2081,7 @@ class ClaimController extends CommonController {
                         v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                         v.pttype,t.name as pttype_name,
                         v.income,r.total_amount,
+                        v.hospmain,
                         if(v.paid_money is not null,v.paid_money,'-') as net_total,
                          v.uc_money,
                          ks.department as department_name
@@ -2108,6 +2110,7 @@ class ClaimController extends CommonController {
                     CONCAT(o.hospmain,' ', h.hosptype, h.name) AS hosp_name,
                     a.regdate,a.dchdate,
                     a.pttype,
+                   /* a.hospmain, */
                     pp.name as pttype_name,
                     a.income, a.uc_money,
                     if(a.paid_money is not null,a.paid_money,'-') as net_total
