@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2017-11-09 13:43:41
+Date: 2017-11-13 14:09:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=373 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=374 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -344,3 +344,4 @@ INSERT INTO lamaereports VALUES ('369', '6', 'รายงานจำนวน�
 INSERT INTO lamaereports VALUES ('370', '6', 'รายงานจำนวนคนไข้ในคลินิกหอบหืด Re-visit ภายใน 48 ชั่วโมง (OPD+ER)  (รายคน)', 'form1', 'report10', '2017-10-09', 'enable', 'asthma', null);
 INSERT INTO lamaereports VALUES ('371', '6', 'รายงานจำนวนคนไข้ในคลินิกหอบหืด ที่มีรหัสวินิจฉัย j46 (OPD+ER) (รายคน)', 'form1', 'report11', '2017-10-09', 'enable', 'asthma', null);
 INSERT INTO lamaereports VALUES ('372', '9', 'รายงานสรุปวัคซีนที่ให้บริการ', 'form1', 'report34', '2017-11-09', 'enable', 'pcu', null);
+INSERT INTO lamaereports VALUES ('373', '14', 'รายงานสรุปลูกหนี้ค่ารักษา OPD/IPD', 'form1', 'report27', '2017-11-10', 'enable', 'claim', null);
