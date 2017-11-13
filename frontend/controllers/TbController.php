@@ -47,7 +47,54 @@ class TbController extends CommonController {
                                    select universal_item_value_text
                                    from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '22'
 
-                            ) as condition_5
+                            ) as condition_5 ,
+                            
+                            (
+                                   select universal_item_value_text
+                                   from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '27'
+
+                            ) as xray_date , 
+                            (
+                                   select universal_item_value_text
+                                   from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '28'
+
+                            ) as xray_result,
+                            
+                            (
+                                   select universal_item_value_text
+                                   from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '29'
+
+                            ) as lab_afb_order_1,
+                            
+                            (
+                                   select universal_item_value_text
+                                   from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '32'
+
+                            ) as lab_afb_result_1,
+                             (
+                                   select universal_item_value_text
+                                   from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '30'
+
+                            ) as lab_afb_order_2,
+                            
+                            (
+                                   select universal_item_value_text
+                                   from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '33'
+
+                            ) as lab_afb_result_2,
+                             (
+                                   select universal_item_value_text
+                                   from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '31'
+
+                            ) as lab_afb_order_3,
+                            
+                            (
+                                   select universal_item_value_text
+                                   from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '34'
+
+                            ) as lab_afb_result_3
+                            
+
                         FROM 
                             universal_head u
                         WHERE

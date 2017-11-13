@@ -141,6 +141,41 @@ echo GridView::widget([
             'attribute' => 'condition_5',
             'header' => 'ต่อมน้ำเหลืองบริเวณคอโตมากกว่า 2 เซนติเมตร'
         ],
+          [
+            'attribute' => 'xray_date',
+            'header' => 'วันที่สั่ง Chest X-Ray'
+        ],
+         [
+            'attribute' => 'xray_result',
+            'header' => 'ผล Chest X-Ray'
+        ],
+         [
+            'attribute' => 'lab_afb_order_1',
+            'header' => 'วันที่สั่ง LAB AFB 1'
+        ],
+         [
+            'attribute' => 'lab_afb_result_1',
+            'header' => 'ผลแลป AFB 1'
+        ],
+         [
+            'attribute' => 'lab_afb_order_2',
+            'header' => 'วันที่สั่ง LAB AFB 2'
+        ],
+         [
+            'attribute' => 'lab_afb_result_2',
+            'header' => 'ผลแลป AFB 2'
+        ],
+          [
+            'attribute' => 'lab_afb_order_3',
+            'header' => 'วันที่สั่ง LAB AFB 3'
+        ],
+         [
+            'attribute' => 'lab_afb_result_3',
+            'header' => 'ผลแลป AFB 3'
+        ],
+        
+                
+        
         [
             'attribute' => 'staff',
             'header' => 'คัดกรองโดย'
