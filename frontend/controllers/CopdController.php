@@ -711,6 +711,60 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
         } // จบ function
         
     
+         public function actionReport13($datestart, $dateend, $details) {
+                        // save log
+            $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
+     
+            $report_name = 'รายงานจำนวนครั้งคนไข้ในเขตอำเภอละแม รับบริการที่(OPD+ER+IPD) ที่มีรหัสวินิจฉัย j440 ถึง j441  ' ;
+                                   
+            $sql = "SELECT
+                        v.vn as visit_number,v.hn,concat(p.pname,p.fname,'   ',p.lname) as pt_name,
+                        v.vstdate as vstdate,v.pdx, p.addrpart,p.moopart, t.full_name
+                    FROM vn_stat  v
+                    left outer join patient p on p.hn = v.hn
+                    left outer join thaiaddress t on t.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+                    WHERE 
+                        v.vstdate between $datestart and $dateend   and v.pdx between 'j440' and 'j441'
+                        and concat(p.chwpart,p.amppart) = '8605'
+
+                 UNION ALL
+
+                    SELECT
+                        a.an as visit_number,a.hn,concat(p.pname,p.fname,'   ',p.lname) as pt_name,
+                        a.dchdate as vstdate,a.pdx, p.addrpart,p.moopart, t.full_name
+                    FROM an_stat  a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join thaiaddress t on t.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+                    WHERE 
+                        a.dchdate between $datestart and $dateend    and a.pdx between 'j440' and 'j441'
+                        and concat(p.chwpart,p.amppart) = '8605' ";
+
+                             
+                      try {
+                          $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+                      } catch (\yii\db\Exception $e) {
+                          throw new \yii\web\ConflictHttpException('sql error');
+                      }
+
+                      $dataProvider = new \yii\data\ArrayDataProvider([
+                          'allModels' => $rawData,
+                          'pagination' => False,
+                      ]);
+
+
+                     return $this->render('report13', [
+                                  'dataProvider' => $dataProvider,
+                                  'report_name' => $report_name,
+                                  'details' => $details,
+
+                           ]); 
+
+                      }
+     
+       
+        
+        
+        
     
 
 

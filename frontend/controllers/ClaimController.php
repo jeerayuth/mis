@@ -1605,13 +1605,13 @@ class ClaimController extends CommonController {
                                     if(sum(v.income) is not null,concat(sum(v.income),'   '),' ') as sum_income ,
                                     if(sum(v.uc_money) is not null,concat(sum(v.uc_money),'   '),' ') as sum_uc_money ,
                                    count(distinct(v.vn)) as count_visit,
-                                   '60,61,62,63,64,65,66,67,68,69,70,72,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
+                                   '60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98' as ptt_code,
                                     'opd' as ptt_type,
                                     '11381' as cup_status
                                FROM vn_stat  v
 
                                WHERE v.vstdate between $datestart and $dateend
-                               AND v.pttype in (60,61,62,63,64,65,66,67,68,69,70,72,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
+                               AND v.pttype in (60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98)
                                AND v.hospmain = '11381'
 
 
@@ -2098,7 +2098,7 @@ class ClaimController extends CommonController {
                        and v.pttype in ($ptt_code)
                           $cup
                   GROUP BY v.vn
-                  ORDER BY v.pttype,v.vstdate ";
+                  ORDER BY v.vn ";
             
             $view = 'report28';
                   
@@ -2124,8 +2124,8 @@ class ClaimController extends CommonController {
                     a.dchdate BETWEEN $date_start AND $date_end 
                     and a.pttype in ($ptt_code)
                 GROUP BY a.an 
-                ORDER BY a.pttype,dchdate
-                    ";
+                ORDER BY a.an ";
+                    
             
             $view = 'report29';
         }
