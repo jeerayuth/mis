@@ -9,8 +9,6 @@ $this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-
-
 <?php
 
 echo GridView::widget([
@@ -33,32 +31,32 @@ echo GridView::widget([
             'header' => 'HN'
         ],
         [
-            'attribute' => 'cid',
-            'header' => 'เลขบัตรประชาชน'
-        ],
-        [
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
         ],
-       
-          [
-            'attribute' => 'addrpart',
-            'header' => 'เลขที่อยู่'
+         [
+            'attribute' => 'pdx',
+            'header' => 'PDX'
         ],
         [
+            'attribute' => 'vstdate',
+            'header' => 'วันที่รับบริการ/วันที่จำหน่าย'
+        ],
+         [
+            'attribute' => 'addrpart',
+            'header' => 'บ้านเลขที่'
+        ],
+         [
             'attribute' => 'moopart',
             'header' => 'หมู่ที่'
         ],
-         [
+          [
             'attribute' => 'full_name',
             'header' => 'ที่อยู่'
         ],
-        [
-            'attribute' => 'type_area',
-            'header' => 'Type Area'
-        ],
-         
-                     
+        
+      
+        
     ]
 ])
 ?>

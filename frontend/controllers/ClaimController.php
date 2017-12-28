@@ -2082,7 +2082,8 @@ class ClaimController extends CommonController {
                         v.pttype,t.name as pttype_name,
                         v.income,r.total_amount,
                         v.hospmain,
-                        if(v.paid_money is not null,v.paid_money,'-') as net_total,
+                      /*  if(v.paid_money is not null,v.paid_money,'-') as net_total, */
+                         v.rcpt_money as net_total,
                          v.uc_money,
                          ks.department as department_name
                         
@@ -2113,7 +2114,8 @@ class ClaimController extends CommonController {
                    /* a.hospmain, */
                     pp.name as pttype_name,
                     a.income, a.uc_money,
-                    if(a.paid_money is not null,a.paid_money,'-') as net_total
+                    /* if(a.paid_money is not null,a.paid_money,'-') as net_total, */
+                    a.rcpt_money as net_total
                 FROM an_stat  a
                 LEFT OUTER JOIN patient p on p.hn = a.hn
                 LEFT OUTER JOIN ward w on w.ward = a.ward

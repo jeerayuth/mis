@@ -33,31 +33,26 @@ echo GridView::widget([
             'header' => 'HN'
         ],
         [
-            'attribute' => 'cid',
-            'header' => 'เลขบัตรประชาชน'
-        ],
-        [
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
         ],
-       
-          [
-            'attribute' => 'addrpart',
-            'header' => 'เลขที่อยู่'
-        ],
-        [
-            'attribute' => 'moopart',
-            'header' => 'หมู่ที่'
-        ],
          [
-            'attribute' => 'full_name',
-            'header' => 'ที่อยู่'
+            'attribute' => 'vstdate',
+            'header' => 'วันที่รับบริการ'
+        ],
+             [
+            'attribute' => 'icode',
+            'header' => 'รหัส'
         ],
         [
-            'attribute' => 'type_area',
-            'header' => 'Type Area'
+            'attribute' => 'drug_name',
+            'header' => 'ชื่อวัคซีน'
+        ], 
+        [
+            'attribute' => 'qty',
+            'header' => 'จำนวน'
         ],
-         
+                
                      
     ]
 ])

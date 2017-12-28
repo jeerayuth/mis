@@ -6,12 +6,12 @@ use Yii;
 use frontend\components\CommonController;
 
 class PcuController extends CommonController {
-    
+
     public $dep_controller = 'pcu';
 
     public function actionReport1($details, $age_id) {
-        
-         // save log
+
+        // save log
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
@@ -59,7 +59,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport2($village_id, $age_id) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
 
 
@@ -110,7 +110,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport3($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
         $report_name = "รายงานสรุปประชากรอายุ >=35 ปี ในเขตรับผิดชอบ";
@@ -142,7 +142,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport4($village_id) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
 
@@ -187,7 +187,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport5($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
 
@@ -230,7 +230,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport6($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => ในบัญชี1 Type(1,2) แต่ในเวชระเบียนลงที่อยู่นอกเขต";
@@ -267,7 +267,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport7($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
 
@@ -300,7 +300,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport8($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
 
@@ -333,7 +333,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport9($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => การศึกษาว่าง ในบัญชี 1 เป็นค่าว่าง";
@@ -364,7 +364,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport10($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ =>การศึกษา อายุ 6-12 ปี ไม่ใช่ชั้นประถม ในบัญชี 1 มีผลกับ HDC";
@@ -395,7 +395,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport11($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => อาชีพว่าง ในบัญชี 1 เป็นค่าว่าง";
@@ -426,7 +426,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport12($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คำนำหน้าชื่อว่าง ในบัญชี 1 เป็นค่าว่าง";
@@ -456,7 +456,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport13($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => สิทธิการรักษา ไม่มีใน pttype ในบัญชี 1 ทำให้ส่งออกไม่ได้";
@@ -490,7 +490,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport14($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => สิทธิการรักษา ในบัญชี 1 ว่าง";
@@ -522,7 +522,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport15($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report15', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => มีสัญชาติไทย แต่เลขที่บัตรประชาชน ขึ้นต้นด้วย 0 Type 1 , 3";
@@ -552,7 +552,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport16($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report16', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คนที่มีบ้านเลขที่บ้าน แต่ไม่มีหลังคาเรือนในระบบ";
@@ -582,7 +582,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport17($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คนต่างด้าว ไม่ลงประเภทคนต่างด้าวในบัญชี1";
@@ -616,7 +616,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport18($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report18', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังไม่จำหน่าย";
@@ -646,7 +646,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport19($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report19', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => ลงติ๊กเสียชีวิตแล้ว ในบัญชี 1 แต่สถานะยังมีชีวิตอยู่ ";
@@ -676,7 +676,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport20($datestart, $dateend, $details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report20', $this->getSession());
 
         $report_name = "รายงานอาการคล้ายไข้หวัดใหญ่ (ILI)";
@@ -825,7 +825,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport21($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => สถานะสมณะ แต่คำนำหน้าไม่ใช่ สมณะ ";
@@ -864,8 +864,8 @@ class PcuController extends CommonController {
     }
 
     public function actionReport22($details) {
-        
-         // save log
+
+        // save log
         $this->SaveLog($this->dep_controller, 'report22', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => คำนำหน้าชื่อเป็นพระ แต่สถานะไม่ใช่สมณะ ";
@@ -904,7 +904,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport23($details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report23', $this->getSession());
 
         $report_name = "รายงานตรวจสอบ => ตรวจสอบสถานะเป็นพระ แต่ อายุ ไม่ถึง 20 ปี";
@@ -944,7 +944,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport24($details, $begin_year) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report24', $this->getSession());
 
         $report_name = "รายงานสรุปผลการคัดกรองโรคเรื้อรังในชุมชนรับผิดชอบ";
@@ -1085,7 +1085,7 @@ class PcuController extends CommonController {
     }
 
     public function actionReport25($title, $options, $begin_year) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report25', $this->getSession());
 
         if ($options != '') {
@@ -1109,7 +1109,7 @@ class PcuController extends CommonController {
                             GROUP BY p2.cid     
                             ORDER BY 
                                  v.village_moo ,p2.sex ";
-                            
+
 
                     break;
 
@@ -1256,43 +1256,38 @@ class PcuController extends CommonController {
                                  v.village_moo ,p2.sex ";
 
                     break;
-                   
-               
             }
-            
-             try {
-                    $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-                } catch (\yii\db\Exception $e) {
-                    throw new \yii\web\ConflictHttpException('sql error');
-                }
 
-                $dataProvider = new \yii\data\ArrayDataProvider([
-                    'allModels' => $rawData,
-                    'pagination' => FALSE,
-                ]);
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
 
-                return $this->render('report25', [
-                            'dataProvider' => $dataProvider,
-                            'rawData' => $rawData,
-                            'report_name' => $title,
-                            'begin_year' => $begin_year,
-                ]);
-            
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => FALSE,
+            ]);
 
+            return $this->render('report25', [
+                        'dataProvider' => $dataProvider,
+                        'rawData' => $rawData,
+                        'report_name' => $title,
+                        'begin_year' => $begin_year,
+            ]);
         }
     }
-    
-    
-    public function actionReport26($details,$age_id) {
-        
-         // save log
+
+    public function actionReport26($details, $age_id) {
+
+        // save log
         $this->SaveLog($this->dep_controller, 'report26', $this->getSession());
 
         if ($age_id != "") { // เริ่มต้นตรวจสอบ อายุ  
             if ($age_id == 1) {
                 $age = '>=35';
                 $report_name = "รายงานสรุปจำนวนประชากรอายุ $age ปี ในเขตรับผิดชอบ";
-            } 
+            }
         }
 
 
@@ -1312,7 +1307,7 @@ class PcuController extends CommonController {
 
                 GROUP BY v.village_id,h.location_area_id
                 having count(h.location_area_id)  > 0  ";
-             
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -1331,15 +1326,11 @@ class PcuController extends CommonController {
                     'report_name' => $report_name,
                     'details' => $details,
                     'age_id' => $age_id,
-                    
         ]);
     }
-    
-    
-    
-    
+
     public function actionReport27($village_id, $age_id, $location_area_id) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report27', $this->getSession());
 
 
@@ -1347,7 +1338,7 @@ class PcuController extends CommonController {
             if ($age_id == 1) {
                 $age = '>=35';
                 $report_name = "รายงานสรุปหญิงอายุ $age ปี ในเขตรับผิดชอบ  แบ่งตามอายุ, เทศบาล/อบต.";
-            } 
+            }
         }
 
         $sql = "select
@@ -1371,7 +1362,7 @@ class PcuController extends CommonController {
                         and  h.location_area_id is not null
 
                 order by p.village_id  ";
-               
+
 
 
         try {
@@ -1390,13 +1381,11 @@ class PcuController extends CommonController {
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'village_id' => $village_id,
-  
         ]);
     }
-    
-    
+
     public function actionReport28() {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report28', $this->getSession());
 
         $report_name = "บ้านไม่ได้ระบุ Location";
@@ -1412,7 +1401,7 @@ class PcuController extends CommonController {
                 where p.village_id != 1   and  h.location_area_id is null
 
                 order by p.village_id ";
-                           
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -1428,20 +1417,17 @@ class PcuController extends CommonController {
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
-                   
-  
         ]);
     }
-    
-    
+
     public function actionReport29($datestart, $dateend, $details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report29', $this->getSession());
 
         $report_name = "รายงานผู้มารับบริการ(เฉพาะสัญชาติไทย)ตามช่วงเวลาที่มารับบริการ opd ที่ไม่มีชื่ออยู่ในบัญชี 1(อ้างอิงจาก CID)";
         $sql = "SELECT
                     v.hn,v.cid, concat(p.pname,p.fname,'  ',p.lname) as pt_name ,
-                    p.addrpart, p.moopart,th.addressid,th.full_name
+                    p.addrpart, p.moopart,th.addressid,th.full_name,p.type_area
               FROM vn_stat v
               LEFT OUTER JOIN patient p ON p.hn = v.hn
               LEFT OUTER JOIN thaiaddress th on th.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
@@ -1451,7 +1437,7 @@ class PcuController extends CommonController {
                    p.nationality = '99' AND (p.cid not like '0%' and p.cid<>' ' and p.cid is not null and p.cid not like '111111111%')
               GROUP BY v.hn  
               ORDER BY th.addressid ";
-            
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -1471,10 +1457,9 @@ class PcuController extends CommonController {
                     'details' => $details,
         ]);
     }
-    
-    
-    public function actionReport30($datestart, $dateend,$details) {
-         // save log
+
+    public function actionReport30($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report30', $this->getSession());
 
         $report_name = "รายงานสรุปอายุของประชากรตามวันเกิด ในเขตรับผิดชอบ";
@@ -1513,11 +1498,9 @@ class PcuController extends CommonController {
                     'dateend' => $dateend,
         ]);
     }
-    
-    
-    
-    public function actionReport31($datestart, $dateend,$village_id) {
-         // save log
+
+    public function actionReport31($datestart, $dateend, $village_id) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report31', $this->getSession());
 
 
@@ -1560,11 +1543,9 @@ class PcuController extends CommonController {
                     'dateend' => $dateend,
         ]);
     }
-    
-    
-    
-     public function actionReport32() {
-         // save log
+
+    public function actionReport32() {
+        // save log
         $this->SaveLog($this->dep_controller, 'report32', $this->getSession());
 
 
@@ -1664,49 +1645,47 @@ class PcuController extends CommonController {
         } catch (\yii\db\Exception $e) {
             throw new \yii\web\ConflictHttpException('sql error');
         }
-        
+
 
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-        
-        
+
+
         return $this->render('report32', [
                     'dataProvider' => $dataProvider,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
-
-        ]); 
+        ]);
     }
-    
-    
+
     public function actionReport33($hosp_area) {
         $this->SaveLog($this->dep_controller, 'report33', $this->getSession());
         // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
         // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
-        $hosp_area_condition = ""; 
+        $hosp_area_condition = "";
         $report_name = 'รายงานรายชื่อคนไข้โรคมะเร็ง ตาม ICD10(c000  ถึง c97)  แยกตามที่อยู่ในแต่ละสถานบริการ(คน)';
-                     
-            if($hosp_area == 1) {
-                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860502'   and pt.moopart in (1,2,3,4,5,6,7,8,9) ";
-            } else if ($hosp_area == 2) {
-                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (2,3,4,5,6,9)";
-            } else if ($hosp_area == 3) {
-                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'   and pt.moopart in (1,2,3,4,6) "; 
-            } else if ($hosp_area == 4) {
-                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (8,11,13,15,17,18,20) ";
-            } else if ($hosp_area == 5) {
-               $hosp_area_condition = " AND (concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'    and pt.moopart in (16,19)
+
+        if ($hosp_area == 1) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860502'   and pt.moopart in (1,2,3,4,5,6,7,8,9) ";
+        } else if ($hosp_area == 2) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (2,3,4,5,6,9)";
+        } else if ($hosp_area == 3) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'   and pt.moopart in (1,2,3,4,6) ";
+        } else if ($hosp_area == 4) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (8,11,13,15,17,18,20) ";
+        } else if ($hosp_area == 5) {
+            $hosp_area_condition = " AND (concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'    and pt.moopart in (16,19)
                                         OR concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'     and pt.moopart in (5,7,8)) ";
-            } else if ($hosp_area == 6) {
-                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (1,7,8,10) ";
-            } else if ($hosp_area == 7) {
-                $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14) ";
-            }
-                                                                    
-                    
-            $sql = "         
+        } else if ($hosp_area == 6) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (1,7,8,10) ";
+        } else if ($hosp_area == 7) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14) ";
+        }
+
+
+        $sql = "         
                     SELECT
                     pt.hn as hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                     concat( timestampdiff(year,pt.birthday,now()), ' ปี') as age_y,
@@ -1729,30 +1708,26 @@ class PcuController extends CommonController {
 
                     ";
 
-            try {
-                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-            } catch (\yii\db\Exception $e) {
-                throw new \yii\web\ConflictHttpException('sql error');
-            }
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
 
 
-            $dataProvider = new \yii\data\ArrayDataProvider([
-                'allModels' => $rawData,
-                'pagination' => FALSE,
-            ]);
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
 
-            return $this->render('report33', [
-                        'dataProvider' => $dataProvider,
-                        'report_name' => $report_name,
-            ]);
-            
-  
+        return $this->render('report33', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+        ]);
     }
 
-    
-    
     public function actionReport34($datestart, $dateend, $details) {
-         // save log
+        // save log
         $this->SaveLog($this->dep_controller, 'report34', $this->getSession());
 
         $report_name = "รายงานสรุปวัคซีนที่ให้บริการ";
@@ -1801,7 +1776,7 @@ class PcuController extends CommonController {
                                       v.dx5 ='z001')
 
             ";
-            
+
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -1821,8 +1796,46 @@ class PcuController extends CommonController {
                     'details' => $details,
         ]);
     }
-    
-    
-    
-   
+
+    public function actionReport35($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report35', $this->getSession());
+
+        $report_name = "รายงานคนไข้ได้รับวัคซีน TRCS";
+        $sql = "SELECT
+                    o.hn,p.cid,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate,
+                    o.vsttime,o.icode,d.name as drug_name,o.qty
+                FROM opitemrece  o
+                left outer join patient p on p.hn = o.hn
+                left outer join drugitems d on d.icode = o.icode
+                WHERE 
+                    vstdate BETWEEN $datestart AND $dateend
+                AND 
+                    o.icode IN (1540018,1540019,1540020,1540021)
+                ORDER BY 
+                    o.hn,o.vstdate  ";
+
+                           
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report35', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
 }

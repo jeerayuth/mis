@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2017-11-13 14:09:41
+Date: 2017-12-28 07:47:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `lamaereports` (
   `controller` varchar(255) NOT NULL,
   `details` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=374 DEFAULT CHARSET=tis620;
+) ENGINE=MyISAM AUTO_INCREMENT=377 DEFAULT CHARSET=tis620;
 
 -- ----------------------------
 -- Records of lamaereports
@@ -345,3 +345,6 @@ INSERT INTO lamaereports VALUES ('370', '6', 'รายงานจำนวน�
 INSERT INTO lamaereports VALUES ('371', '6', 'รายงานจำนวนคนไข้ในคลินิกหอบหืด ที่มีรหัสวินิจฉัย j46 (OPD+ER) (รายคน)', 'form1', 'report11', '2017-10-09', 'enable', 'asthma', null);
 INSERT INTO lamaereports VALUES ('372', '9', 'รายงานสรุปวัคซีนที่ให้บริการ', 'form1', 'report34', '2017-11-09', 'enable', 'pcu', null);
 INSERT INTO lamaereports VALUES ('373', '14', 'รายงานสรุปลูกหนี้ค่ารักษา OPD/IPD', 'form1', 'report27', '2017-11-10', 'enable', 'claim', null);
+INSERT INTO lamaereports VALUES ('374', '5', 'รายงานจำนวนครั้งคนไข้ในเขตอำเภอละแม รับบริการที่(OPD+ER+IPD) ที่มีรหัสวินิจฉัย j440 ถึง j441', 'form1', 'report13', '2017-12-07', 'enable', 'copd', null);
+INSERT INTO lamaereports VALUES ('375', '5', 'รายงานจำนวนครั้งคนไข้ในเขตอำเภอละแม รับบริการที่(OPD+ER+IPD) ที่มีรหัสวินิจฉัย j440 ถึง j449', 'form1', 'report14', '2017-12-07', 'enable', 'copd', null);
+INSERT INTO lamaereports VALUES ('376', '9', 'รายงานคนไข้ได้รับวัคซีน TRCS', 'form1', 'report35', '2017-12-19', 'enable', 'pcu', null);

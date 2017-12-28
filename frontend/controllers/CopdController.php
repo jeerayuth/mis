@@ -6,12 +6,13 @@ use Yii;
 use frontend\components\CommonController;
 
 class CopdController extends CommonController {
+
     public $dep_controller = 'copd';
 
-    public function actionReport1($uclinic) {       
+    public function actionReport1($uclinic) {
         // save log
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
-        
+
         if ($uclinic != "") { // เริ่มต้นตรวจสอบประเภทคนไข้ในคลินิก
             // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
             // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
@@ -20,16 +21,15 @@ class CopdController extends CommonController {
                 $report_name = 'รายงานสรุปคนไข้ทะเบียน COPD ทั้งหมด(รวมที่เป็น DM,HT)';
             } else if ($uclinic == 2) {
                 $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
-                              AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                                 
+                              AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";
                 $report_name = 'รายงานสรุปคนไข้ทะเบียน COPD อย่างเดียว(ไม่รวมที่เป็น DM,HT)';
-                
             } else if ($uclinic == 3) {
-                   $cryteria = " AND cm.hn  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
-                                 AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                 
+                $cryteria = " AND cm.hn  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                                 AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";
                 $report_name = 'รายงานสรุปคนไข้ทะเบียน COPD WITH DM (WITH DM, NO HT)';
             } else if ($uclinic == 4) {
-                   $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
-                                 AND cm.hn   in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                 
+                $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                                 AND cm.hn   in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";
                 $report_name = 'รายงานสรุปคนไข้ทะเบียน COPD WITH HT (WITH HT, NO DM)';
             }
         }
@@ -72,12 +72,12 @@ class CopdController extends CommonController {
 
     /* รายงานสรุปทะเบียนถุงลมโป่งพองแบบ(แสดงรายชื่อคนไข้) */
 
-    public function actionReport2($addressid , $uclinic) {
-            
+    public function actionReport2($addressid, $uclinic) {
+
         // save log
         $this->SaveLog($this->dep_controller, 'report2', $this->getSession());
-        
-         if ($uclinic != "") { // เริ่มต้นตรวจสอบประเภทคนไข้ในคลินิก
+
+        if ($uclinic != "") { // เริ่มต้นตรวจสอบประเภทคนไข้ในคลินิก
             // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
             // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
             if ($uclinic == 1) {
@@ -85,16 +85,15 @@ class CopdController extends CommonController {
                 $report_name = 'รายงานสรุปคนไข้ทะเบียน COPD ทั้งหมด(รวมที่เป็น DM,HT)';
             } else if ($uclinic == 2) {
                 $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
-                              AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                                 
+                              AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";
                 $report_name = 'รายงานสรุปคนไข้ทะเบียน COPD อย่างเดียว(ไม่รวมที่เป็น DM,HT)';
-                
             } else if ($uclinic == 3) {
-                   $cryteria = " AND cm.hn  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
-                                 AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                 
+                $cryteria = " AND cm.hn  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                                 AND cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";
                 $report_name = 'รายงานสรุปคนไข้ทะเบียน COPD WITH DM (WITH DM, NO HT)';
             } else if ($uclinic == 4) {
-                   $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
-                                 AND cm.hn   in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";                 
+                $cryteria = " AND cm.hn  not in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+                                 AND cm.hn   in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code')) ";
                 $report_name = 'รายงานสรุปคนไข้ทะเบียน COPD WITH HT (WITH HT, NO DM)';
             }
         }
@@ -141,10 +140,9 @@ class CopdController extends CommonController {
         ]);
     }
 
-    
     public function actionReport3($datestart, $dateend, $details) {
-        
-                // save log
+
+        // save log
         $this->SaveLog($this->dep_controller, 'report3', $this->getSession());
 
 
@@ -188,14 +186,13 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
-    } // จบ function
-    
-    
-    
-    
-       public function actionReport4($datestart, $dateend, $details) {
-           
-                           // save log
+    }
+
+// จบ function
+
+    public function actionReport4($datestart, $dateend, $details) {
+
+        // save log
         $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
 
@@ -235,19 +232,18 @@ order by v.aid, v.moopart, v.hn, v.vstdate ";
             'pagination' => False,
         ]);
 
-        
+
         return $this->render('report4', [
                     'dataProvider' => $dataProvider,
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
-    } // จบ function
-    
-    
-    
-    
-       public function actionReport5($datestart, $dateend, $details) {
-                           // save log
+    }
+
+// จบ function
+
+    public function actionReport5($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
 
@@ -282,23 +278,21 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
             'pagination' => False,
         ]);
 
-        
+
         return $this->render('report5', [
                     'dataProvider' => $dataProvider,
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
-    } // จบ function
-    
-    
-    
-    
-    
-       public function actionReport6($datestart, $dateend, $details) {
-                // save log
+    }
+
+// จบ function
+
+    public function actionReport6($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
-        
+
         $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง Re-visit ภายใน 48 ชั่วโมง ที่ OPD";
 
         $sql = "select
@@ -322,7 +316,7 @@ and  v.vn  not in (select e.vn from er_regist e )
 and v.pdx between 'j440'  and 'j449'
 group by v.hn
 order by v.aid, v.moopart, v.hn, v.vstdate ";
-        
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -335,18 +329,18 @@ order by v.aid, v.moopart, v.hn, v.vstdate ";
             'pagination' => False,
         ]);
 
-        
+
         return $this->render('report6', [
                     'dataProvider' => $dataProvider,
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
-    } // จบ function
-    
-     
-    
-       public function actionReport7($datestart, $dateend, $details) {
-                           // save log
+    }
+
+// จบ function
+
+    public function actionReport7($datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
 
@@ -376,7 +370,7 @@ and v.pdx between 'j440'  and 'j449'
 
 group by v.hn
 order by v.aid, v.moopart, v.hn, v.vstdate  ";
-        
+
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -389,25 +383,23 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
             'pagination' => False,
         ]);
 
-        
+
         return $this->render('report7', [
                     'dataProvider' => $dataProvider,
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
-    } // จบ function
-    
-    
-    
-    
-    
+    }
+
+// จบ function
+
     public function actionReport8($datestart, $dateend, $details, $item = null) {
-                        // save log
-            $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
-     
-            $report_name = 'รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง แยกกลุ่มผู้ป่วยตาม GOLD 11';
-      
-            $sql = "SELECT  
+        // save log
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
+
+        $report_name = 'รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง แยกกลุ่มผู้ป่วยตาม GOLD 11';
+
+        $sql = "SELECT  
                             n.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name, 
                             n.plain_text,n.note_datetime,n.note_staff
                     FROM ptnote n
@@ -428,35 +420,34 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                     ORDER BY n.note_datetime ";
 
 
-            try {
-                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-            } catch (\yii\db\Exception $e) {
-                throw new \yii\web\ConflictHttpException('sql error');
-            }
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
 
-            $dataProvider = new \yii\data\ArrayDataProvider([
-                'allModels' => $rawData,
-                'pagination' => False,
-            ]);
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
 
 
-           return $this->render('report8', [
-                        'dataProvider' => $dataProvider,
-                        'report_name' => $report_name,
-                        'details' => $details,
-  
-            ]); 
-        } // จบ function
-        
-        
-        
-        public function actionReport9($uclinic,$datestart, $dateend, $details) {
-                        // save log
-            $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
-      
-            
-  if ($uclinic != "") { 
-      
+        return $this->render('report8', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+// จบ function
+
+    public function actionReport9($uclinic, $datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
+
+
+        if ($uclinic != "") {
+
             if ($uclinic == 1) {
                 $join_opd = ' ';
                 $join_ipd = ' ';
@@ -468,8 +459,8 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                 $criteria = ' and c.clinic = "005" ';
                 $report_name = 'รายงานจำนวนคนไข้ที่มีรหัสวินิจฉัย j440-j449 ทั้งโรงพยาบาล(เฉพาะคนไข้ในคลินิก COPD) (รายคน)';
             }
-            
-      
+
+
             $sql = "SELECT
                             a.hn,a.pt_name
                     FROM
@@ -508,8 +499,8 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                              )   a
 
                            GROUP BY a.hn   ";
-                         
-                  
+
+
             try {
                 $rawData = \yii::$app->db->createCommand($sql)->queryAll();
             } catch (\yii\db\Exception $e) {
@@ -522,26 +513,23 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
             ]);
 
 
-           return $this->render('report9', [
+            return $this->render('report9', [
                         'dataProvider' => $dataProvider,
                         'report_name' => $report_name,
                         'details' => $details,
-  
-            ]); 
-           
-   }
-             
-        } // จบ function
-        
-        
-        
-        public function actionReport10($datestart, $dateend, $details) {
-                        // save log
-            $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
-     
-            $report_name = 'รายงานจำนวนคนไข้ re-admit ด้วยรหัสวินิจฉัย j440-j449';
-      
-            $sql = "select
+            ]);
+        }
+    }
+
+// จบ function
+
+    public function actionReport10($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
+
+        $report_name = 'รายงานจำนวนคนไข้ re-admit ด้วยรหัสวินิจฉัย j440-j449';
+
+        $sql = "select
                     q3.hn,concat(patient.pname,patient.fname,'  ',patient.lname) as ptname,
                     patient.birthday,
                     timestampdiff(year,patient.birthday,q3.regdate_AN_New) as age_y,
@@ -567,48 +555,46 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                    TIMESTAMPDIFF(day,substring(q2.dchdate,1,10),substring(q1.regdate,1,10)) <= 28 and
 
                    q1.regdate between $datestart and $dateend  ) as q3  on q3.hn = patient.hn   AND q3.icd10_1 between 'j440' and 'j449' ";
-                    
-
-                   
-
-            try {
-                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-            } catch (\yii\db\Exception $e) {
-                throw new \yii\web\ConflictHttpException('sql error');
-            }
-
-            $dataProvider = new \yii\data\ArrayDataProvider([
-                'allModels' => $rawData,
-                'pagination' => False,
-            ]);
 
 
-           return $this->render('report10', [
-                        'dataProvider' => $dataProvider,
-                        'report_name' => $report_name,
-                        'details' => $details,
-  
-            ]); 
-        } // จบ function
-    
 
 
-        
-        public function actionReport11($uclinic,$datestart, $dateend, $details) {
-                // save log
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+
+        return $this->render('report10', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+// จบ function
+
+    public function actionReport11($uclinic, $datestart, $dateend, $details) {
+        // save log
         $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
-  
-        if ($uclinic != "") { 
 
-                if ($uclinic == 1) {
-                    $join_opd = ' ';
-                    $criteria = ' ';
-                    $report_name = 'รายงานจำนวนคนไข้ ที่มีรหัสวินิจฉัย j440-j449  Re-visit ภายใน 48 ชั่วโมง (คลินิก COPD+คนไข้ทั่วไป) (รายคน)';
-                } else if ($uclinic == 2) {
-                    $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
-                    $criteria = ' and c.clinic = "005" ';
-                    $report_name = 'รายงานจำนวนคนไข้ ที่มีรหัสวินิจฉัย j440-j449  Re-visit ภายใน 48 ชั่วโมง (เฉพาะคนไข้ในคลินิก COPD) (รายคน)';
-                }
+        if ($uclinic != "") {
+
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $criteria = ' ';
+                $report_name = 'รายงานจำนวนคนไข้ ที่มีรหัสวินิจฉัย j440-j449  Re-visit ภายใน 48 ชั่วโมง (คลินิก COPD+คนไข้ทั่วไป) (รายคน)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "005" ';
+                $report_name = 'รายงานจำนวนคนไข้ ที่มีรหัสวินิจฉัย j440-j449  Re-visit ภายใน 48 ชั่วโมง (เฉพาะคนไข้ในคลินิก COPD) (รายคน)';
+            }
 
 
             $sql = "SELECT
@@ -650,32 +636,30 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                         'details' => $details,
             ]);
         }
-    } // จบ function
-    
+    }
 
-    
-    
-           
-        public function actionReport12($uclinic,$datestart, $dateend, $details) {
-                        // save log
-            $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
-     
-            $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี ';
-                                   
-            if ($uclinic != "") { 
+// จบ function
 
-                      if ($uclinic == 1) {
-                          $join_opd = ' ';
-                          $criteria = ' ';
-                          $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี  (คลินิก COPD+ คนไข้ทั่วไป) (รายคน)';
-                      } else if ($uclinic == 2) {
-                          $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
-                          $criteria = ' and c.clinic = "005" ';
-                          $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี  (เฉพาะคนไข้ในคลินิก COPD) (รายคน)';
-                      }
+    public function actionReport12($uclinic, $datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
+
+        $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี ';
+
+        if ($uclinic != "") {
+
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $criteria = ' ';
+                $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี  (คลินิก COPD+ คนไข้ทั่วไป) (รายคน)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "005" ';
+                $report_name = 'รายงานจำนวนคนไข้ผู้ป่วยนอก(OPD+ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี  (เฉพาะคนไข้ในคลินิก COPD) (รายคน)';
+            }
 
 
-                      $sql = "
+            $sql = "
                               SELECT
                                      v.hn ,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
                                      v.age_y
@@ -688,36 +672,35 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                                GROUP BY v.hn ";
 
 
-                      try {
-                          $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-                      } catch (\yii\db\Exception $e) {
-                          throw new \yii\web\ConflictHttpException('sql error');
-                      }
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
 
-                      $dataProvider = new \yii\data\ArrayDataProvider([
-                          'allModels' => $rawData,
-                          'pagination' => False,
-                      ]);
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
 
 
-                     return $this->render('report12', [
-                                  'dataProvider' => $dataProvider,
-                                  'report_name' => $report_name,
-                                  'details' => $details,
+            return $this->render('report12', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
 
-                           ]); 
+// จบ function
 
-                      }
-        } // จบ function
-        
-    
-         public function actionReport13($datestart, $dateend, $details) {
-                        // save log
-            $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
-     
-            $report_name = 'รายงานจำนวนครั้งคนไข้ในเขตอำเภอละแม รับบริการที่(OPD+ER+IPD) ที่มีรหัสวินิจฉัย j440 ถึง j441  ' ;
-                                   
-            $sql = "SELECT
+    public function actionReport13($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
+
+        $report_name = 'รายงานจำนวนครั้งคนไข้ในเขตอำเภอละแม รับบริการที่(OPD+ER+IPD) ที่มีรหัสวินิจฉัย j440 ถึง j441  ';
+
+        $sql = "SELECT
                         v.vn as visit_number,v.hn,concat(p.pname,p.fname,'   ',p.lname) as pt_name,
                         v.vstdate as vstdate,v.pdx, p.addrpart,p.moopart, t.full_name
                     FROM vn_stat  v
@@ -739,33 +722,76 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                         a.dchdate between $datestart and $dateend    and a.pdx between 'j440' and 'j441'
                         and concat(p.chwpart,p.amppart) = '8605' ";
 
-                             
-                      try {
-                          $rawData = \yii::$app->db->createCommand($sql)->queryAll();
-                      } catch (\yii\db\Exception $e) {
-                          throw new \yii\web\ConflictHttpException('sql error');
-                      }
 
-                      $dataProvider = new \yii\data\ArrayDataProvider([
-                          'allModels' => $rawData,
-                          'pagination' => False,
-                      ]);
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
 
 
-                     return $this->render('report13', [
-                                  'dataProvider' => $dataProvider,
-                                  'report_name' => $report_name,
-                                  'details' => $details,
+        return $this->render('report13', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
 
-                           ]); 
-
-                      }
-     
-       
-        
-        
-        
     
+    
+    public function actionReport14($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
 
+        $report_name = 'รายงานจำนวนครั้งคนไข้ในเขตอำเภอละแม รับบริการที่(OPD+ER+IPD) ที่มีรหัสวินิจฉัย j440 ถึง j449  ';
+
+        $sql = "SELECT
+                        v.vn as visit_number,v.hn,concat(p.pname,p.fname,'   ',p.lname) as pt_name,
+                        v.vstdate as vstdate,v.pdx, p.addrpart,p.moopart, t.full_name
+                    FROM vn_stat  v
+                    left outer join patient p on p.hn = v.hn
+                    left outer join thaiaddress t on t.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+                    WHERE 
+                        v.vstdate between $datestart and $dateend   and v.pdx between 'j440' and 'j449'
+                        and concat(p.chwpart,p.amppart) = '8605'
+
+                 UNION ALL
+
+                    SELECT
+                        a.an as visit_number,a.hn,concat(p.pname,p.fname,'   ',p.lname) as pt_name,
+                        a.dchdate as vstdate,a.pdx, p.addrpart,p.moopart, t.full_name
+                    FROM an_stat  a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join thaiaddress t on t.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+                    WHERE 
+                        a.dchdate between $datestart and $dateend    and a.pdx between 'j440' and 'j449'
+                        and concat(p.chwpart,p.amppart) = '8605' ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+
+        return $this->render('report14', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
 
 }
+
+
