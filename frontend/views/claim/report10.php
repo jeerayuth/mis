@@ -51,13 +51,10 @@ echo GridView::widget([
             'header' => 'อายุ(ปี)'
         ],
         [
-            'attribute' => 'pdx',
-            'header' => 'การวินิจฉัยหลัก'
+            'attribute' => 'diag',
+            'header' => 'รหัสวินิจฉัย'
         ],
-        [
-            'attribute' => 'second_diag',
-            'header' => 'การวินิจฉัยรอง'
-        ],
+
         [
             'attribute' => 'icd9',
             'header' => 'หัตถการ(ICD9)'

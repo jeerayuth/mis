@@ -625,17 +625,16 @@ class ClaimController extends CommonController {
         $sql = "SELECT 
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
                     ,v.cid,s.name as sex,v.age_y,
-                    
-                    v.pdx as pdx,
-                    
+                     
                     concat(
+                           if(v.pdx is not null,concat(v.pdx,'   '),' '),
                            if(v.dx0 is not null,concat(v.dx0,'   '),' '),
                            if(v.dx1 is not null,concat(v.dx1,'   '),' '),
                            if(v.dx2 is not null,concat(v.dx2,'   '),' '),
                            if(v.dx3 is not null,concat(v.dx3,'   '),' '),
                            if(v.dx4 is not null,concat(v.dx4,'   '),' '),
                            if(v.dx5 is not null,concat(v.dx5,'   '),' ')
-                           )  as second_diag,
+                           )  as diag,
                      concat(
                             if(v.op0 is not null, concat(v.op0,'   '),' '),
                             if(v.op1 is not null, concat(v.op1,'   '),' '),
@@ -684,17 +683,16 @@ class ClaimController extends CommonController {
         $report_name = "รายงานสิทธิ์บัตรประกันสุขภาพถ้วนหน้า(UC) มีท,ไม่มีท เขตรอยต่อ (ผลวินิจฉัย E100 - E119,I10)";
         $sql = "select 
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
-                    ,v.cid,s.name as sex,v.age_y,
-                v.pdx as pdx,
-                
+                    ,v.cid,s.name as sex,v.age_y,               
                     concat(
+                           if(v.pdx is not null,concat(v.pdx,'   '),' '),
                            if(v.dx0 is not null,concat(v.dx0,'   '),' '),
                            if(v.dx1 is not null,concat(v.dx1,'   '),' '),
                            if(v.dx2 is not null,concat(v.dx2,'   '),' '),
                            if(v.dx3 is not null,concat(v.dx3,'   '),' '),
                            if(v.dx4 is not null,concat(v.dx4,'   '),' '),
                            if(v.dx5 is not null,concat(v.dx5,'   '),' ')
-                           )  as second_diag,
+                           )  as diag,
                      concat(
                             if(v.op0 is not null, concat(v.op0,'   '),' '),
                             if(v.op1 is not null, concat(v.op1,'   '),' '),
@@ -2156,6 +2154,55 @@ class ClaimController extends CommonController {
         ]);
             
      }
+     
+      /*  
+     
+      public function actionReport30($date_start, $date_end) {
+         // save log
+        $this->SaveLog($this->dep_controller, 'report30', $this->getSession());
+
+        $report_name = "รายงานจำนวนคนไข้ที่ใช้สิทธิ์ 37(พรบ.30000 จ่ายเงินไม่มีสิทธิเบิกคืนจาก รพ.) ระหว่างวันที่ $date_start ถึงวันที่ $date_end";
+   
+        $sql = "SELECT
+                    'ผู้ป่วยนอก' as name,
+                    count(distinct(hn)) as count_hn,count(distinct(vn)) as count_visit
+                    from vn_stat   where pttype = '37'     
+                    and vstdate between $date_start AND $date_end 
+                
+                UNION ALL  
+                
+                SELECT
+                    'ผู้ป่วยใน' as name,
+                    count(distinct(hn)) as count_hn,count(distinct(an)) as count_visit
+                    from an_stat   where pttype = '37'     
+                    and dchdate between $date_start AND $date_end  ";
+             
+        echo $sql;  
+
+                                                    
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+      
+        return $this->render('report30', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $date_start,
+                    'date_end' => $date_end,
+                    'report_name' => $report_name,
+
+        ]); 
+      
+ 
+     } */
      
      
      
