@@ -1805,7 +1805,9 @@ class PcuController extends CommonController {
         $sql = "SELECT
                     o.hn,p.cid,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
                     concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate,
-                    o.vsttime,o.icode,d.name as drug_name,o.qty
+                    o.vsttime,o.icode,d.name as drug_name,o.qty,
+                    if(p.hometel is not null, p.hometel ,' ') as tel
+
                 FROM opitemrece  o
                 left outer join patient p on p.hn = o.hn
                 left outer join drugitems d on d.icode = o.icode

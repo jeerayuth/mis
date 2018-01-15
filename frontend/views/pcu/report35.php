@@ -36,6 +36,10 @@ echo GridView::widget([
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
         ],
+        [
+            'attribute' => 'tel',
+            'header' => 'เบอร์โทรศัพท์'
+        ],
          [
             'attribute' => 'vstdate',
             'header' => 'วันที่รับบริการ'

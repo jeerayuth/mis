@@ -277,7 +277,6 @@ group by o.icode ";
         ]);
     }
 
-    
     public function actionReport6($datestart, $dateend, $details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
@@ -948,6 +947,123 @@ group by o.icode ";
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
+        ]);
+    }
+
+    public function actionReport18($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report18', $this->getSession());
+
+        $report_name = "รายงานคนไข้จิตเวช(ผู้ที่มีรหัสวินิจฉัย F00-F99)";
+        $sql = "SELECT
+                    v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+                    v.pdx,o.bw as weight,
+                    o.pulse ,concat(o.bps,' / ',o.bpd) as bps_bpd,
+                     concat(
+                           if(v.dx0 is not null,concat(v.dx0,'   '),'  '),
+                           if(v.dx1 is not null,concat(v.dx1,'   '),'  '),
+                           if(v.dx2 is not null,concat(v.dx2,'   '),'  '),
+                           if(v.dx3 is not null,concat(v.dx3,'   '),'  '),
+                           if(v.dx4 is not null,concat(v.dx4,'   '),'  '),
+                           if(v.dx5 is not null,concat(v.dx5,'   '),'  ')
+                           )  as second_diag,  
+                           
+                    GROUP_CONCAT(concat('[ ',d.name, du.shortlist ,' สั่งใช้=',om.qty, ' ]') SEPARATOR ', ')  as drug
+
+                FROM vn_stat v
+                left outer join patient p  on p.hn = v.hn
+                left outer join opdscreen o on o.vn = v.vn
+                left outer join opitemrece om on om.vn = v.vn
+                left outer join drugitems d on d.icode = om.icode
+                left outer join drugusage du on du.drugusage = om.drugusage
+
+                WHERE v.vstdate BETWEEN $datestart and $dateend   and
+                                                       
+                    (
+                          v.pdx between 'f00' and 'f99' or
+                          v.dx0 between 'f00' and 'f99' or
+                          v.dx1 between 'f00' and 'f99' or
+                          v.dx2 between 'f00' and 'f99' or
+                          v.dx3 between 'f00' and 'f99' or
+                          v.dx4 between 'f00' and 'f99' or
+                          v.dx5 between 'f00' and 'f99'
+                    )
+                    
+                GROUP BY v.vn
+             
+                ";
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report18', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'date_start' => $datestart,
+                    'date_end' => $dateend,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+    public function actionReport19($hn, $vn, $pt_name, $date_start, $date_end) {
+
+        $sql = "SELECT 
+                    o.icode,
+                    d.name as drug_name,
+                    o.qty,
+                    du.shortlist
+                FROM opitemrece o
+                LEFT OUTER JOIN drugitems d ON d.icode = o.icode
+                LEFT OUTER JOIN drugusage du on du.drugusage = o.drugusage
+                
+                WHERE o.vn = $vn AND o.icode like '1%'
+            ";
+        
+        $sql_lab = "SELECT         
+                    lh.vn,lh.hn,lh.lab_order_number,lh.report_date ,
+                    lo.lab_items_code,li.lab_items_name,lo.confirm,lo.lab_order_result,
+                    concat(DAY(lh.order_date),'/',MONTH(lh.order_date),'/',(YEAR(lh.order_date)+543)) as order_date
+                FROM lab_head  lh
+                    left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                    left outer join lab_items li on li.lab_items_code = lo.lab_items_code
+                WHERE 
+                    lh.vn =  $vn  and lh.confirm_report = 'Y'
+                 ";
+
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            $rawData2 = \yii::$app->db->createCommand($sql_lab)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        $dataProvider2 = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData2,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report19', [
+                    'dataProvider' => $dataProvider,
+                    'dataProvider2' => $dataProvider2,
+                    'rawData' => $rawData,
+                    'hn' => $hn,
+                    'pt_name' => $pt_name,
         ]);
     }
 
