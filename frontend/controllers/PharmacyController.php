@@ -970,13 +970,13 @@ group by o.icode ";
                            )  as second_diag,  
                            
                     GROUP_CONCAT(concat('[ ',d.name, du.shortlist ,' สั่งใช้=',om.qty, ' ]') SEPARATOR ', ')  as drug
-
                 FROM vn_stat v
                 left outer join patient p  on p.hn = v.hn
                 left outer join opdscreen o on o.vn = v.vn
                 left outer join opitemrece om on om.vn = v.vn
                 left outer join drugitems d on d.icode = om.icode
                 left outer join drugusage du on du.drugusage = om.drugusage
+                
 
                 WHERE v.vstdate BETWEEN $datestart and $dateend   and
                                                        
@@ -989,6 +989,7 @@ group by o.icode ";
                           v.dx4 between 'f00' and 'f99' or
                           v.dx5 between 'f00' and 'f99'
                     )
+                   
                     
                 GROUP BY v.vn
              

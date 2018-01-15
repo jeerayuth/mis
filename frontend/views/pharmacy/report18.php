@@ -76,8 +76,7 @@ echo GridView::widget([
         [
             'attribute' => 'drug',
             'header' => 'รายการยาที่สั่ง'
-        ],
-        
+        ]
        
     ]
 ])
