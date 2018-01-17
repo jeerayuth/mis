@@ -61,6 +61,14 @@ echo GridView::widget([
             'attribute' => 'dchdate',
             'header' => 'วันที่จำหน่าย'
         ],
+         [
+            'attribute' => 'pdx',
+            'header' => 'รหัสวินิจฉัยหลัก'
+        ],
+         [
+            'attribute' => 'second_diag',
+            'header' => 'รหัสวินิจฉัยรอง'
+        ],
         [
             'attribute' => 'pttype',
             'header' => 'รหัสสิทธิ์'

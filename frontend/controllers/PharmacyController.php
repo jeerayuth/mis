@@ -969,13 +969,19 @@ group by o.icode ";
                            if(v.dx5 is not null,concat(v.dx5,'   '),'  ')
                            )  as second_diag,  
                            
-                    GROUP_CONCAT(concat('[ ',d.name, du.shortlist ,' สั่งใช้=',om.qty, ' ]') SEPARATOR ', ')  as drug
+                    GROUP_CONCAT(DISTINCT concat('[ ',d.name, du.shortlist ,' สั่งใช้=',om.qty, ' ]') SEPARATOR ', ')  as drug,
+                    GROUP_CONCAT(DISTINCT concat('[ ',li.lab_items_name,'=', lo.lab_order_result, ' ]') SEPARATOR ', ')  as lab
+                
                 FROM vn_stat v
                 left outer join patient p  on p.hn = v.hn
                 left outer join opdscreen o on o.vn = v.vn
                 left outer join opitemrece om on om.vn = v.vn
                 left outer join drugitems d on d.icode = om.icode
                 left outer join drugusage du on du.drugusage = om.drugusage
+                
+                left outer join lab_head lh on lh.vn = v.vn
+                left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                left outer join lab_items li on li.lab_items_code = lo.lab_items_code
                 
 
                 WHERE v.vstdate BETWEEN $datestart and $dateend   and
@@ -1028,8 +1034,8 @@ group by o.icode ";
                 LEFT OUTER JOIN drugitems d ON d.icode = o.icode
                 LEFT OUTER JOIN drugusage du on du.drugusage = o.drugusage
                 
-                WHERE o.vn = $vn AND o.icode like '1%'
-            ";
+                WHERE o.vn = $vn AND o.icode like '1%' ";
+            
         
         $sql_lab = "SELECT         
                     lh.vn,lh.hn,lh.lab_order_number,lh.report_date ,
@@ -1039,8 +1045,8 @@ group by o.icode ";
                     left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
                     left outer join lab_items li on li.lab_items_code = lo.lab_items_code
                 WHERE 
-                    lh.vn =  $vn  and lh.confirm_report = 'Y'
-                 ";
+                    lh.vn =  $vn  and lo.confirm = 'Y' ";
+                 
 
         
         try {

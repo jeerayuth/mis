@@ -28,7 +28,7 @@ echo GridView::widget([
     ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
-          [
+         /* [
             'attribute' => '',
             'header' => 'ยา/แลป',
             'format' => 'raw',
@@ -40,7 +40,7 @@ echo GridView::widget([
 
                 return Html::a(Html::encode($title), ['pharmacy/report19', 'hn' => $hn,'vn' => $vn,'pt_name' => $pt_name, 'date_start' => $date_start, 'date_end' => $date_end], ['target' => '_blank']);
             }
-                ],
+                ], */
         [
             'attribute' => 'hn',
             'header' => 'HN'
@@ -76,6 +76,10 @@ echo GridView::widget([
         [
             'attribute' => 'drug',
             'header' => 'รายการยาที่สั่ง'
+        ],
+        [
+            'attribute' => 'lab',
+            'header' => 'ผลแลป'
         ]
        
     ]

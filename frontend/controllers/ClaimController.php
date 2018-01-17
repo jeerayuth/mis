@@ -2083,7 +2083,17 @@ class ClaimController extends CommonController {
                       /*  if(v.paid_money is not null,v.paid_money,'-') as net_total, */
                          v.rcpt_money as net_total,
                          v.uc_money,
-                         ks.department as department_name
+                         ks.department as department_name,
+                         
+                        v.pdx as pdx,
+                        concat(
+                                  if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                                  if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                                  if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                                  if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                                  if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                                  if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                                  )  as second_diag
                         
                   FROM vn_stat v
                   left outer join  rcpt_print r on r.vn = v.vn
@@ -2113,7 +2123,17 @@ class ClaimController extends CommonController {
                     pp.name as pttype_name,
                     a.income, a.uc_money,
                     /* if(a.paid_money is not null,a.paid_money,'-') as net_total, */
-                    a.rcpt_money as net_total
+                    a.rcpt_money as net_total,
+                    a.pdx as pdx,
+                        concat(
+                                  if(a.dx0 is not null,concat(a.dx0,'   '),' '),
+                                  if(a.dx1 is not null,concat(a.dx1,'   '),' '),
+                                  if(a.dx2 is not null,concat(a.dx2,'   '),' '),
+                                  if(a.dx3 is not null,concat(a.dx3,'   '),' '),
+                                  if(a.dx4 is not null,concat(a.dx4,'   '),' '),
+                                  if(a.dx5 is not null,concat(a.dx5,'   '),' ')
+                                  )  as second_diag
+                                  
                 FROM an_stat  a
                 LEFT OUTER JOIN patient p on p.hn = a.hn
                 LEFT OUTER JOIN ward w on w.ward = a.ward

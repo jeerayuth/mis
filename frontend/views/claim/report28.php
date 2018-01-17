@@ -53,6 +53,14 @@ echo GridView::widget([
             'attribute' => 'vstdate',
             'header' => 'วันที่รับบริการ'
         ],
+         [
+            'attribute' => 'pdx',
+            'header' => 'รหัสวินิจฉัยหลัก'
+        ],
+         [
+            'attribute' => 'second_diag',
+            'header' => 'รหัสวินิจฉัยรอง'
+        ],
         [
             'attribute' => 'pttype',
             'header' => 'รหัสสิทธิ์'
