@@ -175,6 +175,47 @@ class AncController extends CommonController {
     
     
     
+    public function actionReport5($details) {
+          // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
+
+        $report_name = "รายงานทะเบียนหญิงตั้งครรภ์และหญิงหลังคลอด 6 สัปดาห์";
+
+        $sql = "SELECT
+                    p.cid,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    h.address,h.road,v.village_moo,v.village_name,
+                    t.full_name as full_address_name,p.patient_hn as person_hn ,
+                    pt.hn as patient_hn
+                FROM person_anc a
+                left outer join person p on p.person_id = a.person_id
+                left outer join house h on h.house_id = p.house_id
+                left outer join village v on v.village_id = p.village_id
+                left outer join labor_status ats on ats.labor_status_id = a.labor_status_id
+                left outer join thaiaddress t on t.addressid = v.address_id
+                left outer join patient pt on pt.cid = p.cid
+
+                WHERE (a.discharge <> 'Y' or a.discharge IS NULL)
+                ORDER BY  pt.hn  ";
+            
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report5', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
     
 
 
