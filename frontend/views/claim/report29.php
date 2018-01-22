@@ -49,9 +49,17 @@ echo GridView::widget([
             'attribute' => 'hn',
             'header' => 'HN'
         ],
+          [
+            'attribute' => 'cid',
+            'header' => 'เลขบัตรประชาชน'
+        ],
         [
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
+        ],
+          [
+            'attribute' => 'age_y',
+            'header' => 'อายุ(ปี)'
         ],
         [
             'attribute' => 'regdate',

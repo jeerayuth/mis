@@ -2084,6 +2084,8 @@ class ClaimController extends CommonController {
                          v.rcpt_money as net_total,
                          v.uc_money,
                          ks.department as department_name,
+                         pt.cid,
+                         v.age_y,
                          
                         v.pdx as pdx,
                         concat(
@@ -2125,6 +2127,8 @@ class ClaimController extends CommonController {
                     /* if(a.paid_money is not null,a.paid_money,'-') as net_total, */
                     a.rcpt_money as net_total,
                     a.pdx as pdx,
+                    p.cid,
+                    a.age_y,
                         concat(
                                   if(a.dx0 is not null,concat(a.dx0,'   '),' '),
                                   if(a.dx1 is not null,concat(a.dx1,'   '),' '),
