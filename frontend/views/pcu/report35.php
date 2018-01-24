@@ -32,9 +32,17 @@ echo GridView::widget([
             'attribute' => 'hn',
             'header' => 'HN'
         ],
+         [
+            'attribute' => 'cid',
+            'header' => 'เลขบัตรประชาชน'
+        ],
         [
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
+        ],
+         [
+            'attribute' => 'addess',
+            'header' => 'ที่อยู่'
         ],
         [
             'attribute' => 'tel',

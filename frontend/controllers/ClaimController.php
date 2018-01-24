@@ -2073,6 +2073,7 @@ class ClaimController extends CommonController {
         } else {
             $cup = '';
         }
+        
         if($ptt_type == 'opd') {
             $sql = "SELECT
                         v.vn,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,

@@ -322,7 +322,69 @@ class TtmController extends CommonController {
         ]); 
     }
 
+    
+      public function actionReport7($datestart, $dateend, $details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
+        $report_name = "รายงานการให้บริการ(หัตถการที่กำหนด)ตามเจ้าหน้าที่ให้บริการ";
+        $sql = "SELECT
+                    hs.health_med_service_id,hs.hn,
+                    concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    hs.an,
+                    concat(DAY(hs.service_date),'/',MONTH(hs.service_date),'/',(YEAR(hs.service_date)+543)) as vstdate ,
+                    ho.health_med_operation_item_id ,
+                    hi.health_med_operation_item_name ,
+                    ho.health_med_provider_id,
+                    hp.health_med_provider_full_name as dorcor_name ,
+                    ns.billcode,
+                    v.pttype,
+                    p.name as pttype_name,
+                    '' as input1,
+                    '' as input2,
+                    '' as input3,
+                    '' as input4
+              FROM 
+                health_med_service hs
+
+              LEFT OUTER JOIN patient pt ON pt.hn = hs.hn
+              LEFT OUTER JOIN health_med_service_operation ho ON ho.health_med_service_id = hs.health_med_service_id
+              LEFT OUTER JOIN health_med_operation_item hi ON  hi.health_med_operation_item_id = ho.health_med_operation_item_id
+              lEFT OUTER JOIN health_med_provider hp ON hp.health_med_provider_id = ho.health_med_provider_id
+              LEFT OUTER JOIN nondrugitems ns ON ns.icode = ho.service_icode
+              LEFT OUTER JOIN vn_stat v ON v.vn = hs.vn
+              LEFT OUTER JOIN pttype p ON p.pttype = v.pttype
+              
+              WHERE
+                hs.service_date between $datestart and $dateend AND
+                ho.health_med_operation_item_id in (7,104,107) AND
+                ho.service_qty >= 1
+
+              ORDER BY
+                    ho.health_med_provider_id,
+                    ho.health_med_operation_item_id, hs.service_date ";
+              
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report7', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
     
 
 }
