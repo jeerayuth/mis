@@ -179,7 +179,7 @@ class AncController extends CommonController {
           // save log
         $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
-        $report_name = "รายงานทะเบียนหญิงตั้งครรภ์และหญิงหลังคลอด 6 สัปดาห์";
+        $report_name = "รายงานทะเบียนหญิงตั้งครรภ์และหญิงหลังคลอด 6 สัปดาห์(HN บัญชี1 กับ HN ห้องบัตร ไม่ตรงกัน)";
 
         $sql = "SELECT
                     p.cid,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
@@ -194,7 +194,7 @@ class AncController extends CommonController {
                 left outer join thaiaddress t on t.addressid = v.address_id
                 left outer join patient pt on pt.cid = p.cid
 
-                WHERE (a.discharge <> 'Y' or a.discharge IS NULL)
+                WHERE (a.discharge <> 'Y' or a.discharge IS NULL) AND pt.hn != p.patient_hn
                 ORDER BY  pt.hn  ";
             
         try {
