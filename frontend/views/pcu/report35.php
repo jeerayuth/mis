@@ -40,6 +40,10 @@ echo GridView::widget([
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
         ],
+        [
+            'attribute' => 'age_y',
+            'header' => 'อายุ(ปี)'
+        ],
          [
             'attribute' => 'addess',
             'header' => 'ที่อยู่'
