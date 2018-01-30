@@ -1127,10 +1127,10 @@ limit 40 ";
         // save log
         $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
 
-        $report_name = "รายงานจำนวนครั้ง CPR ที่ห้องอุบัติเหตุฉุกเฉิน";
+        $report_name = "รายงานจำนวนครั้ง CPR (ER+IPD), หัตถการ > การฟื้นคืนชีพ (รวม Defib ไม่รวม Tube)";
 
         $sql = "SELECT
-                    v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    'ER' as department, v.vn as visit,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate_thai,
                     v.vstdate,v.pdx,v.age_y , o.icode,
                     o.qty
@@ -1138,15 +1138,22 @@ limit 40 ";
                 LEFT OUTER JOIN opitemrece o on o.vn = v.vn
                 LEFT OUTER JOIN patient p on p.hn = v.hn
                 WHERE 
-                    v.vstdate BETWEEN $datestart AND $dateend  AND v.vn IN
+                    v.vstdate BETWEEN $datestart AND $dateend  AND v.vn IN             
+                (  select vn from er_regist ) AND o.icode = '3001210'
+                                                  
+            UNION ALL
 
-                (
-                      select vn from er_regist
-                )
-
-                AND o.icode = '3001210'
-                GROUP BY o.vn
-                ORDER BY o.hn,o.vstdate ";
+                SELECT
+                    'IPD' as department, a.an as visit,a.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as vstdate_thai,
+                    a.dchdate,a.pdx,a.age_y , o.icode,
+                    o.qty
+                FROM an_stat a
+                LEFT OUTER JOIN opitemrece o on o.an = a.an
+                LEFT OUTER JOIN patient p on p.hn = a.hn
+                WHERE 
+                    a.dchdate BETWEEN $datestart AND $dateend
+                AND o.icode = '3001210'  ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
