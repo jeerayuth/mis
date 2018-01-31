@@ -2137,7 +2137,8 @@ class ClaimController extends CommonController {
                     w.name as ward_name, a.an, p.hn, 
                     CONCAT(p.pname, p.fname,' ',p.lname) AS pt_name,
                     CONCAT(o.hospmain,' ', h.hosptype, h.name) AS hosp_name,
-                    a.regdate,a.dchdate,
+                    concat(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) as regdate ,
+                    concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as dchdate ,
                     a.pttype,
                    /* a.hospmain, */
                     pp.name as pttype_name,

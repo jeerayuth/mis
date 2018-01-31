@@ -77,6 +77,10 @@ echo GridView::widget([
             'attribute' => 'second_diag',
             'header' => 'รหัสวินิจฉัยรอง'
         ],
+         [
+            'attribute' => 'icd9',
+            'header' => 'รหัสหัตถการ (icd9cm)'
+        ],
          
         [
             'attribute' => 'pttype',
