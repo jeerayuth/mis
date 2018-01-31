@@ -2096,7 +2096,24 @@ class ClaimController extends CommonController {
                                   if(v.dx3 is not null,concat(v.dx3,'   '),' '),
                                   if(v.dx4 is not null,concat(v.dx4,'   '),' '),
                                   if(v.dx5 is not null,concat(v.dx5,'   '),' ')
-                                  )  as second_diag
+                                  )  as second_diag ,
+                                  
+                        concat(
+                            if(v.op0 is not null, concat(v.op0,'   '),' '),
+                            if(v.op1 is not null, concat(v.op1,'   '),' '),
+                            if(v.op2 is not null, concat(v.op2,'   '),' '),
+                            if(v.op3 is not null, concat(v.op3,'   '),' '),
+                            if(v.op4 is not null, concat(v.op4,'   '),' '),
+                            if(v.op5 is not null, concat(v.op5,'   '),' ')
+                            ) as icd9,
+                            
+                            v.inc01,v.inc02,v.inc03,v.inc04,v.inc05,
+                            v.inc06,v.inc07,v.inc08,v.inc09,v.inc10,
+                            v.inc11,v.inc12,v.inc13,v.inc14,v.inc15,
+                            v.inc16,v.inc17
+
+                            
+                            
                         
                   FROM vn_stat v
                   left outer join  rcpt_print r on r.vn = v.vn
@@ -2137,7 +2154,23 @@ class ClaimController extends CommonController {
                                   if(a.dx3 is not null,concat(a.dx3,'   '),' '),
                                   if(a.dx4 is not null,concat(a.dx4,'   '),' '),
                                   if(a.dx5 is not null,concat(a.dx5,'   '),' ')
-                                  )  as second_diag
+                                  )  as second_diag  ,
+                                  
+                        concat(
+                                 if(a.op0 is not null, concat(a.op0,'   '),' '),
+                                 if(a.op1 is not null, concat(a.op1,'   '),' '),
+                                 if(a.op2 is not null, concat(a.op2,'   '),' '),
+                                 if(a.op3 is not null, concat(a.op3,'   '),' '),
+                                 if(a.op4 is not null, concat(a.op4,'   '),' '),
+                                 if(a.op5 is not null, concat(a.op5,'   '),' '),
+                                 if(a.op6 is not null, concat(a.op6,'   '),' ')
+                                 ) as icd9, 
+                                 
+                                a.inc01,a.inc02,a.inc03,a.inc04,a.inc05,
+                                a.inc06,a.inc07,a.inc08,a.inc09,a.inc10,
+                                a.inc11,a.inc12,a.inc13,a.inc14,a.inc15,
+                                a.inc16,a.inc17
+                            
                                   
                 FROM an_stat  a
                 LEFT OUTER JOIN patient p on p.hn = a.hn

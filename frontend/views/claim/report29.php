@@ -77,6 +77,7 @@ echo GridView::widget([
             'attribute' => 'second_diag',
             'header' => 'รหัสวินิจฉัยรอง'
         ],
+         
         [
             'attribute' => 'pttype',
             'header' => 'รหัสสิทธิ์'
@@ -84,6 +85,74 @@ echo GridView::widget([
         [
             'attribute' => 'pttype_name',
             'header' => 'ชื่อสิทธิ์'
+        ],
+        [
+            'attribute' => 'inc01',
+            'header' => 'หมวด01 ค่าบริการชันสูตรโรค'
+        ],
+         [
+            'attribute' => 'inc02',
+            'header' => 'หมวด02 ค่าบริการคลังเลือด'
+        ],
+         [
+            'attribute' => 'inc03',
+            'header' => 'หมวด03 ค่าบริการพยาธิวิทยา'
+        ],
+         [
+            'attribute' => 'inc04',
+            'header' => 'หมวด04 ค่าบริการรังสีวิทยา'
+        ],
+         [
+            'attribute' => 'inc05',
+            'header' => 'หมวด05 ค่าบริการตรวจวินิจฉัยอื่นๆ'
+        ],
+         [
+            'attribute' => 'inc06',
+            'header' => 'หมวด06 ค่าบริการผ่าตัด'
+        ],
+         [
+            'attribute' => 'inc07',
+            'header' => 'หมวด07 ค่าบริการระงับความรู้สึก'
+        ],
+         [
+            'attribute' => 'inc08',
+            'header' => 'หมวด08 ค่าอวัยวะเทียม'
+        ],
+         [
+            'attribute' => 'inc09',
+            'header' => 'หมวด09 ค่าอุปกรณ์บำบัดโรค'
+        ],
+         [
+            'attribute' => 'inc10',
+            'header' => 'หมวด10 ค่ายาเคมีบำบัด'
+        ],
+         [
+            'attribute' => 'inc11',
+            'header' => 'หมวด11 ค่าบริการทันตกรรม'
+        ],
+         [
+            'attribute' => 'inc12',
+            'header' => 'หมวด12 ค่ายาและเวชภัณฑ์'
+        ],
+         [
+            'attribute' => 'inc13',
+            'header' => 'หมวด13 ค่าบริการเวชกรรมฟื้นฟู'
+        ],
+         [
+            'attribute' => 'inc14',
+            'header' => 'หมวด14 ค่าบริการบำบัดรักษาอื่นๆ'
+        ],
+         [
+            'attribute' => 'inc15',
+            'header' => 'หมวด15 ค่าบริการหอผู้ป่วยหนัก'
+        ],
+         [
+            'attribute' => 'inc16',
+            'header' => 'หมวด16 ค่าห้องและอาหาร'
+        ],
+         [
+            'attribute' => 'inc17',
+            'header' => 'หมวด17 ค่าบริการทางการแพทย์ บัตรทอง'
         ],
     
         [
