@@ -986,6 +986,72 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     
     
     
+     public function actionReport20($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report20', $this->getSession());
+
+        $report_name = "รายงานเด็กทารกตัวเหลืองหลังคลอด (DIAG P580-P599)";
+
+        $sql = "select
+                    a.an,a.hn, concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    a.pdx,a.dx0,a.dx1,a.dx2,a.dx3,a.dx4,a.dx5,a.sex,
+                    concat(a.age_y,'ปี ',a.age_m,' เดือน ',a.age_d, 'วัน') as age,
+                    a.age_m,
+                    concat(DAY(p.birthday),'/',MONTH(p.birthday),'/',(YEAR(p.birthday)+543)) as birthday,
+                    concat(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) as regdate,
+                    concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as dchdate,
+                    a.admdate ,
+                    lh.vn  as an_ipd ,
+                    concat(DAY(lh.order_date),'/',MONTH(lh.order_date),'/',(YEAR(lh.order_date)+543)) as order_date,
+                    lo.lab_items_code  ,li.lab_items_name ,
+                    lo.lab_order_result, lo.confirm,
+                    concat(timestampdiff(year,p.birthday,a.regdate),'ปี ', TIMESTAMPDIFF(month,p.birthday,a.regdate) mod 12 ,'เดือน ', TIMESTAMPDIFF(day,p.birthday,a.regdate),'วัน' ) as age_begin
+
+
+              from an_stat a
+
+              left outer join patient p on p.hn = a.hn
+              left outer join lab_head lh on lh.vn = a.an
+              left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+              left outer join lab_items li on li.lab_items_code = lo.lab_items_code
+
+              where a.dchdate between $datestart AND $dateend      and
+              (
+                    (a.pdx between 'p580' and 'p599') or
+                    (a.dx0 between 'p580' and 'p599') or
+                    (a.dx1 between 'p580' and 'p599') or
+                    (a.dx2 between 'p580' and 'p599') or
+                    (a.dx3 between 'p580' and 'p599') or
+                    (a.dx4 between 'p580' and 'p599') or
+                    (a.dx5 between 'p580' and 'p599')
+
+              )   and a.ward = 01    and lo.lab_items_code =  2047  and lo.confirm = 'Y'
+
+              ORDER BY a.an,a.hn,lh.order_date";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report20', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
     
     
 }
