@@ -1073,5 +1073,53 @@ group by o.icode ";
                     'pt_name' => $pt_name,
         ]);
     }
+    
+    
+    public function actionReport20($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report20', $this->getSession());
+
+        $report_name = "รายงานคนไข้สั่งใช้ยา Clozapine(B)(รหัสยา 1580029,1580030) ";
+        $sql = "SELECT
+                      o.vn,o.hn,
+                      if(o.an is not null,o.an,' ') as an,
+                      CONCAT(p.pname,p.fname,'  ',p.lname) as pt_name,
+                      CONCAT(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate,
+                      GROUP_CONCAT(concat('[ ',o.icode,' ',d.name ,' สั่งใช้=',o.qty, ' ]') SEPARATOR ', ')  as drug1  ,
+                      GROUP_CONCAT(concat('[ ',d.name, du.shortlist ,' สั่งใช้=',o.qty, ' ]') SEPARATOR ', ')  as drug2
+                FROM opitemrece o
+                LEFT OUTER JOIN drugitems d ON d.icode = o.icode
+                LEFT OUTER JOIN patient p ON p.hn = o.hn
+                LEFT OUTER JOIN drugusage du on du.drugusage = o.drugusage
+                WHERE
+                     o.vstdate BETWEEN $datestart and $dateend  AND
+                     o.icode IN ('1580029','1580030')
+                GROUP BY o.vn
+                ORDER BY o.hn,o.vstdate  ";
+
+               
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report20', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
 
 }
