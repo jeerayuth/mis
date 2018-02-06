@@ -1027,7 +1027,7 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
 
               )   and a.ward = 01    and lo.lab_items_code =  2047  and lo.confirm = 'Y'
 
-              ORDER BY a.an,a.hn,lh.order_date";
+              ORDER BY a.an,a.hn,lh.order_date ";
                          
 
         try {

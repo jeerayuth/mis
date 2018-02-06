@@ -1120,6 +1120,43 @@ group by o.icode ";
     
     
     
+    public function actionReport21($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
+
+        $report_name = "การสั่งจ่ายยาใช้ยาเสพติดและวัตุถุออกฤทธ์ประเภท 2 (รหัสยา 1460028,1580020,1460536,1000196,1000236)";
+        $sql = "SELECT s.icode,s.name as drug_name,s.units as drug_unit,s.unitprice,s.unitcost,sum(o.qty) as count_use,
+        sum(IF(o.unitprice <> 0,o.unitprice*o.qty,s.unitprice*o.qty)) as sum_price ,
+        sum(IF(o.cost <> 0, o.cost*o.qty,s.unitcost*o.qty)) as  sum_cost
+        FROM opitemrece o
+        left outer join drugitems s on s.icode=o.icode
+        WHERE o.vstdate between $datestart and $dateend
+        and o.icode in (1460028,1580020,1460536,1000196,1000236)
+        GROUP BY o.icode ,s.name
+        ORDER BY sum_cost desc ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report21', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
     
 
 }
