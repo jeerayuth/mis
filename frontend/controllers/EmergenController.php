@@ -2414,4 +2414,45 @@ limit 40 ";
       }
       
       
+       public function actionReport25($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report25', $this->getSession());
+
+        $report_name = "รายงานคนไข้ผู้ป่วยนอก OPD+ER  Re-visit ภายใน 48 ชั่วโมง (ยกเว้น Diag หลัก z480,z242,z548,z235,z236,z519,z488)";
+
+        $sql = "SELECT
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+                    v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                    v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,v.lastvisit_hour,
+                     if(e.er_dch_type is not null,d.name,' ') as er_dch_type
+
+                FROM vn_stat v
+                LEFT OUTER JOIN patient p on p.hn  = v.hn 
+                LEFT OUTER JOIN er_regist e on e.vn = v.vn
+                LEFT OUTER JOIN er_dch_type d on d.er_dch_type = e.er_dch_type
+                WHERE v.vstdate between $datestart and $dateend and  
+                      v.lastvisit_hour <= 48 and 
+                      v.pdx not in ('z480','z242','z548','z235','z236','z519','z488')
+                ORDER BY v.hn,v.vstdate
+                ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report25', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
 }

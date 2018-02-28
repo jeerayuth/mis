@@ -296,26 +296,26 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
         $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง Re-visit ภายใน 48 ชั่วโมง ที่ OPD";
 
         $sql = "select
-v.lastvisit_hour,v.vn,v.hn,v.vstdate,v.age_y,
-concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name ,
-v.pdx,v.dx0 ,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
- v.moopart,t.full_name as address
+                    v.lastvisit_hour,v.vn,v.hn,v.vstdate,v.age_y,
+                    concat(p.pname,p.fname,'  ',p.lname) as pt_name,s.name ,
+                    v.pdx,v.dx0 ,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
+                     v.moopart,t.full_name as address
 
-from vn_stat  v
+                    from vn_stat  v
 
-left outer join clinicmember c on c.hn = v.hn
-left outer join patient p on p.hn = v.hn
-left outer join spclty s on s.spclty = v.spclty
-left OUTER join thaiaddress t on t.addressid=v.aid
-left outer join sex se on se.code = p.sex
+                    left outer join clinicmember c on c.hn = v.hn
+                    left outer join patient p on p.hn = v.hn
+                    left outer join spclty s on s.spclty = v.spclty
+                    left OUTER join thaiaddress t on t.addressid=v.aid
+                    left outer join sex se on se.code = p.sex
 
-where c.clinic = '005'  /* and c.clinic_member_status_id='1' */  and v.old_diagnosis = 'Y'
-and v.lastvisit_hour <= 48
-and v.vstdate between $datestart and $dateend
-and  v.vn  not in (select e.vn from er_regist e )
-and v.pdx between 'j440'  and 'j449'
-group by v.hn
-order by v.aid, v.moopart, v.hn, v.vstdate ";
+                    where c.clinic = '005'  /* and c.clinic_member_status_id='1' */  and v.old_diagnosis = 'Y'
+                    and v.lastvisit_hour <= 48
+                    and v.vstdate between $datestart and $dateend
+                    and  v.vn  not in (select e.vn from er_regist e )
+                    and v.pdx between 'j440'  and 'j449'
+                    group by v.hn
+                    order by v.aid, v.moopart, v.hn, v.vstdate ";
 
 
         try {

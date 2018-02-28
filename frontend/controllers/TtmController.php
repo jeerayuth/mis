@@ -357,7 +357,7 @@ class TtmController extends CommonController {
               
               WHERE
                 hs.service_date between $datestart and $dateend AND
-                ho.health_med_operation_item_id in (7,104,107,72,95) AND
+                ho.health_med_operation_item_id in (7,104,107,72,95,68,71,72,73,76) AND
                 ho.service_qty >= 1
 
               ORDER BY
