@@ -1820,7 +1820,7 @@ class PcuController extends CommonController {
                 WHERE 
                     o.vstdate BETWEEN $datestart AND $dateend
                 AND 
-                    o.icode IN (1540018,1540019,1540020,1540021)
+                    o.icode IN (1540018,1540019,1540020,1540021,1540029)
                 ORDER BY 
                     o.hn,o.vstdate  ";
 
