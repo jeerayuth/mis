@@ -44,6 +44,11 @@ echo GridView::widget([
             'attribute' => 'age_y',
             'header' => 'อายุ(ปี)'
         ],
+          [
+            'attribute' => 'marrystatus_name',
+            'header' => 'สภาพสมรส'
+        ],
+        
          [
             'attribute' => 'addess',
             'header' => 'ที่อยู่'
@@ -55,6 +60,10 @@ echo GridView::widget([
          [
             'attribute' => 'vstdate',
             'header' => 'วันที่รับบริการ'
+        ],
+          [
+            'attribute' => 'pttype_name',
+            'header' => 'สิทธิ์การรักษา'
         ],
              [
             'attribute' => 'icode',
