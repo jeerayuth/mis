@@ -58,6 +58,10 @@ echo GridView::widget([
             'header' => 'เบอร์โทรศัพท์'
         ],
          [
+            'attribute' => 'occupation_name',
+            'header' => 'อาชีพ'
+        ],
+         [
             'attribute' => 'vstdate',
             'header' => 'วันที่รับบริการ'
         ],

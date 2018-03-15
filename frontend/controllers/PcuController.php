@@ -1808,7 +1808,8 @@ class PcuController extends CommonController {
                     o.vsttime,o.icode,d.name as drug_name,o.qty,
                     if(p.hometel is not null, p.hometel ,' ') as tel,
                     concat(p.addrpart,' หมู่',p.moopart,' ',th.full_name) as addess,
-                    v.age_y, ms.name as marrystatus_name,concat(v.pttype,' ',pty.name) as pttype_name 
+                    v.age_y, ms.name as marrystatus_name,concat(v.pttype,' ',pty.name) as pttype_name ,
+                    occ.name as occupation_name
 
                 FROM opitemrece  o
                 left outer join vn_stat v on v.vn = o.vn
@@ -1816,6 +1817,7 @@ class PcuController extends CommonController {
                 left outer join marrystatus ms on ms.code = p.marrystatus 
                 left outer join pttype pty on pty.pttype = v.pttype
                 left outer join drugitems d on d.icode = o.icode
+                left outer join occupation occ on occ.occupation = p.occupation
                 left outer join thaiaddress th on th.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
                 
                 
