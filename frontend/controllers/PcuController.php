@@ -1826,7 +1826,7 @@ class PcuController extends CommonController {
                 AND 
                     o.icode IN (1540018,1540019,1540020,1540021,1540029)
                 ORDER BY 
-                    o.hn,o.vstdate  ";
+                    o.icode  ";
 
     
         
