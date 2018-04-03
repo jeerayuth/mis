@@ -39,8 +39,8 @@ echo GridView::widget([
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         [
-            'attribute' => 'vn',
-            'header' => 'VN'
+            'attribute' => 'cid',
+            'header' => 'CID'
         ],
         [
             'attribute' => 'hn',
@@ -54,6 +54,24 @@ echo GridView::widget([
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
         ],
+         [
+            'attribute' => 'hometel',
+            'header' => 'เบอร์โทรติดต่อ'
+        ],
+          [
+            'attribute' => 'addrpart',
+            'header' => 'บ้านเลขที่'
+        ],
+            [
+            'attribute' => 'moopart',
+            'header' => 'หมู่ที่'
+        ],
+        [
+            'attribute' => 'full_name',
+            'header' => 'ที่อยู่'
+        ],
+       
+       
         [
             'attribute' => 'pdx',
             'header' => 'รหัสวินิจฉัยหลัก'

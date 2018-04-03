@@ -14,21 +14,23 @@ class ArvController extends CommonController {
 
         $report_name = "รายงานผู้ป่วยที่มีรหัสวินิจฉัย B24";
         $sql = "SELECT
-                    v.vn,v.hn,v.vstdate,
+                    pt.cid,pt.hometel,v.vn,v.hn,v.vstdate,
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate_thai,
                     concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                     v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
                     o.icode,concat(d.name,'(',d.units,')') as drug_name ,nd.name as non_drug_name,
                     o.qty,
-                    du.shortlist
-
+                    du.shortlist,
+                    pt.addrpart,pt.moopart,
+                    th.full_name
         FROM vn_stat v
         LEFT OUTER JOIN opitemrece o on o.vn = v.vn
         LEFT OUTER JOIN drugitems d on d.icode = o.icode
         LEFT OUTER JOIN drugusage du on du.drugusage = o.drugusage
         LEFT OUTER JOIN nondrugitems nd on nd.icode = o.icode
         LEFT OUTER JOIN patient pt on pt.hn = v.hn
-
+        LEFT OUTER JOIN thaiaddress th on th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+      
         WHERE v.vstdate BETWEEN $datestart AND $dateend AND
 
         (

@@ -362,7 +362,7 @@ class TtmController extends CommonController {
 
               ORDER BY
                     ho.health_med_provider_id,
-                    ho.health_med_operation_item_id, hs.service_date ";
+                    v.vstdate, ho.health_med_operation_item_id ";
               
         
         try {
