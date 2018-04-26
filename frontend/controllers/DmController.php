@@ -167,6 +167,7 @@ AND
 
 AND pd.code in('3','03')
 AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14)
+
 GROUP BY th.addressid
 
  ";
