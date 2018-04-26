@@ -38,10 +38,10 @@ echo GridView::widget([
             'attribute' => 'age_y',
             'header' => 'อายุ'
         ],
-        [
+      /*  [
             'attribute' => 'cid',
             'header' => 'เลขบัตรประชาชน'
-        ],
+        ], */
         [
             'attribute' => 'moopart',
             'header' => 'หมู่บ้าน',
@@ -49,7 +49,16 @@ echo GridView::widget([
         [
             'attribute' => 'address',
             'header' => 'ที่อยู่',
+        ],
+        [
+            'attribute' => 'hometel',
+            'header' => 'เบอร์โทรติดต่อ',
+        ],
+        [
+            'attribute' => 'last_diag_N183_N18',
+            'header' => 'Diag N183-N185 ครั้งล่าสุด',
         ]
+        
     ]
 ])
 ?>

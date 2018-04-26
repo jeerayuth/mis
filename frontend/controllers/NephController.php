@@ -438,7 +438,20 @@ class NephController extends CommonController {
                     concat( timestampdiff(year,p.birthday,now()), ' ปี') as age_y,
                     p.cid,
                     concat(p.addrpart,' ม.',p.moopart,' ',th.full_name) address,
-                    p.moopart
+                    p.moopart,p.hometel,
+                    (
+                        select 
+                             concat(ov.icd10,' > ',ov.vstdate)
+                        from ovstdiag ov
+                        where 
+                        ov.icd10 BETWEEN 'N183' AND 'N185' and
+                        ov.vstdate between '2012-10-01' and now()                 
+                        and ov.hn = p.hn                        
+                        order by ov.vstdate desc
+                        limit 1
+                        
+                        
+                    ) as last_diag_N183_N18
 
                     FROM vn_stat  v
 
