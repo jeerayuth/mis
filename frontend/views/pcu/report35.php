@@ -77,6 +77,10 @@ echo GridView::widget([
             'attribute' => 'drug_name',
             'header' => 'ชื่อวัคซีน'
         ], 
+          [
+            'attribute' => 'rxtime',
+            'header' => 'เวลาให้บริการวัคซีน'
+        ], 
         [
             'attribute' => 'qty',
             'header' => 'จำนวน'

@@ -1797,7 +1797,7 @@ class PcuController extends CommonController {
         ]);
     }
 
-    public function actionReport35($datestart, $dateend, $details) {
+    public function actionReport35($datestart, $dateend, $timestart, $timeend, $details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report35', $this->getSession());
 
@@ -1809,7 +1809,8 @@ class PcuController extends CommonController {
                     if(p.hometel is not null, p.hometel ,' ') as tel,
                     concat(p.addrpart,' หมู่',p.moopart,' ',th.full_name) as addess,
                     v.age_y, ms.name as marrystatus_name,concat(v.pttype,' ',pty.name) as pttype_name ,
-                    occ.name as occupation_name
+                    occ.name as occupation_name,
+                    o.rxtime
 
                 FROM opitemrece  o
                 left outer join vn_stat v on v.vn = o.vn
@@ -1822,13 +1823,13 @@ class PcuController extends CommonController {
                 
                 
                 WHERE 
-                    o.vstdate BETWEEN $datestart AND $dateend
+                    o.vstdate BETWEEN '$datestart' AND '$dateend'  and o.rxtime between '$timestart' and '$timeend'
                 AND 
                     o.icode IN (1540018,1540019,1540020,1540021,1540029)
                 ORDER BY 
-                    o.icode  ";
+                    o.vsttime  ";
+        
 
-    
         
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -1848,6 +1849,8 @@ class PcuController extends CommonController {
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
+         
+         
     }
 
 }
