@@ -439,9 +439,9 @@ class NephController extends CommonController {
                     p.cid,
                     concat(p.addrpart,' ม.',p.moopart,' ',th.full_name) address,
                     p.moopart,p.hometel,
-                    (
+                     (
                         select 
-                             concat(ov.icd10,' > ',ov.vstdate)
+                             ov.icd10
                         from ovstdiag ov
                         where 
                         ov.icd10 BETWEEN 'N183' AND 'N185' and
@@ -451,7 +451,52 @@ class NephController extends CommonController {
                         limit 1
                         
                         
-                    ) as last_diag_N183_N18
+                    ) as last_diag,
+                    (
+                        select 
+                            ov.vstdate
+                        from ovstdiag ov
+                        where 
+                        ov.icd10 BETWEEN 'N183' AND 'N185' and
+                        ov.vstdate between '2012-10-01' and now()                 
+                        and ov.hn = p.hn                        
+                        order by ov.vstdate desc
+                        limit 1
+                        
+                        
+                    ) as last_date,
+                    
+
+                    (
+                        select 
+                             ov.icd10
+                        from ovstdiag ov
+                        where 
+                        ov.icd10 BETWEEN 'N183' AND 'N185' and
+                        ov.vstdate between '2012-10-01' and now()                 
+                        and ov.hn = p.hn                        
+                        order by ov.vstdate asc
+                        limit 1
+                        
+                        
+                    ) as first_diag,
+                    
+
+                     (
+                        select 
+                             ov.vstdate
+                        from ovstdiag ov
+                        where 
+                        ov.icd10 BETWEEN 'N183' AND 'N185' and
+                        ov.vstdate between '2012-10-01' and now()                 
+                        and ov.hn = p.hn                        
+                        order by ov.vstdate asc
+                        limit 1
+                        
+                        
+                    ) as first_date
+                    
+
 
                     FROM vn_stat  v
 

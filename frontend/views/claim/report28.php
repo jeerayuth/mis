@@ -41,6 +41,10 @@ echo GridView::widget([
             'attribute' => 'department_name',
             'header' => 'แผนก'
         ],
+         [
+            'attribute' => 'vn',
+            'header' => 'VN'
+        ],
         [
             'attribute' => 'hn',
             'header' => 'HN'

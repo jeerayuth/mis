@@ -2076,7 +2076,7 @@ class ClaimController extends CommonController {
         
         if($ptt_type == 'opd') {
             $sql = "SELECT
-                        v.vn,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,
+                        v.vn as vn,concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate ,
                         v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                         v.pttype,t.name as pttype_name,
                         v.income,r.total_amount,
