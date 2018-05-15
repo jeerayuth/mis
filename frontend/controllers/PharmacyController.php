@@ -921,7 +921,7 @@ group by o.icode ";
         $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
 
         $report_name = "รายงานมูลค่าการใช้ยาทั้งหมด";
-        $sql = "SELECT s.icode,s.name as drug_name,s.units as drug_unit,s.unitprice,s.unitcost,sum(o.qty) as count_use,
+        $sql = "SELECT s.icode,concat(s.name,'(',s.strength,')') as drug_name,s.units as drug_unit,s.unitprice,s.unitcost,sum(o.qty) as count_use,
         sum(IF(o.unitprice <> 0,o.unitprice*o.qty,s.unitprice*o.qty)) as sum_price ,
         sum(IF(o.cost <> 0, o.cost*o.qty,s.unitcost*o.qty)) as  sum_cost
         FROM opitemrece o
