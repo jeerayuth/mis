@@ -385,6 +385,65 @@ class TtmController extends CommonController {
     }
     
     
+     public function actionReport8($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
+
+        $report_name = "รายงานการลง Diag U778 ในผู้ป่วยที่ไม่ใช่สิทธิ์ UC";
+        $sql = "SELECT           
+                v.vn,v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                v.pdx,dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,v.pttype, pp.name as pttype_name,v.vstdate
+
+                FROM vn_stat v
+                
+                left outer join patient p on p.hn = v.hn
+                left outer join pttype pp on pp.pttype = p.pttype
+
+                WHERE
+
+                 (
+
+                  v.pdx = 'u778' or
+                  v.dx0 = 'u778' or
+                  v.dx1 = 'u778' or
+                  v.dx2 = 'u778' or
+                  v.dx3 = 'u778' or
+                  v.dx4 = 'u778' or
+                  v.dx5 = 'u778'
+
+                  )
+
+                AND v.vstdate between $datestart and $dateend
+                AND v.pttype in (11,14,31) ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+  
+        return $this->render('report8', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+        
+        
+        
+    
+        
+    }
+    
+    
+    
+    
     
 
 }

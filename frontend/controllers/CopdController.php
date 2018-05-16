@@ -698,7 +698,7 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
         // save log
         $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
 
-        $report_name = 'รายงานจำนวนครั้งคนไข้ในเขตอำเภอละแม รับบริการที่(OPD+ER+IPD) ที่มีรหัสวินิจฉัย j440 ถึง j441  ';
+        $report_name = 'รายงานจำนวนครั้งคนไข้ในเขตอำเภอละแม รับบริการที่(OPD+ER+IPD) ที่มีรหัสวินิจฉัย j440 ถึง j441 (รายครั้ง) ';
 
         $sql = "SELECT
                         v.vn as visit_number,v.hn,concat(p.pname,p.fname,'   ',p.lname) as pt_name,
@@ -792,6 +792,58 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
         ]);
     }
 
+    
+    
+    //Developping Now
+     public function actionReport15($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report15', $this->getSession());
+
+        $report_name = 'รายงานจำนวนคนไข้ในเขตอำเภอละแม รับบริการที่(OPD+ER+IPD) ที่มีรหัสวินิจฉัย j440 ถึง j441 (รายคน) ';
+
+        $sql = " SELECT
+                       distinct v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name ,p.addrpart,p.moopart, t.full_name
+                    FROM vn_stat  v
+                    left outer join patient p on p.hn = v.hn
+                    left outer join thaiaddress t on t.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+                    WHERE 
+                        v.vstdate between $datestart and $dateend    and v.pdx between 'j440' and 'j441'
+                        and concat(p.chwpart,p.amppart) = '8605'
+
+                 UNION
+
+                   SELECT
+                        distinct a.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name  , p.addrpart,p.moopart, t.full_name
+                    FROM an_stat  a
+                    left outer join patient p on p.hn = a.hn
+                    left outer join thaiaddress t on t.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+                    WHERE 
+                        a.dchdate between $datestart and $dateend   and a.pdx between 'j440' and 'j441'
+                        and concat(p.chwpart,p.amppart) = '8605'  ";
+
+
+
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => False,
+        ]);
+
+
+        return $this->render('report15', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+
+    
 }
 
 
