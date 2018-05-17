@@ -2214,6 +2214,57 @@ class ClaimController extends CommonController {
             
      }
      
+     
+      public function actionReport30($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
+
+        $report_name = "รายงานตรวจสอบการบันทึกเลข Approve Code";
+        $sql = "SELECT
+
+      v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+      concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+      v.pdx,v.pttype,p.name as pttype_name,v.income ,
+      /*r.debt_date */ 
+      if(r.total_amount is not null,r.total_amount,' ') as total_amount,
+       if(r.sss_approval_code is not null,r.sss_approval_code,' ') as approve_code,
+      if(er.vn is not null,er.vn,' ')  as er_visit
+
+FROM vn_stat v
+LEFT OUTER JOIN rcpt_debt r ON r.vn = v.vn
+LEFT OUTER JOIN er_regist er ON er.vn = v.vn
+LEFT OUTER JOIN patient pt ON pt.hn = v.hn
+LEFT OUTER JOIN pttype p ON  p.pttype = v.pttype
+
+WHERE
+     v.vstdate BETWEEN $datestart AND $dateend 
+
+AND
+     v.pttype  IN  (12,11)
+
+
+                ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report30', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+     
       /*  
      
       public function actionReport30($date_start, $date_end) {

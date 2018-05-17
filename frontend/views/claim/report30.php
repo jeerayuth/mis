@@ -41,6 +41,45 @@ echo GridView::widget([
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
          [
+            'attribute' => 'hn',
+            'header' => 'HN'
+        ],
+        [
+            'attribute' => 'vstdate',
+            'header' => 'วันที่รับบริการ'
+        ],
+        [
+            'attribute' => 'pdx',
+            'header' => 'รหัสวินิจฉัยหลัก'
+        ],
+         [
+            'attribute' => 'pttype',
+            'header' => 'รหัสสิทธิ์'
+        ],
+         [
+            'attribute' => 'pttype_name',
+            'header' => 'ชื่อสิทธิ์'
+        ],
+         [
+            'attribute' => 'income',
+            'header' => 'ค่าใช้จ่ายรวม'
+        ],
+         [
+            'attribute' => 'total_amount',
+            'header' => 'total_amount'
+        ],
+           [
+            'attribute' => 'er_visit',
+            'header' => 'Visit ที่ ER'
+        ],
+        [
+            'attribute' => 'approve_code',
+            'header' => 'เลข Approve Code จากเครื่อง EDC' 
+        ],
+      
+        
+        /*
+         [
             'attribute' => 'name',
             'header' => 'ประเภท'
         ],
@@ -52,7 +91,7 @@ echo GridView::widget([
             'attribute' => 'count_visit',
             'header' => 'จำนวนครั้ง'
         ],
-          
+         */ 
             
       
     ]
