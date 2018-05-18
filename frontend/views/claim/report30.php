@@ -41,8 +41,16 @@ echo GridView::widget([
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
          [
+            'attribute' => 'cid',
+            'header' => 'เลขบัตรประชาชน'
+        ],
+         [
             'attribute' => 'hn',
             'header' => 'HN'
+        ],
+         [
+            'attribute' => 'pt_name',
+            'header' => 'ชื่อ-สกุล'
         ],
         [
             'attribute' => 'vstdate',

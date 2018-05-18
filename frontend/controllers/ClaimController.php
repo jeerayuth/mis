@@ -751,6 +751,7 @@ class ClaimController extends CommonController {
                     concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
                     ,v.cid,s.name as sex,v.age_y,
                     v.pdx as pdx,
+                    v.pttype,
                     concat(
                            if(v.dx0 is not null,concat(v.dx0,'   '),' '),
                            if(v.dx1 is not null,concat(v.dx1,'   '),' '),
@@ -777,7 +778,7 @@ class ClaimController extends CommonController {
                     left outer join sex s on s.code=v.sex
                 WHERE
                     v.pcode='A2' and v.vstdate between $datestart and $dateend
-                    and v.pttype in('11')
+                    and v.pttype in('11','12')
                 GROUP BY v.vn 
                 ORDER BY v.vstdate,v.hn ";
 
@@ -2217,32 +2218,32 @@ class ClaimController extends CommonController {
      
       public function actionReport30($datestart, $dateend, $details) {
         // save log
-        $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
+        $this->SaveLog($this->dep_controller, 'report30', $this->getSession());
 
         $report_name = "รายงานตรวจสอบการบันทึกเลข Approve Code";
         $sql = "SELECT
 
-      v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
-      concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
-      v.pdx,v.pttype,p.name as pttype_name,v.income ,
-      /*r.debt_date */ 
-      if(r.total_amount is not null,r.total_amount,' ') as total_amount,
-       if(r.sss_approval_code is not null,r.sss_approval_code,' ') as approve_code,
-      if(er.vn is not null,er.vn,' ')  as er_visit
+            pt.cid,v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+            concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+            v.pdx,v.pttype,p.name as pttype_name,v.income ,
+            /*r.debt_date */ 
+            if(sum(r.total_amount) is not null,sum(r.total_amount),' ') as total_amount,
+             if(r.sss_approval_code is not null,r.sss_approval_code,' ') as approve_code,
+            if(er.vn is not null,er.vn,' ')  as er_visit
 
-FROM vn_stat v
-LEFT OUTER JOIN rcpt_debt r ON r.vn = v.vn
-LEFT OUTER JOIN er_regist er ON er.vn = v.vn
-LEFT OUTER JOIN patient pt ON pt.hn = v.hn
-LEFT OUTER JOIN pttype p ON  p.pttype = v.pttype
+        FROM vn_stat v
+        LEFT OUTER JOIN rcpt_debt r ON r.vn = v.vn
+        LEFT OUTER JOIN er_regist er ON er.vn = v.vn
+        LEFT OUTER JOIN patient pt ON pt.hn = v.hn
+        LEFT OUTER JOIN pttype p ON  p.pttype = v.pttype
 
-WHERE
-     v.vstdate BETWEEN $datestart AND $dateend 
+        WHERE
+             v.vstdate BETWEEN $datestart AND $dateend 
 
-AND
-     v.pttype  IN  (12,11)
+        AND
+             v.pttype  IN  (12,11)
 
-
+             GROUP BY v.vn
                 ";
 
         try {

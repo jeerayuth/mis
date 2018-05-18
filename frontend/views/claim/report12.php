@@ -34,14 +34,21 @@ echo GridView::widget([
             'attribute' => 'hn',
             'header' => 'HN'
         ],
+          [
+            'attribute' => 'patient_name',
+            'header' => 'ชื่อ-สกุล'
+        ],
+        
         [
             'attribute' => 'vst_date',
             'header' => 'รับบริการ'
         ],
-        [
-            'attribute' => 'patient_name',
-            'header' => 'ชื่อ-สกุล'
+        
+          [
+            'attribute' => 'pttype',
+            'header' => 'รหัสสิทธิ์การรักษา'
         ],
+      
         [
             'attribute' => 'sex',
             'header' => 'เพศ'
