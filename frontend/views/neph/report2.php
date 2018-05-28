@@ -56,18 +56,18 @@ echo GridView::widget([
         ],
         [
             'attribute' => 'first_diag',
-            'header' => 'Diag N183-N185 ครั้งแรก',
+            'header' => 'Diag N181-N185 ครั้งแรก',
         ],
          [
             'attribute' => 'first_date',
-            'header' => 'Diag N183-N185 วันแรก',
+            'header' => 'Diag N181-N185 วันแรก',
         ],
         [
             'attribute' => 'last_diag',
-            'header' => 'Diag N183-N185 ครั้งล่าสุด',
+            'header' => 'Diag N181-N185 ครั้งล่าสุด',
         ],  [
             'attribute' => 'last_date',
-            'header' => 'Diag N183-N185 วันล่าสุด',
+            'header' => 'Diag N181-N185 วันล่าสุด',
         ]
         
         

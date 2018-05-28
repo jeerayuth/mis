@@ -19,28 +19,28 @@ class NephController extends CommonController {
             // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
             // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
             if ($uclinic == 1) {
-                $report_name = 'รายงานคนไข้ Diag N183-N185 และไม่มีชื่ออยู่ในทะเบียน DM และ HT แยกตามสถานบริการ(คน)';
+                $report_name = 'รายงานคนไข้ Diag N181-N185 และไม่มีชื่ออยู่ในทะเบียน DM และ HT แยกตามสถานบริการ(คน)';
                 
                 $get_type = 'p.hn not IN ( SELECT hn FROM clinicmember WHERE clinic = "001" AND clinic_member_status_id != 3)
                   AND
                      p.hn not IN ( SELECT hn FROM clinicmember WHERE clinic = "002" AND clinic_member_status_id != 3) ';
 
             } else if ($uclinic == 2) {
-                $report_name = 'รายงานคนไข้ Diag N183-N185 และมีชื่ออยู่ในทะเบียน DM และ HT แยกตามสถานบริการ(คน)';
+                $report_name = 'รายงานคนไข้ Diag N181-N185 และมีชื่ออยู่ในทะเบียน DM และ HT แยกตามสถานบริการ(คน)';
                 
                 $get_type = 'p.hn  IN ( SELECT hn FROM clinicmember WHERE clinic = "001" AND clinic_member_status_id != 3)
                   AND
                      p.hn  IN ( SELECT hn FROM clinicmember WHERE clinic = "002" AND clinic_member_status_id != 3) ';
 
             } else if ($uclinic == 3) {
-                 $report_name = 'รายงานคนไข้ Diag N183-N185 มีชื่อในทะเบียน DM แต่ไม่มีชื่อในทะเบียน HT แยกตามสถานบริการ(คน)';
+                 $report_name = 'รายงานคนไข้ Diag N181-N185 มีชื่อในทะเบียน DM แต่ไม่มีชื่อในทะเบียน HT แยกตามสถานบริการ(คน)';
                 
                  $get_type = 'p.hn  IN ( SELECT hn FROM clinicmember WHERE clinic = "001" AND clinic_member_status_id != 3)
                   AND
                      p.hn  NOT IN ( SELECT hn FROM clinicmember WHERE clinic = "002" AND clinic_member_status_id != 3) ';
 
             } else if ($uclinic == 4) {
-                 $report_name = 'รายงานคนไข้ Diag N183-N185 มีชื่อในทะเบียน HT แต่ไม่มีชื่อในทะเบียน DM แยกตามสถานบริการ(คน)';
+                 $report_name = 'รายงานคนไข้ Diag N181-N185 มีชื่อในทะเบียน HT แต่ไม่มีชื่อในทะเบียน DM แยกตามสถานบริการ(คน)';
                 
                  $get_type = 'p.hn  NOT IN ( SELECT hn FROM clinicmember WHERE clinic = "001" AND clinic_member_status_id != 3)
                   AND
@@ -65,13 +65,13 @@ class NephController extends CommonController {
                   AND
 
                      (
-                        v.pdx BETWEEN 'N183' AND 'N185' OR
-                        v.dx0 BETWEEN 'N183' AND 'N185' OR
-                        v.dx1 BETWEEN 'N183' AND 'N185' OR
-                        v.dx2 BETWEEN 'N183' AND 'N185' OR
-                        v.dx3 BETWEEN 'N183' AND 'N185' OR
-                        v.dx4 BETWEEN 'N183' AND 'N185' OR
-                        v.dx5 BETWEEN 'N183' AND 'N185'
+                        v.pdx BETWEEN 'N181' AND 'N185' OR
+                        v.dx0 BETWEEN 'N181' AND 'N185' OR
+                        v.dx1 BETWEEN 'N181' AND 'N185' OR
+                        v.dx2 BETWEEN 'N181' AND 'N185' OR
+                        v.dx3 BETWEEN 'N181' AND 'N185' OR
+                        v.dx4 BETWEEN 'N181' AND 'N185' OR
+                        v.dx5 BETWEEN 'N181' AND 'N185'
 
                      )
 
@@ -106,13 +106,13 @@ class NephController extends CommonController {
                   AND
 
                      (
-                        v.pdx BETWEEN 'N183' AND 'N185' OR
-                        v.dx0 BETWEEN 'N183' AND 'N185' OR
-                        v.dx1 BETWEEN 'N183' AND 'N185' OR
-                        v.dx2 BETWEEN 'N183' AND 'N185' OR
-                        v.dx3 BETWEEN 'N183' AND 'N185' OR
-                        v.dx4 BETWEEN 'N183' AND 'N185' OR
-                        v.dx5 BETWEEN 'N183' AND 'N185'
+                        v.pdx BETWEEN 'N181' AND 'N185' OR
+                        v.dx0 BETWEEN 'N181' AND 'N185' OR
+                        v.dx1 BETWEEN 'N181' AND 'N185' OR
+                        v.dx2 BETWEEN 'N181' AND 'N185' OR
+                        v.dx3 BETWEEN 'N181' AND 'N185' OR
+                        v.dx4 BETWEEN 'N181' AND 'N185' OR
+                        v.dx5 BETWEEN 'N181' AND 'N185'
 
                      )
 
@@ -148,13 +148,13 @@ class NephController extends CommonController {
                   AND
 
                      (
-                        v.pdx BETWEEN 'N183' AND 'N185' OR
-                        v.dx0 BETWEEN 'N183' AND 'N185' OR
-                        v.dx1 BETWEEN 'N183' AND 'N185' OR
-                        v.dx2 BETWEEN 'N183' AND 'N185' OR
-                        v.dx3 BETWEEN 'N183' AND 'N185' OR
-                        v.dx4 BETWEEN 'N183' AND 'N185' OR
-                        v.dx5 BETWEEN 'N183' AND 'N185'
+                        v.pdx BETWEEN 'N181' AND 'N185' OR
+                        v.dx0 BETWEEN 'N181' AND 'N185' OR
+                        v.dx1 BETWEEN 'N181' AND 'N185' OR
+                        v.dx2 BETWEEN 'N181' AND 'N185' OR
+                        v.dx3 BETWEEN 'N181' AND 'N185' OR
+                        v.dx4 BETWEEN 'N181' AND 'N185' OR
+                        v.dx5 BETWEEN 'N181' AND 'N185'
 
                      )
 
@@ -192,13 +192,13 @@ class NephController extends CommonController {
                   AND
 
                      (
-                        v.pdx BETWEEN 'N183' AND 'N185' OR
-                        v.dx0 BETWEEN 'N183' AND 'N185' OR
-                        v.dx1 BETWEEN 'N183' AND 'N185' OR
-                        v.dx2 BETWEEN 'N183' AND 'N185' OR
-                        v.dx3 BETWEEN 'N183' AND 'N185' OR
-                        v.dx4 BETWEEN 'N183' AND 'N185' OR
-                        v.dx5 BETWEEN 'N183' AND 'N185'
+                        v.pdx BETWEEN 'N181' AND 'N185' OR
+                        v.dx0 BETWEEN 'N181' AND 'N185' OR
+                        v.dx1 BETWEEN 'N181' AND 'N185' OR
+                        v.dx2 BETWEEN 'N181' AND 'N185' OR
+                        v.dx3 BETWEEN 'N181' AND 'N185' OR
+                        v.dx4 BETWEEN 'N181' AND 'N185' OR
+                        v.dx5 BETWEEN 'N181' AND 'N185'
 
                      )
 
@@ -235,13 +235,13 @@ class NephController extends CommonController {
                   AND
 
                      (
-                        v.pdx BETWEEN 'N183' AND 'N185' OR
-                        v.dx0 BETWEEN 'N183' AND 'N185' OR
-                        v.dx1 BETWEEN 'N183' AND 'N185' OR
-                        v.dx2 BETWEEN 'N183' AND 'N185' OR
-                        v.dx3 BETWEEN 'N183' AND 'N185' OR
-                        v.dx4 BETWEEN 'N183' AND 'N185' OR
-                        v.dx5 BETWEEN 'N183' AND 'N185'
+                        v.pdx BETWEEN 'N181' AND 'N185' OR
+                        v.dx0 BETWEEN 'N181' AND 'N185' OR
+                        v.dx1 BETWEEN 'N181' AND 'N185' OR
+                        v.dx2 BETWEEN 'N181' AND 'N185' OR
+                        v.dx3 BETWEEN 'N181' AND 'N185' OR
+                        v.dx4 BETWEEN 'N181' AND 'N185' OR
+                        v.dx5 BETWEEN 'N181' AND 'N185'
 
                      )
 
@@ -280,13 +280,13 @@ class NephController extends CommonController {
                   AND
 
                      (
-                        v.pdx BETWEEN 'N183' AND 'N185' OR
-                        v.dx0 BETWEEN 'N183' AND 'N185' OR
-                        v.dx1 BETWEEN 'N183' AND 'N185' OR
-                        v.dx2 BETWEEN 'N183' AND 'N185' OR
-                        v.dx3 BETWEEN 'N183' AND 'N185' OR
-                        v.dx4 BETWEEN 'N183' AND 'N185' OR
-                        v.dx5 BETWEEN 'N183' AND 'N185'
+                        v.pdx BETWEEN 'N181' AND 'N185' OR
+                        v.dx0 BETWEEN 'N181' AND 'N185' OR
+                        v.dx1 BETWEEN 'N181' AND 'N185' OR
+                        v.dx2 BETWEEN 'N181' AND 'N185' OR
+                        v.dx3 BETWEEN 'N181' AND 'N185' OR
+                        v.dx4 BETWEEN 'N181' AND 'N185' OR
+                        v.dx5 BETWEEN 'N181' AND 'N185'
 
                      )
 
@@ -321,13 +321,13 @@ class NephController extends CommonController {
                   AND
 
                      (
-                        v.pdx BETWEEN 'N183' AND 'N185' OR
-                        v.dx0 BETWEEN 'N183' AND 'N185' OR
-                        v.dx1 BETWEEN 'N183' AND 'N185' OR
-                        v.dx2 BETWEEN 'N183' AND 'N185' OR
-                        v.dx3 BETWEEN 'N183' AND 'N185' OR
-                        v.dx4 BETWEEN 'N183' AND 'N185' OR
-                        v.dx5 BETWEEN 'N183' AND 'N185'
+                        v.pdx BETWEEN 'N181' AND 'N185' OR
+                        v.dx0 BETWEEN 'N181' AND 'N185' OR
+                        v.dx1 BETWEEN 'N181' AND 'N185' OR
+                        v.dx2 BETWEEN 'N181' AND 'N185' OR
+                        v.dx3 BETWEEN 'N181' AND 'N185' OR
+                        v.dx4 BETWEEN 'N181' AND 'N185' OR
+                        v.dx5 BETWEEN 'N181' AND 'N185'
 
                      )
 
@@ -382,28 +382,28 @@ class NephController extends CommonController {
         if ($uclinic != "" && $hosp_area != "") {
                     
              if ($uclinic == 1) {
-                $report_name = 'รายงานคนไข้ Diag N183-N185 และไม่มีชื่ออยู่ในทะเบียน DM และ HT แยกตามสถานบริการ(คน)';
+                $report_name = 'รายงานคนไข้ Diag N181-N185 และไม่มีชื่ออยู่ในทะเบียน DM และ HT แยกตามสถานบริการ(คน)';
                 
                 $get_type = 'p.hn not IN ( SELECT hn FROM clinicmember WHERE clinic = "001" AND clinic_member_status_id != 3)
                   AND
                      p.hn not IN ( SELECT hn FROM clinicmember WHERE clinic = "002" AND clinic_member_status_id != 3) ';
 
             } else if ($uclinic == 2) {
-                $report_name = 'รายงานคนไข้ Diag N183-N185 และมีชื่ออยู่ในทะเบียน DM และ HT แยกตามสถานบริการ(คน)';
+                $report_name = 'รายงานคนไข้ Diag N181-N185 และมีชื่ออยู่ในทะเบียน DM และ HT แยกตามสถานบริการ(คน)';
                 
                 $get_type = 'p.hn  IN ( SELECT hn FROM clinicmember WHERE clinic = "001" AND clinic_member_status_id != 3)
                   AND
                      p.hn  IN ( SELECT hn FROM clinicmember WHERE clinic = "002" AND clinic_member_status_id != 3) ';
 
             } else if ($uclinic == 3) {
-                 $report_name = 'รายงานคนไข้ Diag N183-N185 มีชื่อในทะเบียน DM แต่ไม่มีชื่อในทะเบียน HT แยกตามสถานบริการ(คน)';
+                 $report_name = 'รายงานคนไข้ Diag N181-N185 มีชื่อในทะเบียน DM แต่ไม่มีชื่อในทะเบียน HT แยกตามสถานบริการ(คน)';
                 
                  $get_type = 'p.hn  IN ( SELECT hn FROM clinicmember WHERE clinic = "001" AND clinic_member_status_id != 3)
                   AND
                      p.hn  NOT IN ( SELECT hn FROM clinicmember WHERE clinic = "002" AND clinic_member_status_id != 3) ';
 
             } else if ($uclinic == 4) {
-                 $report_name = 'รายงานคนไข้ Diag N183-N185 มีชื่อในทะเบียน HT แต่ไม่มีชื่อในทะเบียน DM แยกตามสถานบริการ(คน)';
+                 $report_name = 'รายงานคนไข้ Diag N181-N185 มีชื่อในทะเบียน HT แต่ไม่มีชื่อในทะเบียน DM แยกตามสถานบริการ(คน)';
                 
                  $get_type = 'p.hn  NOT IN ( SELECT hn FROM clinicmember WHERE clinic = "001" AND clinic_member_status_id != 3)
                   AND
@@ -444,7 +444,7 @@ class NephController extends CommonController {
                              ov.icd10
                         from ovstdiag ov
                         where 
-                        ov.icd10 BETWEEN 'N183' AND 'N185' and
+                        ov.icd10 BETWEEN 'N181' AND 'N185' and
                         ov.vstdate between '2012-10-01' and now()                 
                         and ov.hn = p.hn                        
                         order by ov.vstdate desc
@@ -457,7 +457,7 @@ class NephController extends CommonController {
                             ov.vstdate
                         from ovstdiag ov
                         where 
-                        ov.icd10 BETWEEN 'N183' AND 'N185' and
+                        ov.icd10 BETWEEN 'N181' AND 'N185' and
                         ov.vstdate between '2012-10-01' and now()                 
                         and ov.hn = p.hn                        
                         order by ov.vstdate desc
@@ -472,7 +472,7 @@ class NephController extends CommonController {
                              ov.icd10
                         from ovstdiag ov
                         where 
-                        ov.icd10 BETWEEN 'N183' AND 'N185' and
+                        ov.icd10 BETWEEN 'N181' AND 'N185' and
                         ov.vstdate between '2012-10-01' and now()                 
                         and ov.hn = p.hn                        
                         order by ov.vstdate asc
@@ -487,7 +487,7 @@ class NephController extends CommonController {
                              ov.vstdate
                         from ovstdiag ov
                         where 
-                        ov.icd10 BETWEEN 'N183' AND 'N185' and
+                        ov.icd10 BETWEEN 'N181' AND 'N185' and
                         ov.vstdate between '2012-10-01' and now()                 
                         and ov.hn = p.hn                        
                         order by ov.vstdate asc
@@ -514,13 +514,13 @@ class NephController extends CommonController {
                   AND
 
                      (
-                        v.pdx BETWEEN 'N183' AND 'N185' OR
-                        v.dx0 BETWEEN 'N183' AND 'N185' OR
-                        v.dx1 BETWEEN 'N183' AND 'N185' OR
-                        v.dx2 BETWEEN 'N183' AND 'N185' OR
-                        v.dx3 BETWEEN 'N183' AND 'N185' OR
-                        v.dx4 BETWEEN 'N183' AND 'N185' OR
-                        v.dx5 BETWEEN 'N183' AND 'N185'
+                        v.pdx BETWEEN 'N181' AND 'N185' OR
+                        v.dx0 BETWEEN 'N181' AND 'N185' OR
+                        v.dx1 BETWEEN 'N181' AND 'N185' OR
+                        v.dx2 BETWEEN 'N181' AND 'N185' OR
+                        v.dx3 BETWEEN 'N181' AND 'N185' OR
+                        v.dx4 BETWEEN 'N181' AND 'N185' OR
+                        v.dx5 BETWEEN 'N181' AND 'N185'
 
                      )
 
@@ -533,7 +533,6 @@ class NephController extends CommonController {
 
                     GROUP BY p.hn
                     ORDER BY p.moopart,age_y
-
 
                     ";
 
