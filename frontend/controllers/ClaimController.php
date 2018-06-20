@@ -807,7 +807,8 @@ class ClaimController extends CommonController {
 
         $report_name = "รายงานคนไข้ที่ใช้สิทธิ์ อปท.เข้าโครงการจ่ายตรง (ผู้ป่วยนอก)";
         $sql = "SELECT 
-                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vst_date,
+                    v.hn,v.vn,concat(p.pname,p.fname,'  ',p.lname) as patient_name
                     ,v.cid,s.name as sex,v.age_y,
                     v.pdx as pdx,                  
                     concat(
@@ -2225,17 +2226,31 @@ class ClaimController extends CommonController {
 
             pt.cid,v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
             concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
-            v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,v.pttype,p.name as pttype_name,v.income ,
+            v.pdx,
+    
+            concat(
+                if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+            )  as second_diag,
+            v.pttype,p.name as pttype_name,v.income ,
             /*r.debt_date */ 
             if(sum(r.total_amount) is not null,sum(r.total_amount),' ') as total_amount,
              if(r.sss_approval_code is not null,r.sss_approval_code,' ') as approve_code,
-            if(er.vn is not null,er.vn,' ')  as er_visit
+            if(er.vn is not null,er.vn,' ')  as er_visit,
+             dr.name as doc_name,dr.licenseno
+
 
         FROM vn_stat v
         LEFT OUTER JOIN rcpt_debt r ON r.vn = v.vn
         LEFT OUTER JOIN er_regist er ON er.vn = v.vn
         LEFT OUTER JOIN patient pt ON pt.hn = v.hn
         LEFT OUTER JOIN pttype p ON  p.pttype = v.pttype
+        LEFT OUTER JOIN ovst ov on ov.vn=v.vn
+        LEFT OUTER JOIN doctor dr on dr.code=ov.doctor
 
         WHERE
              v.vstdate BETWEEN $datestart AND $dateend 

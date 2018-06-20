@@ -841,7 +841,256 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
                     'details' => $details,
         ]);
     }
+    
+    
+    
+    
+     public function actionReport16($uclinic, $datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report16', $this->getSession());
 
+        $report_name = 'รายงานการใส่ Tube ในผู้ป่วย COPD ที่ ER';
+
+        if ($uclinic != "") {
+
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $criteria = ' ';
+                $report_name = 'รายงานการใส่ Tube ในผู้ป่วย COPD ที่ ER >= (ยอดคนไข้ทั่วไป + คนไข้ใน clinic copd)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "005" ';
+                $report_name = 'รายงานการใส่ Tube ในผู้ป่วย COPD ที่ ER >= (เฉพาะคนไข้ใน clinic copd)';
+            }
+                  
+            $sql = "SELECT
+                        er.vn,v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        er.vstdate,
+                        concat(DAY(er.vstdate),'/',MONTH(er.vstdate),'/',(YEAR(er.vstdate)+543)) as vstdate_thai,
+                        op.icode,nd.name as items_name,
+                        v.pdx,     
+                        CONCAT(
+                            if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                            if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                            if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                            if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                            if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                            if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                        )  as second_diag
+                  FROM er_regist  er
+                  LEFT OUTER JOIN opitemrece op ON op.vn = er.vn
+                  LEFT OUTER JOIN nondrugitems nd ON nd.icode = op.icode
+                  LEFT OUTER JOIN vn_stat v ON v.vn = er.vn
+                  LEFT OUTER JOIN patient pt ON pt.hn = v.hn
+                  $join_opd
+                  WHERE
+                       er.vstdate BETWEEN $datestart AND $dateend
+                  AND
+                       op.icode in ('3001595','3001596')
+                  AND
+                       (
+                             v.pdx BETWEEN 'j440'  AND  'j449' OR
+                             v.dx0 BETWEEN 'j440'  AND  'j449' OR
+                             v.dx1 BETWEEN 'j440'  AND  'j449' OR
+                             v.dx2 BETWEEN 'j440'  AND  'j449' OR
+                             v.dx3 BETWEEN 'j440'  AND  'j449' OR
+                             v.dx4 BETWEEN 'j440'  AND  'j449' OR
+                             v.dx5 BETWEEN 'j440'  AND  'j449'
+                        )  
+                  $criteria 
+                  GROUP BY er.vn ";
+
+
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+            return $this->render('report16', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+    
+    
+     public function actionReport17($uclinic, $datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report17', $this->getSession());
+
+        $report_name = 'คนไข้ COPD มีการ Refer ที่ ER';
+
+        if ($uclinic != "") {
+
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $criteria = ' ';
+                $report_name = 'คนไข้ COPD มีการ Refer ที่ ER (ยอดคนไข้ทั่วไป + คนไข้ใน clinic copd)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "005" ';
+                $report_name = 'คนไข้ COPD มีการ Refer ที่ ER (เฉพาะคนไข้ใน clinic copd)';
+            }
+                  
+            $sql = "
+                    SELECT
+                        v.hn,CONCAT(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        er.vn,
+                        concat(DAY(ro.refer_date),'/',MONTH(ro.refer_date),'/',(YEAR(ro.refer_date)+543)) as refer_date_thai,
+                        ro.refer_type,ro.refer_point,ro.department,
+                        v.pdx,
+                        CONCAT(
+                            if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                            if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                            if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                            if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                            if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                            if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                        )  as second_diag,
+                        ov.ovstost, os.name as ovst_name
+                    FROM
+                        referout ro
+                    RIGHT OUTER JOIN er_regist er ON ro.vn = er.vn
+                    LEFT  OUTER JOIN vn_stat v ON v.vn = ro.vn
+                    LEFT OUTER JOIN ovst ov ON ov.vn = v.vn
+                    LEFT OUTER JOIN ovstost os ON os.ovstost = ov.ovstost
+                    LEFT OUTER JOIN patient pt ON pt.hn =v.hn
+                    $join_opd
+                    WHERE
+                         ro.refer_date BETWEEN $datestart AND $dateend
+                    AND
+
+                         (
+                               v.pdx BETWEEN 'j440'  AND  'j449' OR
+                               v.dx0 BETWEEN 'j440'  AND  'j449' OR
+                               v.dx1 BETWEEN 'j440'  AND  'j449' OR
+                               v.dx2 BETWEEN 'j440'  AND  'j449' OR
+                               v.dx3 BETWEEN 'j440'  AND  'j449' OR
+                               v.dx4 BETWEEN 'j440'  AND  'j449' OR
+                               v.dx5 BETWEEN 'j440'  AND  'j449'
+
+                          )
+                    $criteria
+
+                    GROUP BY
+                          ro.vn
+                    ";
+
+
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+            return $this->render('report17', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+
+
+     public function actionReport18($uclinic, $datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report18', $this->getSession());
+
+        $report_name = 'คนไข้ COPD มีการ Admit ที่ ER';
+
+        if ($uclinic != "") {
+
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $criteria = ' ';
+                $report_name = 'คนไข้ COPD มีการ Admit ที่ ER (ยอดคนไข้ทั่วไป + คนไข้ใน clinic copd)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "005" ';
+                $report_name = 'คนไข้ COPD มีการ Admit ที่ ER (เฉพาะคนไข้ใน clinic copd)';
+            }
+                  
+            $sql = "SELECT
+                        o.hn,o.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                        v.age_y,s.name as sex,
+                        v.age_y,s.name as sex,o.vstdate,
+                        concat(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) as regdate_thai,
+                        concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as dchdate_thai,
+                        v.moopart,t.full_name as address,
+                        a.pdx,
+                        CONCAT(
+                            if(a.dx0 is not null,concat(a.dx0,'   '),' '),
+                            if(a.dx1 is not null,concat(a.dx1,'   '),' '),
+                            if(a.dx2 is not null,concat(a.dx2,'   '),' '),
+                            if(a.dx3 is not null,concat(a.dx3,'   '),' '),
+                            if(a.dx4 is not null,concat(a.dx4,'   '),' '),
+                            if(a.dx5 is not null,concat(a.dx5,'   '),' ')
+                        )  as second_diag
+
+                  FROM ovst  o
+
+                  LEFT OUTER JOIN patient p ON p.hn = o.hn
+                  LEFT OUTER JOIN vn_stat v ON v.vn = o.vn
+                  LEFT OUTER JOIN thaiaddress t ON t.addressid=v.aid
+                  LEFT OUTER JOIN sex s ON s.code = p.sex
+                  LEFT OUTER JOIN an_stat a ON  a.an = o.an
+                  $join_opd
+                      
+                  WHERE
+                       a.dchdate BETWEEN $datestart AND $dateend
+                  AND o.an  != ''
+                  AND a.pdx BETWEEN 'J440' AND 'J449'
+                  AND o.vn in (select vn from er_regist)
+                  $criteria
+                  GROUP BY
+                        o.hn
+                  ORDER BY
+                        v.aid, v.moopart, v.hn, v.vstdate ";                                  
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+            return $this->render('report18', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
     
 }
 
