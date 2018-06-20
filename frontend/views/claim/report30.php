@@ -60,6 +60,29 @@ echo GridView::widget([
             'attribute' => 'pdx',
             'header' => 'รหัสวินิจฉัยหลัก'
         ],
+        [
+            'attribute' => 'dx0',
+            'header' => 'รหัสวินิจฉัยรอง1'
+        ],
+         [
+            'attribute' => 'dx1',
+            'header' => 'รหัสวินิจฉัยรอง2'
+        ],
+        [
+            'attribute' => 'dx2',
+            'header' => 'รหัสวินิจฉัยรอง3'
+        ],
+          [
+            'attribute' => 'dx3',
+            'header' => 'รหัสวินิจฉัยรอง4'
+        ],
+          [
+            'attribute' => 'dx4',
+            'header' => 'รหัสวินิจฉัยรอง5'
+        ], [
+            'attribute' => 'dx5',
+            'header' => 'รหัสวินิจฉัยรอง6'
+        ],
          [
             'attribute' => 'pttype',
             'header' => 'รหัสสิทธิ์'

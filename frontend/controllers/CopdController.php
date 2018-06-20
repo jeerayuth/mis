@@ -343,7 +343,6 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
         // save log
         $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
-
         $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง Re-visit ภายใน 48 ชั่วโมง ที่ ER";
 
         $sql = "select  v.hn,v.vstdate,

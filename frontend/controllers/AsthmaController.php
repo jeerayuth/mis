@@ -195,7 +195,7 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
                          // save log
         $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
-        $report_name = "รายงานจำนวนคนไข้คลินิกหอบหืด ได้รับบริการที่ห้องฉุกเฉิน";
+        $report_name = "รายงานจำนวนคนไข้คลินิกหอบหืด ได้รับบริการที่ห้องฉุกเฉิน(นับเป็นคน)";
 
         $sql = "select
 v.hn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
@@ -560,7 +560,7 @@ group by o.hn ";
                         // save log
             $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
                                        
-            $report_name = 'รายงานจำนวนคนไข้ในคลินิกหอบหืด ที่มีรหัสวินิจฉัย j46 (OPD+ER) (รายคน)';
+            $report_name = "รายงานจำนวนคนไข้ในคลินิกหอบหืด ที่มีรหัสวินิจฉัย j46 (OPD+ER) (รายคน)";
  
             $sql = "SELECT
                         v.hn ,concat(p.pname,p.fname,'  ',p.lname) as pt_name,

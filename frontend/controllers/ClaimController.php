@@ -2225,7 +2225,7 @@ class ClaimController extends CommonController {
 
             pt.cid,v.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
             concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
-            v.pdx,v.pttype,p.name as pttype_name,v.income ,
+            v.pdx,v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,v.pttype,p.name as pttype_name,v.income ,
             /*r.debt_date */ 
             if(sum(r.total_amount) is not null,sum(r.total_amount),' ') as total_amount,
              if(r.sss_approval_code is not null,r.sss_approval_code,' ') as approve_code,
