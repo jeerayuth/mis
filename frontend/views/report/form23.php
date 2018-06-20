@@ -64,9 +64,9 @@ $this->title = 'MIS :: ระบบรายงานสารสนเทศ';
 
                         <div class="col-md-3 col-sm-3 col-xs-6 col-md-offset-3">
                             <select id="clinic" class="form-control">
-                                <option value="">กรุณาเลือกประเภทคนไข้ COPD</option>
+                                <option value="">กรุณาเลือกประเภทคนไข้ Asthma</option>
                                 <option value="1">คนไข้ทั้งหมด</option>
-                                <option value="2">เฉพาะคนไข้ในคลินิก COPD</option>
+                                <option value="2">เฉพาะคนไข้ในคลินิก Asthma</option>
                             </select> 
                         </div>
                     </div>

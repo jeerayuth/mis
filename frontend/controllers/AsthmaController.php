@@ -599,6 +599,169 @@ group by o.hn ";
      
         
         
+     public function actionReport12($uclinic, $datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
+
+        $report_name = 'คนไข้ Asthma มีการ Refer ที่ ER';
+
+        if ($uclinic != "") {
+
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $criteria = ' ';
+                $report_name = 'คนไข้ Asthma มีการ Refer ที่ ER (ยอดคนไข้ทั่วไป + คนไข้ใน clinic asthma)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "019" ';
+                $report_name = 'คนไข้ Asthma มีการ Refer ที่ ER (เฉพาะคนไข้ใน clinic asthma)';
+            }
+                  
+            $sql = "
+                    SELECT
+                        v.hn,CONCAT(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        er.vn,
+                        concat(DAY(ro.refer_date),'/',MONTH(ro.refer_date),'/',(YEAR(ro.refer_date)+543)) as refer_date_thai,
+                        ro.refer_type,ro.refer_point,ro.department,
+                        v.pdx,
+                        CONCAT(
+                            if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                            if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                            if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                            if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                            if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                            if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                        )  as second_diag,
+                        ov.ovstost, os.name as ovst_name
+                    FROM
+                        referout ro
+                    RIGHT OUTER JOIN er_regist er ON ro.vn = er.vn
+                    LEFT  OUTER JOIN vn_stat v ON v.vn = ro.vn
+                    LEFT OUTER JOIN ovst ov ON ov.vn = v.vn
+                    LEFT OUTER JOIN ovstost os ON os.ovstost = ov.ovstost
+                    LEFT OUTER JOIN patient pt ON pt.hn =v.hn
+                    $join_opd
+                    WHERE
+                         ro.refer_date BETWEEN $datestart AND $dateend
+                    AND
+
+                         (
+                               v.pdx BETWEEN 'j450'  AND  'j46' OR
+                               v.dx0 BETWEEN 'j450'  AND  'j46' OR
+                               v.dx1 BETWEEN 'j450'  AND  'j46' OR
+                               v.dx2 BETWEEN 'j450'  AND  'j46' OR
+                               v.dx3 BETWEEN 'j450'  AND  'j46' OR
+                               v.dx4 BETWEEN 'j450'  AND  'j46' OR
+                               v.dx5 BETWEEN 'j450'  AND  'j46'
+
+                          )
+                    $criteria
+
+                    GROUP BY
+                          ro.vn
+                    ";
+
+
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+            return $this->render('report12', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+    
         
-        
+    
+    public function actionReport13($uclinic, $datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
+
+        $report_name = 'คนไข้ Asthma มีการ Admit ที่ ER';
+
+        if ($uclinic != "") {
+
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $criteria = ' ';
+                $report_name = 'คนไข้ Asthma มีการ Admit ที่ ER (ยอดคนไข้ทั่วไป + คนไข้ใน clinic asthma)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "019" ';
+                $report_name = 'คนไข้ Asthma มีการ Admit ที่ ER (เฉพาะคนไข้ใน clinic asthma)';
+            }
+                  
+            $sql = "SELECT
+                        o.hn,o.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                        v.age_y,s.name as sex,
+                        v.age_y,s.name as sex,o.vstdate,
+                        concat(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) as regdate_thai,
+                        concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as dchdate_thai,
+                        v.moopart,t.full_name as address,
+                        a.pdx,
+                        CONCAT(
+                            if(a.dx0 is not null,concat(a.dx0,'   '),' '),
+                            if(a.dx1 is not null,concat(a.dx1,'   '),' '),
+                            if(a.dx2 is not null,concat(a.dx2,'   '),' '),
+                            if(a.dx3 is not null,concat(a.dx3,'   '),' '),
+                            if(a.dx4 is not null,concat(a.dx4,'   '),' '),
+                            if(a.dx5 is not null,concat(a.dx5,'   '),' ')
+                        )  as second_diag
+
+                  FROM ovst  o
+
+                  LEFT OUTER JOIN patient p ON p.hn = o.hn
+                  LEFT OUTER JOIN vn_stat v ON v.vn = o.vn
+                  LEFT OUTER JOIN thaiaddress t ON t.addressid=v.aid
+                  LEFT OUTER JOIN sex s ON s.code = p.sex
+                  LEFT OUTER JOIN an_stat a ON  a.an = o.an
+                  $join_opd
+                      
+                  WHERE
+                       a.dchdate BETWEEN $datestart AND $dateend
+                  AND o.an  != ''
+                  AND a.pdx BETWEEN 'J450' AND 'J46'
+                  AND o.vn in (select vn from er_regist)
+                  $criteria
+                  GROUP BY
+                        o.hn
+                  ORDER BY
+                        v.aid, v.moopart, v.hn, v.vstdate ";                                  
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+            return $this->render('report13', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+
+    
+    
+    
+    
 }
