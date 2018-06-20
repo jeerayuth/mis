@@ -1086,9 +1086,137 @@ order by v.aid, v.moopart, v.hn, v.vstdate  ";
     
     
     
+    public function actionReport19($uclinic, $datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report19', $this->getSession());
+
+        $report_name = 'คนไข้ COPD Re-Visit ภายใน 48 ชม. ที่ ER';
+
+        if ($uclinic != "") {
+
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $criteria = ' ';
+                $report_name = 'คนไข้ COPD Re-Visit ภายใน 48 ชม. ที่ ER (ยอดคนไข้ทั่วไป + คนไข้ใน clinic asthma) (นับเป็นคน)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "005" ';
+                $report_name = 'คนไข้ COPD Re-Visit ภายใน 48 ชม. ที่ ER (เฉพาะคนไข้ใน clinic asthma) (นับเป็นคน)';
+            }
+                  
+            $sql = "SELECT
+                        v.hn,CONCAT(p.pname,p.fname,'  ',p.lname) as pt_name,
+                        e.vn,
+                        concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate_thai,
+                        v.pdx,
+                        CONCAT(
+                            if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                            if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                            if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                            if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                            if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                            if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                        )  as second_diag
+                  FROM
+                  vn_stat  v
+                  LEFT OUTER  JOIN  patient p on p.hn = v.hn
+                  LEFT OUTER  JOIN  spclty s on s.spclty = v.spclty
+                  RIGHT OUTER JOIN  er_regist e on e.vn = v.vn
+                  LEFT OUTER  JOIN  thaiaddress t on t.addressid=v.aid
+                  LEFT OUTER  JOIN  sex se on se.code = p.sex
+                  $join_opd
+                  WHERE
+                       v.lastvisit_hour <= 48
+                  AND
+                       v.old_diagnosis = 'Y'
+                  AND
+                       v.vstdate BETWEEN $datestart and $dateend
+                  AND
+                       v.pdx BETWEEN 'J440' AND 'J449'
+                  $criteria
+                  GROUP BY
+                        v.hn "; 
+                                  
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+            return $this->render('report19', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
     
-    
-    
+        
+    public function actionReport20($uclinic, $datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report20', $this->getSession());
+
+        $report_name = 'รายงานจำนวนคนไข้ ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี ';
+
+        if ($uclinic != "") {
+
+            if ($uclinic == 1) {
+                $join_opd = ' ';
+                $criteria = ' ';
+                $report_name = 'รายงานจำนวนคนไข้ (เฉพาะที่ ER) ที่มีรหัสวินิจฉัย j441  และมีอายุมากกว่า 15 ปี  (คนไข้ทั่วไป + คลินิก COPD) (รายคน)';
+            } else if ($uclinic == 2) {
+                $join_opd = ' left outer join clinicmember c on c.hn = v.hn ';
+                $criteria = ' and c.clinic = "005" ';
+                $report_name = 'รายงานจำนวนคนไข้ (เฉพาะที่ ER) ที่มีรหัสวินิจฉัย j441 และมีอายุมากกว่า 15 ปี  (เฉพาะคนไข้ในคลินิก COPD) (รายคน)';
+            }
+
+
+            $sql = "
+                              SELECT
+                                     v.hn ,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                                     v.age_y
+                               FROM vn_stat v
+                               LEFT OUTER JOIN patient p on p.hn = v.hn
+                               RIGHT OUTER JOIN  er_regist e on e.vn = v.vn
+                               $join_opd
+                               WHERE 
+                                  v.vstdate BETWEEN $datestart AND $dateend  
+                                  AND 
+                                    v.pdx = 'j441'
+                                  AND
+                                    v.age_y > 15  
+                                  $criteria
+                               GROUP BY v.hn ";
+
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+
+            return $this->render('report12', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+
+// จบ function
     
     
     
