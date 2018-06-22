@@ -589,7 +589,44 @@ ORDER BY v.vstdate ";
     }
     
     
+     public function actionReport13($datestart, $dateend,$details) {
+                // save log
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
     
-
+            $report_name = "รายงานผู้มารับบริการ(OPD) ที่มี Diag Type = 3 (ไม่นับรวมคนไข้ Admit)";
+            
+             $sql = "SELECT
+                            concat(DAY(od.vstdate),'/',MONTH(od.vstdate),'/',(YEAR(od.vstdate)+543)) as vstdate_thai,
+                            od.vn,od.hn,
+                            CONCAT(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                            od.icd10,od.vstdate,od.diagtype,od.doctor,ov.an
+                      FROM ovstdiag od
+                      LEFT OUTER JOIN ovst ov  ON ov.vn = od.vn
+                      LEFT OUTER JOIN patient pt ON pt.hn = ov.hn
+                      WHERE
+                           od.vstdate BETWEEN $datestart AND $dateend
+                      AND  od.diagtype  = '3'  AND (ov.an is null or ov.an = '')
+                      ORDER BY od.vn ";
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+ 
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+      
+        return $this->render('report13', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
+    
 
 }
