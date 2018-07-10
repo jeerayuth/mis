@@ -13,7 +13,7 @@ class LabController extends CommonController {
         // save log
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
-        $report_name = "รายงานประวัติการสั่งแลปตาม HN คนไข้";
+        $report_name = "รายงานประวัติการสั่งแลป กลุ่ม Blood Bank ตาม HN";
 
         $sql = "
                 SELECT
