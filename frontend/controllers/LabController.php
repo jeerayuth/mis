@@ -35,14 +35,14 @@ class LabController extends CommonController {
                 LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number
                 LEFT OUTER JOIN lab_items li ON li.lab_items_code = lo.lab_items_code
                 LEFT OUTER JOIN sex s ON s.code = pt.sex
-               LEFT OUTER JOIN kskdepartment k ON k.depcode = lh.order_department
+                LEFT OUTER JOIN kskdepartment k ON k.depcode = lh.order_department
 
 
                 WHERE         
-                     lo.lab_items_code  in ('14','15','16','17','18','20','20','22','23','25',
+                     lo.lab_items_code  in ('14','15','16','17','18','20','22','23','25',
                                             '3104','3121','3122','3123','3124','3125','3126',
                                             '3129','3288','3290','3293','3296','3299','3397',
-                                            '3398','3401')
+                                            '3399','3401')
                  AND lh.hn = $hn
                  AND lo.confirm = 'Y'
 
