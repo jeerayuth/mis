@@ -4,10 +4,19 @@ use kartik\grid\GridView;
 use yii\helpers\Html;
 use miloschuman\highcharts\Highcharts;
 
+$session = Yii::$app->session;
+
 /* @var $this yii\web\View */
 $this->title = 'ระบบศูนย์ข้อมูลและสารสนเทศ';
 ?>
 
+<?php 
+      if ($session["loginname"] != null) {
+?>
+       <button type="button" class="btn  btn-success btn-lg" style="float:right;">ฟอร์มขอรายงานใหม่</button>
+<?php
+       } 
+?>
 
 <div style="display:none">
     <?php
@@ -189,6 +198,7 @@ $js_data7 = json_encode($data7);
 $js_data8 = json_encode($data8);
 
 
+            
 // Chart1
 $this->registerJs(" 
     $(function () {
