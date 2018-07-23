@@ -1155,7 +1155,59 @@ group by o.icode ";
     }
     
     
-    
+     public function actionReport22($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report22', $this->getSession());
+
+        $report_name = "รายงานมูลค่าการใช้ยา ARV";
+        $sql = "SELECT
+                        px.icode as icode,d.name as drug_name,d.units as drug_unit,
+                        d.unitprice as unit_price,
+                        d.unitcost as unit_cost,
+                        sum(px.qty) as total_use,
+                        sum(
+                            IF(px.unitprice <> 0,px.unitprice*px.qty,d.unitprice*px.qty)
+                            ) as sum_price ,
+
+                        sum(
+                            IF(px.cost <> 0,px.cost*px.qty,d.unitcost*px.qty)
+                            ) as sum_cost ,
+                        count(px.icode) as count_icode
+
+                FROM
+                        opitemrece px
+
+                LEFT OUTER JOIN drugitems d ON px.icode=d.icode
+
+                WHERE px.icode IN ('1570019','1590008','1430501','1570020','1580014',
+                '1600148','1460563','1520002','1600159','1470510',
+                '1580013','1460526','1520001','1600180','1520901','1520003','1470004')
+
+                AND px.vstdate BETWEEN $datestart AND $dateend
+
+                GROUP BY  px.icode
+                ORDER BY  sum_cost DESC ";
+
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+       
+        return $this->render('report22', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
     
     
     
