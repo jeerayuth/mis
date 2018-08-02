@@ -312,11 +312,21 @@ group by o.icode ";
         ]);
     }
 
-    public function actionReport7($datestart, $dateend, $details) {
+    public function actionReport7($datestart, $dateend, $timestart, $timeend,$details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
         $report_name = "รายงานจ่ายยานอกเวลา 16.01น. - 07.59น.(รวมวันหยุดราชการ)";
+        
+        $default_time = " and (o.rxtime between '16:00:01' and '23:59:59' or o.rxtime between '00:00:01' and '07:59:59') ";
+        
+        if($timestart !='' and $timeend != '') {
+            $default_time = " and (o.rxtime between '$timestart' and '$timeend' ) "; 
+        } else {
+             $default_time = " and (o.rxtime between '16:00:01' and '23:59:59' or o.rxtime between '00:00:01' and '07:59:59') ";       
+        }
+    
+        
         $sql = "select
 
             o.vn,o.hn,
@@ -337,8 +347,9 @@ group by o.icode ";
             left outer join drugusage u on u.drugusage = o.drugusage
 
             where o.vstdate between $datestart and $dateend
-            and (o.rxtime between '16:00:01' and '23:59:59' or o.rxtime between '00:00:01' and '07:59:59')
-
+            
+            $default_time
+                
             and o.vn is   not null
             
           /*  and o.vstdate not in
@@ -1181,7 +1192,7 @@ group by o.icode ";
 
                 WHERE px.icode IN ('1570019','1590008','1430501','1570020','1580014',
                 '1600148','1460563','1520002','1600159','1470510',
-                '1580013','1460526','1520001','1600180','1520901','1520003','1470004')
+                '1580013','1460526','1520001','1600180','1520901','1520003','1470004','1460176','1510035')
 
                 AND px.vstdate BETWEEN $datestart AND $dateend
 
