@@ -378,11 +378,20 @@ group by o.icode ";
         ]);
     }
 
-    public function actionReport8($datestart, $dateend, $details) {
+    public function actionReport8($datestart, $dateend, $timestart, $timeend,$details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
         $report_name = "รายงานจำนวน visit ที่จ่ายยานอกเวลา 16.01น. - 07.59น.(รวมวันหยุดราชการ)";
+        
+          $default_time = " and (o.rxtime between '16:00:01' and '23:59:59' or o.rxtime between '00:00:01' and '07:59:59') ";
+        
+        if($timestart !='' and $timeend != '') {
+            $default_time = " and (o.rxtime between '$timestart' and '$timeend' ) "; 
+        } else {
+             $default_time = " and (o.rxtime between '16:00:01' and '23:59:59' or o.rxtime between '00:00:01' and '07:59:59') ";       
+        }
+        
         $sql = "SELECT
                     'จำนวนครั้ง visit' as name,
                     count(distinct(o.vn)) as count_visit
@@ -397,8 +406,8 @@ group by o.icode ";
                 left outer join drugusage u on u.drugusage = o.drugusage
 
                 WHERE o.vstdate between $datestart and $dateend
-                and (o.rxtime between '16:00:01' and '23:59:59' 
-                or o.rxtime between '00:00:01' and '07:59:59')
+                    
+                $default_time
 
                 and o.vn is   not null
 

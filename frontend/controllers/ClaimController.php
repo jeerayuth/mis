@@ -533,7 +533,9 @@ class ClaimController extends CommonController {
                     left outer join sex s on s.code=v.sex
 
                     WHERE  
-                        v.pttype='34' and v.vstdate between $datestart and $dateend
+                        v.pttype in ('34','31') and v.vstdate between $datestart and $dateend
+                    AND 
+                        v.vn IN (select vn from dtmain)
                     GROUP BY v.vn 
                     ORDER BY v.vstdate,v.hn ";
 
