@@ -381,5 +381,103 @@ class IcController extends CommonController {
 
     
     
+    public function actionReport5($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
+
+        $report_name = "รายงานประวัติการมารับบริการของเจ้าหน้าที่โรงพยาบาล";
+
+        $sql = "SELECT
+                    concat(p.pname,p.fname) as fname, p.lname as lname, p.hn,
+                    timestampdiff(year,p.birthday,v.vstdate)  as age_y , v.vstdate,
+                    v.pttype,pp.name as pttype_name,
+                    v.pdx,
+                    if(v.dx0 is not null, v.dx0, '') as dx0,
+                    if(v.dx1 is not null, v.dx1, '') as dx1,
+                    if(v.dx2 is not null, v.dx2, '') as dx2,
+                    if(v.dx3 is not null, v.dx3, '') as dx3,
+                    if(v.dx4 is not null, v.dx4, '') as dx4,
+                    if(v.dx5 is not null, v.dx5, '') as dx5
+                    
+                    
+                FROM vn_stat v
+                left outer join patient p on p.hn = v.hn
+                left outer join pttype pp on pp.pttype = v.pttype
+                left outer join opdscreen o on o.vn = v.vn
+                left outer join lab_head lh on lh.vn = v.vn
+                left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                left outer join opitemrece op on op.vn = v.vn
+
+                WHERE 
+                     v.vstdate between $datestart and $dateend  
+                         
+                and p.hn in ('4501661','5500252','5701788','5302679','5503924',
+                             '5201958','5301599','4801532','5401806','5500068',
+                             '5902133','5902323','5902025','5902019','4702928',
+                             '4410623','4700504','4400765','4402710','4405177',
+                             '4600046','4706079','4807976','4400350','4405347',
+                             '4400525','4400748','5003731','4407741','4800313',
+                             '4900574','4405769','4705745','4702092','4405283',
+                             
+                             '4600119','4807494','4901678','4504082','4903681',
+                             '4900625','4403526','4500492','4800283','4401358',
+                             '4708050','4509002','4407985','4600941','4404900',
+                             '4401076','4400610','4400488','4408750','4400923',
+                             '4404488','4401371',
+                             
+                             '4400915','4705318','4700946','4401948','4400832',
+                             '4703808','4400513','5901945','4505377','4601594',
+                             '4900672','5700203','5800611','4401055','4900448',
+                             '4401685','4401351','4400422','4410886','4404574',
+                             '4400625','4404291','4707053','4400245',
+                             
+                             '5300143','4605430','4906012','4412878','4805845',
+                             '4504085','4405225','4411606','4405925','5501683',
+                             '5602487','5400312','5503444 ','5404482','5302377',
+                             '5202159','4505145','4902140','5805426','4905854',
+                             '5902406','4404004',
+                             
+                             '4400866','4401363','4411337','4501714','5600142',
+                             '5601740','5701253','5701307','5701494','5703871',
+                             '4500732','5803220','5004287','5801707','4400023',
+                             '5404784',
+                             
+                             '4707680','4602424','5002128','4400537','4504929',
+                             '4606911','4407608','4806443','4402827','4704584',
+                             '4401258','4401770','5103473','4800330','4406578',
+                             '4407643','4702497','4600280','4801684','4400448',
+                             '4404518','4700068',
+                             
+                             '5102697','5205141','5301662','4405925','4504760',
+                             '4409134','5102704','4905065','4603853','5202473',
+                             '4605903','5903779','4403536','6001579'
+                             
+
+                )
+                
+                GROUP BY v.vn
+                ORDER BY v.hn,v.vstdate ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report5', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+ 
 
 }
