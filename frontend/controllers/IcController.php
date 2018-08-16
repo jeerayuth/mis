@@ -389,7 +389,8 @@ class IcController extends CommonController {
 
         $sql = "SELECT
                     concat(p.pname,p.fname) as fname, p.lname as lname, p.hn,
-                    timestampdiff(year,p.birthday,v.vstdate)  as age_y , v.vstdate,
+                    timestampdiff(year,p.birthday,v.vstdate)  as age_y ,
+                    concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
                     v.pttype,pp.name as pttype_name,
                     v.pdx,
                     if(v.dx0 is not null, v.dx0, '') as dx0,
@@ -453,6 +454,119 @@ class IcController extends CommonController {
                              '4605903','5903779','4403536','6001579'
                              
 
+                )
+                AND 
+                (
+                    ( 
+                      v.pdx between 'A150' and 'A199' or
+                      v.dx0 between 'A150' and 'A199' or
+                      v.dx1 between 'A150' and 'A199' or
+                      v.dx2 between 'A150' and 'A199' or
+                      v.dx3 between 'A150' and 'A199' or
+                      v.dx4 between 'A150' and 'A199' or
+                      v.dx5 between 'A150' and 'A199'
+                     )
+                     OR
+                     ( 
+                      v.pdx between 'B010' and 'B019' or
+                      v.dx0 between 'B010' and 'B019' or
+                      v.dx1 between 'B010' and 'B019' or
+                      v.dx2 between 'B010' and 'B019' or
+                      v.dx3 between 'B010' and 'B019' or
+                      v.dx4 between 'B010' and 'B019' or
+                      v.dx5 between 'B010' and 'B019'
+                     )
+                      OR
+                     ( 
+                      v.pdx between 'B050' and 'B059' or
+                      v.dx0 between 'B050' and 'B059' or
+                      v.dx1 between 'B050' and 'B059' or
+                      v.dx2 between 'B050' and 'B059' or
+                      v.dx3 between 'B050' and 'B059' or
+                      v.dx4 between 'B050' and 'B059' or
+                      v.dx5 between 'B050' and 'B059'
+                     )
+                     OR
+                     ( 
+                      v.pdx between 'J00' and 'J069' or
+                      v.dx0 between 'J00' and 'J069' or
+                      v.dx1 between 'J00' and 'J069' or
+                      v.dx2 between 'J00' and 'J069' or
+                      v.dx3 between 'J00' and 'J069' or
+                      v.dx4 between 'J00' and 'J069' or
+                      v.dx5 between 'J00' and 'J069'
+                     )
+                       OR
+                     ( 
+                      v.pdx between 'H100' and 'H109' or
+                      v.dx0 between 'H100' and 'H109' or
+                      v.dx1 between 'H100' and 'H109' or
+                      v.dx2 between 'H100' and 'H109' or
+                      v.dx3 between 'H100' and 'H109' or
+                      v.dx4 between 'H100' and 'H109' or
+                      v.dx5 between 'H100' and 'H109'
+                     )
+                      OR
+                     ( 
+                      v.pdx between 'B180' and 'B1819' or
+                      v.dx0 between 'B180' and 'B1819' or
+                      v.dx1 between 'B180' and 'B1819' or
+                      v.dx2 between 'B180' and 'B1819' or
+                      v.dx3 between 'B180' and 'B1819' or
+                      v.dx4 between 'B180' and 'B1819' or
+                      v.dx5 between 'B180' and 'B1819'
+                     )
+                      OR
+                     ( 
+                      v.pdx in ('B171','B182') or
+                      v.dx0 in ('B171','B182') or
+                      v.dx1 in ('B171','B182') or
+                      v.dx2 in ('B171','B182') or
+                      v.dx3 in ('B171','B182') or
+                      v.dx4 in ('B171','B182') or
+                      v.dx5 in ('B171','B182')
+                     )  
+                     OR
+                     ( 
+                      v.pdx between 'A000' and 'A099' or
+                      v.dx0 between 'A000' and 'A099' or
+                      v.dx1 between 'A000' and 'A099' or
+                      v.dx2 between 'A000' and 'A099' or
+                      v.dx3 between 'A000' and 'A099' or
+                      v.dx4 between 'A000' and 'A099' or
+                      v.dx5 between 'A000' and 'A099'
+                     )
+                       OR
+                     ( 
+                      v.pdx between 'B060' and 'B069' or
+                      v.dx0 between 'B060' and 'B069' or
+                      v.dx1 between 'B060' and 'B069' or
+                      v.dx2 between 'B060' and 'B069' or
+                      v.dx3 between 'B060' and 'B069' or
+                      v.dx4 between 'B060' and 'B069' or
+                      v.dx5 between 'B060' and 'B069'
+                     )
+                      OR
+                     ( 
+                      v.pdx between 'B000' and 'B009' or
+                      v.dx0 between 'B000' and 'B009' or
+                      v.dx1 between 'B000' and 'B009' or
+                      v.dx2 between 'B000' and 'B009' or
+                      v.dx3 between 'B000' and 'B009' or
+                      v.dx4 between 'B000' and 'B009' or
+                      v.dx5 between 'B000' and 'B009'
+                     ) 
+                     OR
+                     ( 
+                      v.pdx between 'B020' and 'B029' or
+                      v.dx0 between 'B020' and 'B029' or
+                      v.dx1 between 'B020' and 'B029' or
+                      v.dx2 between 'B020' and 'B029' or
+                      v.dx3 between 'B020' and 'B029' or
+                      v.dx4 between 'B020' and 'B029' or
+                      v.dx5 between 'B020' and 'B029'
+                     )
+                     
                 )
                 
                 GROUP BY v.vn
