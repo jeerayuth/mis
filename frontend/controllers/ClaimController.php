@@ -2282,6 +2282,64 @@ class ClaimController extends CommonController {
     }
     
     
+    
+    
+      public function actionReport31($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report31', $this->getSession());
+
+        $report_name = "รายงานคนไข้เบาหวานหรือความดัน ที่มี diag รอง N183";
+        $sql = "SELECT
+                    a.an,a.hn,
+                    CONCAT(p.pname,p.fname,'  ',p.lname) as pt_name,
+                     a.pdx ,
+                    CONCAT(
+                              if(a.dx0 is not null,concat(a.dx0,'   '),' '),
+                              if(a.dx1 is not null,concat(a.dx1,'   '),' '),
+                              if(a.dx2 is not null,concat(a.dx2,'   '),' '),
+                              if(a.dx3 is not null,concat(a.dx3,'   '),' '),
+                              if(a.dx4 is not null,concat(a.dx4,'   '),' '),
+                              if(a.dx5 is not null,concat(a.dx5,'   '),' ')
+                          )  as second_diag,
+
+                     CONCAT(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) as regdate,
+                     CONCAT(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as dchdate
+
+              FROM an_stat   a
+              LEFT OUTER JOIN patient p ON p.hn = a.hn
+              WHERE
+                   a.dchdate BETWEEN $datestart AND $dateend
+              AND
+                   (
+                      a.pdx = 'i10' or a.pdx between 'e110' and 'e119'
+                   )
+              AND
+                    (
+                            a.dx0 = 'n183' or a.dx1 = 'n183' or a.dx2 = 'n183' or a.dx3='n183' or a.dx4 = 'n183' or a.dx5 = 'n183'
+                    ) ";
+
+
+                              
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report31', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
      
       /*  
      
