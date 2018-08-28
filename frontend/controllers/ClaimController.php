@@ -2288,9 +2288,49 @@ class ClaimController extends CommonController {
         // save log
         $this->SaveLog($this->dep_controller, 'report31', $this->getSession());
 
-        $report_name = "รายงานคนไข้เบาหวานหรือความดัน ที่มี diag รอง N183";
+        $report_name = "รายงานคนไข้เบาหวานหรือความดัน(IPD,OPD) ที่มี diag รอง N183";
         $sql = "SELECT
-                    a.an,a.hn,
+                    'ผู้ป่วยนอก' as dep,v.vn as visit,v.hn,
+                    CONCAT(p.pname,p.fname,'  ',p.lname) as pt_name,
+                     v.pdx ,
+                    CONCAT(
+                              if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                              if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                              if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                              if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                              if(v.dx4 is not null,concat(v.dx4,'   '),' ')
+
+                          )  as second_diag,
+                    v.pttype,
+                    pp.name as pptypename,
+
+                     CONCAT(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as visitdate
+
+              FROM vn_stat  v
+              LEFT OUTER JOIN patient p ON p.hn = v.hn
+              LEFT OUTER JOIN pttype pp ON pp.pttype = v.pttype
+              WHERE
+                   v.vstdate BETWEEN $datestart  AND $dateend
+              AND
+                   (
+                      v.pdx = 'i10' or v.pdx between 'e109' and 'e119'
+                   )
+              AND
+                    (
+                            v.dx0 = 'n183' or
+                            v.dx1 = 'n183' or
+                            v.dx2 = 'n183' or
+                            v.dx3 = 'n183' or
+                            v.dx4 = 'n183' or
+                            v.dx5 = 'n183'
+                    )
+
+
+UNION ALL
+
+
+SELECT
+                    'ผู้ป่วยใน' as dep ,a.an as visit,a.hn,
                     CONCAT(p.pname,p.fname,'  ',p.lname) as pt_name,
                      a.pdx ,
                     CONCAT(
@@ -2301,21 +2341,28 @@ class ClaimController extends CommonController {
                               if(a.dx4 is not null,concat(a.dx4,'   '),' '),
                               if(a.dx5 is not null,concat(a.dx5,'   '),' ')
                           )  as second_diag,
-
-                     CONCAT(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) as regdate,
-                     CONCAT(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as dchdate
+                    a.pttype,
+                    pp.name as pptypename,
+                     CONCAT(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as visitdate
 
               FROM an_stat   a
               LEFT OUTER JOIN patient p ON p.hn = a.hn
+              LEFT OUTER JOIN pttype pp ON pp.pttype = a.pttype
+              
               WHERE
-                   a.dchdate BETWEEN $datestart AND $dateend
+                   a.dchdate BETWEEN $datestart  AND $dateend
               AND
                    (
-                      a.pdx = 'i10' or a.pdx between 'e110' and 'e119'
+                      a.pdx = 'i10' or a.pdx between 'e109' and 'e119'
                    )
               AND
                     (
-                            a.dx0 = 'n183' or a.dx1 = 'n183' or a.dx2 = 'n183' or a.dx3='n183' or a.dx4 = 'n183' or a.dx5 = 'n183'
+                            a.dx0 = 'n183' or 
+                            a.dx1 = 'n183' or 
+                            a.dx2 = 'n183' or 
+                            a.dx3 = 'n183' or 
+                            a.dx4 = 'n183' or 
+                            a.dx5 = 'n183'
                     ) ";
 
 

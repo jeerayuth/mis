@@ -40,9 +40,17 @@ echo GridView::widget([
     ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
+        [
+            'attribute' => 'dep',
+            'header' => 'ประเภท'
+        ],
          [
-            'attribute' => 'an',
-            'header' => 'AN'
+            'attribute' => 'visit',
+            'header' => 'VN/AN'
+        ],
+        [
+            'attribute' => 'hn',
+            'header' => 'HN'
         ],
   
          [
@@ -57,13 +65,17 @@ echo GridView::widget([
             'attribute' => 'second_diag',
             'header' => 'รหัสวินิจฉัยรอง'
         ],
+         [
+            'attribute' => 'pttype',
+            'header' => 'รหัสสิทธิ์การรักษา'
+        ],
         [
-            'attribute' => 'regdate',
-            'header' => 'วันที่ Admit' 
-        ], 
+            'attribute' => 'pptypename',
+            'header' => 'ชื่อสิทธิ์การรักษา'
+        ],
         [
-            'attribute' => 'dchdate',
-            'header' => 'วันที่จำหน่าย' 
+            'attribute' => 'visitdate',
+            'header' => 'OPD=วันที่รับบริการ, IPD=วันที่จำหน่าย' 
         ],
       
         
