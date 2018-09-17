@@ -405,12 +405,12 @@ GROUP BY th.addressid
 
                   AND (
                             (v.pdx  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx0  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx1  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx2  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx3  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx4  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx5  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')
+                            (v.dx0  BETWEEN 'e100' AND 'e109' OR v.dx0 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx1  BETWEEN 'e100' AND 'e109' OR v.dx1 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx2  BETWEEN 'e100' AND 'e109' OR v.dx2 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx3  BETWEEN 'e100' AND 'e109' OR v.dx3 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx4  BETWEEN 'e100' AND 'e109' OR v.dx4 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx5  BETWEEN 'e100' AND 'e109' OR v.dx5 BETWEEN 'e110' AND 'e119')
 
 
                        )
@@ -510,7 +510,7 @@ GROUP BY th.addressid
                 'pagination' => FALSE,
             ]);
 
-            return $this->render('report4', [
+            return $this->render('report6', [
                         'dataProvider' => $dataProvider,
                         'report_name' => $report_name,
             ]);
@@ -555,12 +555,12 @@ GROUP BY th.addressid
 
                   AND (
                             (v.pdx  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx0  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx1  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx2  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx3  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx4  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')   OR
-                            (v.dx5  BETWEEN 'e100' AND 'e109' OR v.pdx BETWEEN 'e110' AND 'e119')
+                            (v.dx0  BETWEEN 'e100' AND 'e109' OR v.dx0 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx1  BETWEEN 'e100' AND 'e109' OR v.dx1 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx2  BETWEEN 'e100' AND 'e109' OR v.dx2 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx3  BETWEEN 'e100' AND 'e109' OR v.dx3 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx4  BETWEEN 'e100' AND 'e109' OR v.dx4 BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx5  BETWEEN 'e100' AND 'e109' OR v.dx5 BETWEEN 'e110' AND 'e119')
 
 
                        )
@@ -590,12 +590,93 @@ GROUP BY th.addressid
                 'pagination' => FALSE,
             ]);
 
-            return $this->render('report5', [
+            return $this->render('report7', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+            ]);
+                                         
+        
+    }
+    
+    
+    
+    public function actionReport8($datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
+
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM และไม่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง 100 ถึง 125";
+
+            $sql = "SELECT
+                        v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
+                        concat(pt.addrpart,' ?.',pt.moopart,' ',th.full_name) address,
+                        concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+                        v.pdx,
+                        concat(
+                                if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                                if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                                if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                                if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                                if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                                if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                            )  as second_diag,                          
+                        v.age_y,
+                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+
+                  FROM vn_stat v
+                  LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
+                  LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number
+                  LEFT OUTER JOIN lab_items li ON li.lab_items_code = lo.lab_items_code
+                  LEFT OUTER JOIN patient pt ON pt.hn = v.hn
+                  LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                  WHERE
+                       v.vstdate BETWEEN  $datestart and $dateend
+
+                  AND  v.hn in (select hn from clinicmember where clinic='020')
+                  AND  v.hn not in (select hn from clinicmember where clinic='001')
+
+                  AND (
+                            (v.pdx  not BETWEEN 'e100' AND 'e109' OR v.pdx not BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx0  not BETWEEN 'e100' AND 'e109' OR v.dx0 not BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx1  not BETWEEN 'e100' AND 'e109' OR v.dx1 not BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx2  not BETWEEN 'e100' AND 'e109' OR v.dx2 not BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx3  not BETWEEN 'e100' AND 'e109' OR v.dx3 not BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx4  not BETWEEN 'e100' AND 'e109' OR v.dx4 not BETWEEN 'e110' AND 'e119')   OR
+                            (v.dx5  not BETWEEN 'e100' AND 'e109' OR v.dx5 not BETWEEN 'e110' AND 'e119')
+
+
+                       )
+
+                  AND lo.confirm = 'Y'
+                  AND
+                        (
+                            (lo.lab_items_code = '3001' and lo.lab_order_result between  '100' and '125')
+                        )
+                  ORDER BY 
+                            v.aid,v.hn,v.vstdate,lo.lab_items_code
+         
+
+                   ";
+                        
+            
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => FALSE,
+            ]);
+
+            return $this->render('report8', [
                         'dataProvider' => $dataProvider,
                         'report_name' => $report_name,
             ]);
         
     }
+    
     
 
 } // end class
