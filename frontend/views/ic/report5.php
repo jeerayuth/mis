@@ -85,6 +85,11 @@ echo GridView::widget([
             'attribute' => 'dx5',
             'header' => 'DX5'
         ],
+        
+          [
+            'attribute' => 'count_antibiotic',
+            'header' => 'จำนวนครั้งสั่งใช้ยา Antibiotic'
+        ]
      
       
    

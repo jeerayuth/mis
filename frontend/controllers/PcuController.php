@@ -1849,6 +1849,44 @@ class PcuController extends CommonController {
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
+                 
+    }
+    
+    
+     public function actionReport36($details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report36', $this->getSession());
+
+        $report_name = "รายงานตรวจสอบประชากรที่ไม่มีบ้านเลขที่";
+        $sql = " SELECT
+                        p.village_id,v.village_moo,p.person_id,p.house_id,p.cid,CONCAT(p.pname,p.fname,p.lname) as pt_name,
+                        p.house_regist_type_id,hp.house_regist_type_name
+
+                  FROM person p
+                  LEFT OUTER JOIN village v ON v.village_id = p.village_id
+                  LEFT OUTER JOIN house_regist_type hp ON hp.house_regist_type_id = p.house_regist_type_id
+
+                  WHERE  (p.house_id = '' OR  p.house_id is null) 
+                  ORDER BY v.village_moo   ";            
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report36', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
          
          
     }

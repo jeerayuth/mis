@@ -25,6 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 1, 'dep_name' => 'เวชระเบียน']) ?>">เวชระเบียน <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
         <tr>
+            <th scope="row">7</th>
+            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 7, 'dep_name' => 'อุบัติเหตุฉุกเฉิน']) ?>">อุบัติเหตุฉุกเฉิน <span class="glyphicon glyphicon-zoom-in"></span></a></td>
+        </tr>
+        <tr>
             <th scope="row">3</th>
             <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 3, 'dep_name' => 'คลินิกเบาหวาน']) ?>">คลินิกเบาหวาน <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
@@ -44,13 +48,24 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 6, 'dep_name' => 'คลินิกหอบหืด']) ?>">คลินิกหอบหืด <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
         
-
-        
+          <tr>
+            <th scope="row">14</th>
+            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 16, 'dep_name' => 'คลินิกฝากครรภ์']) ?>">คลินิกฝากครรภ์ <span class="glyphicon glyphicon-zoom-in"></span></a></td>
+        </tr>
         
         <tr>
-            <th scope="row">7</th>
-            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 7, 'dep_name' => 'อุบัติเหตุฉุกเฉิน']) ?>">อุบัติเหตุฉุกเฉิน <span class="glyphicon glyphicon-zoom-in"></span></a></td>
+            <th scope="row">23</th>
+            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 26, 'dep_name' => 'คลินิครักษ์สุขภาพ(DPAC)']) ?>">คลินิครักษ์สุขภาพ (DPAC) <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
+        
+         </tr>
+		<tr>
+            <th scope="row">16</th>
+            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 18, 'dep_name' => 'คลินิก ARV']) ?>">คลินิก ARV <span class="glyphicon glyphicon-zoom-in"></span></a></td>
+        </tr>
+        
+        
+   
         
           <tr>
             <th scope="row">8</th>
@@ -81,19 +96,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <th scope="row">13</th>
             <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 15, 'dep_name' => 'คุ้มครองและป้องกันวัณโรค']) ?>">คุ้มครองและป้องกันวัณโรค <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
-         <tr>
-            <th scope="row">14</th>
-            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 16, 'dep_name' => 'คลินิกฝากครรภ์']) ?>">คลินิกฝากครรภ์ <span class="glyphicon glyphicon-zoom-in"></span></a></td>
-        </tr>
+       
+        
         
         <tr>
             <th scope="row">15</th>
             <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 17, 'dep_name' => 'การเงิน']) ?>">การเงิน <span class="glyphicon glyphicon-zoom-in"></span></a></td>
-        </tr>
-		<tr>
-            <th scope="row">16</th>
-            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 18, 'dep_name' => 'คลินิก ARV']) ?>">คลินิก ARV <span class="glyphicon glyphicon-zoom-in"></span></a></td>
-        </tr>
+       
         
         <tr>
             <th scope="row">17</th>
@@ -131,6 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 24, 'dep_name' => 'ตรวจสอบข้อมูล']) ?>">ตรวจสอบข้อมูล(ทดสอบ) <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
         
+       
     </tbody>
 
 </table>

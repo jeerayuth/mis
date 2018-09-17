@@ -211,6 +211,7 @@ echo GridView::widget([
             'attribute' => 'diag_second',
             'header' => 'รหัสวินิจฉัยรอง'
         ],
+         
     ]
 ])
 ?>

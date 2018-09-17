@@ -398,7 +398,20 @@ class IcController extends CommonController {
                     if(v.dx2 is not null, v.dx2, '') as dx2,
                     if(v.dx3 is not null, v.dx3, '') as dx3,
                     if(v.dx4 is not null, v.dx4, '') as dx4,
-                    if(v.dx5 is not null, v.dx5, '') as dx5
+                    if(v.dx5 is not null, v.dx5, '') as dx5,
+
+                    (
+                       select count(opp.icode) from opitemrece opp
+                       where opp.vn = v.vn and opp.icode in
+
+                       ('1000028','1000030','1460566','1510007','1000034',
+                        '1460057','1460071','1430502','1460570','1000060','1520919','1520908',
+                        '1510026','1000082','1510027','1000084','1000085','1480609','1000140',
+                        '1520034','1000188','1460235','1440207','1000221','1000231','1000235',
+                        '1000233','1510065','1000267','1540028','1550007','1540017','1520919',
+                        '1560011','1580019','1590011','1550008')
+
+                    ) as count_antibiotic
                     
                     
                 FROM vn_stat v
@@ -568,6 +581,9 @@ class IcController extends CommonController {
                      )
                      
                 )
+                
+
+    
                 
                 GROUP BY v.vn
                 ORDER BY v.hn,v.vstdate ";
