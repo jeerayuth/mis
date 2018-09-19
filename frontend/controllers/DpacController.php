@@ -906,10 +906,7 @@ GROUP BY th.addressid
         
     }
     
-    
-    
-    
-    
+          
     
     public function actionReport12($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
@@ -990,7 +987,84 @@ GROUP BY th.addressid
     }
     
     
+     public function actionReport13($datestart, $dateend, $bmi,$details) {
+        $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
+        
+        $report_name = "";
+        $bmi_result = "";
+        
+          if ($bmi != "") {
+              if($bmi == 1 ){
+                    $report_name  = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ  ที่มีค่า BMI >= 23";
+                     $bmi_result  = " AND  opd.bmi  >= '23' ";    
+              } else if ($bmi == 2 ){
+                     $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ  ที่มีค่า BMI ระหว่าง 23 ถึง 24.99";
+                     $bmi_result  = " AND  opd.bmi  between '23' and '24.99' ";  
+              } else if ($bmi == 3 ){
+                     $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ  ที่มีค่า BMI ระหว่าง 25 ถึง 29.99";
+                     $bmi_result  = " AND  opd.bmi  between '25' and '29.99' ";  
+              } else if ($bmi == 4 ){
+                    $report_name  = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ  ที่มีค่า BMI มากกว่าเท่ากับ 30";
+                    $bmi_result   = "  AND  opd.bmi >= 30 ";  
+              }
+              
+          }
+          
+      
+            $sql = "SELECT
+                            v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
+                            concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+                            concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+                            v.pdx,
+                            concat(
+                                if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                                if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                                if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                                if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                                if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                                if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                            )  as second_diag,
+                            
+                            v.age_y ,opd.bps,opd.bpd, opd.bmi
+
+                      FROM vn_stat v
+
+                      LEFT OUTER JOIN patient pt ON pt.hn = v.hn
+                      LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                      LEFT OUTER JOIN opdscreen  opd ON opd.vn = v.vn
+                      WHERE
+                           v.vstdate BETWEEN $datestart and $dateend
+                                
+                      AND  v.hn in (select hn from clinicmember where clinic='020')
+
+                      $bmi_result
+
+                      ORDER BY v.aid,v.hn,v.vstdate
+                   ";
+                               
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => FALSE,
+            ]);
+
+            return $this->render('report13', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+            ]);
     
+         
+            
+            
+    }
+     
     
     
     
