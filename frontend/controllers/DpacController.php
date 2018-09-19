@@ -24,7 +24,6 @@ LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt
 WHERE 
     cm.hn in(select hn from clinicmember where clinic='020' and clinic_member_status_id = '1')
 
-/* AND pd.code in('3','03') */
 AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860502'   and pt.moopart in (1,2,3,4,5,6,7,8,9)
 
 GROUP BY th.addressid 
@@ -43,7 +42,6 @@ LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt
 WHERE 
       cm.hn in(select hn from clinicmember where clinic='020' and clinic_member_status_id = '1')
 
-/* AND pd.code in('3','03') */
 AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (2,3,4,5,6,9)
 
 GROUP BY th.addressid
@@ -63,7 +61,6 @@ LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt
 WHERE 
      cm.hn in(select hn from clinicmember where clinic='020' and clinic_member_status_id = '1')
 
-/* AND pd.code in('3','03') */
 AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'   and pt.moopart in (1,2,3,4,6)
 
 GROUP BY th.addressid
@@ -82,7 +79,6 @@ LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt
 WHERE 
       cm.hn in(select hn from clinicmember where clinic='020' and clinic_member_status_id = '1')
 
-/* AND pd.code in('3','03') */
 AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (8,11,13,15,17,18,20)
 
 GROUP BY th.addressid
@@ -100,8 +96,6 @@ LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
 LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
 WHERE 
      cm.hn in(select hn from clinicmember where clinic='020' and clinic_member_status_id = '1')
-
-/* AND pd.code in ('3','03') */
 
 AND (concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501' and pt.moopart in (16,19)
 OR concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504' and pt.moopart in (5,7,8))
@@ -122,7 +116,6 @@ LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt
 WHERE 
       cm.hn in(select hn from clinicmember where clinic='020' and clinic_member_status_id = '1')
 
-/* AND pd.code in('3','03') */
 AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (1,7,8,10)
 
 GROUP BY th.addressid
@@ -142,7 +135,6 @@ LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt
 WHERE 
       cm.hn in(select hn from clinicmember where clinic='020' and clinic_member_status_id = '1')
 
-/* AND pd.code in('3','03') */
 AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14)
 
 GROUP BY th.addressid
@@ -216,8 +208,6 @@ GROUP BY th.addressid
                 WHERE 
                       cm.hn in(select hn from clinicmember where clinic='020' and clinic_member_status_id = '1')
 
-                /* AND pd.code in('3','03') */
-
                 $hosp_area_condition
 
                 GROUP BY pt.hn     
@@ -270,9 +260,6 @@ GROUP BY th.addressid
                     LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
                     WHERE 
                           cm.hn in(select hn from clinicmember where clinic='020' and clinic_member_status_id = '1' )
-
-                   /* AND pd.code in('3','03') */
-
 
                     GROUP BY pt.hn     
                     ORDER BY th.addressid,pt.moopart
@@ -334,14 +321,12 @@ GROUP BY th.addressid
                                 
                       AND  v.hn in (select hn from clinicmember where clinic='020')
                       AND  v.hn in (select hn from clinicmember where clinic='001')
-
-                      AND lo.confirm = 'Y'
-
+               
                       AND
 
                       (
-                          (lo.lab_items_code = '3001' and lo.lab_order_result >= 180)  OR
-                          (lo.lab_items_code = '48' and lo.lab_order_result  >= 8)
+                          (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result >= 180)  OR
+                          (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result  >= 8)
                       )
 
 
@@ -415,11 +400,10 @@ GROUP BY th.addressid
 
                        )
 
-                  AND lo.confirm = 'Y'
                   AND
                         (
-                            (lo.lab_items_code = '3001' and lo.lab_order_result >= 180)  OR
-                            (lo.lab_items_code = '48' and lo.lab_order_result  >= 8)
+                            (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result >= 180)  OR
+                            (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result  >= 8)
                         )
                   ORDER BY 
                             v.aid,v.hn,v.vstdate,lo.lab_items_code
@@ -484,14 +468,10 @@ GROUP BY th.addressid
                                 
                       AND  v.hn in (select hn from clinicmember where clinic='020')
                       AND  v.hn in (select hn from clinicmember where clinic='001')
-
-                      AND lo.confirm = 'Y'
-
                       AND
-
                       (
-                          (lo.lab_items_code = '3001' and lo.lab_order_result between '125' and '179')  OR
-                          (lo.lab_items_code = '48' and lo.lab_order_result  between '7' and '7.9')
+                          (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result between '125' and '179')  OR
+                          (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result  between '7' and '7.9')
                       )
 
                       ORDER BY v.aid,v.hn,v.vstdate,lo.lab_items_code ";
@@ -565,11 +545,10 @@ GROUP BY th.addressid
 
                        )
 
-                  AND lo.confirm = 'Y'
                   AND
                         (
-                            (lo.lab_items_code = '3001' and lo.lab_order_result between  '125' and '179')  OR
-                            (lo.lab_items_code = '48' and lo.lab_order_result between '7' and '7.9')
+                            (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result between  '125' and '179')  OR
+                            (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result between '7' and '7.9')
                         )
                   ORDER BY 
                             v.aid,v.hn,v.vstdate,lo.lab_items_code
@@ -645,10 +624,9 @@ GROUP BY th.addressid
 
                        )
 
-                  AND lo.confirm = 'Y'
                   AND
                         (
-                            (lo.lab_items_code = '3001' and lo.lab_order_result between  '100' and '125')
+                            (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result between  '100' and '125')
                         )
                   ORDER BY 
                             v.aid,v.hn,v.vstdate,lo.lab_items_code
@@ -874,11 +852,9 @@ GROUP BY th.addressid
 
                        )
 
-
-                  AND lo.confirm = 'Y'
                   AND
                         (
-                            (lo.lab_items_code = '3248' and lo.lab_order_result < 60)
+                            (lo.lab_items_code = '3248' and lo.confirm = 'Y' and lo.lab_order_result < 60)
                         )
 
                   ORDER BY 
@@ -952,11 +928,9 @@ GROUP BY th.addressid
 
                        )
 
-
-                  AND lo.confirm = 'Y'
                   AND
                         (
-                            (lo.lab_items_code = '3248' and lo.lab_order_result < 60)
+                            (lo.lab_items_code = '3248' and lo.confirm = 'Y' and lo.lab_order_result < 60)
                         )
 
                   ORDER BY 
@@ -1066,8 +1040,82 @@ GROUP BY th.addressid
     }
      
     
+     
+     public function actionReport14($datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
+
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ ที่มี Diag(e780 ถึง e789) และมีผลแลป(Cholesterol>200 หรือ Triglyceride>200 หรือ LDL-C>110)";
+
+            $sql = "     
+                    SELECT
+                            v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
+                            concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+                            concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+                            v.pdx,
+                            concat(
+                                if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                                if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                                if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                                if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                                if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                                if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                            )  as second_diag,
+                            
+                            v.age_y,
+                            lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+
+                      FROM vn_stat v
+                      LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
+                      LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number
+                      LEFT OUTER JOIN lab_items li ON li.lab_items_code = lo.lab_items_code
+                      LEFT OUTER JOIN patient pt ON pt.hn = v.hn
+                      LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                      WHERE
+                           v.vstdate BETWEEN $datestart and $dateend
+                                
+                      AND  v.hn in (select hn from clinicmember where clinic='020')
+                      AND
+                      (
+                          (lo.lab_items_code = '3005'  and lo.confirm = 'Y' and lo.lab_order_result >'200')  OR
+                          (lo.lab_items_code = '3006'  and lo.confirm = 'Y' and lo.lab_order_result >'200')  OR
+                          (lo.lab_items_code = '3008'  and lo.confirm = 'Y' and lo.lab_order_result >'110')
+                      )
+
+                        AND (
+                            (v.pdx  BETWEEN 'e780' AND 'e789')   OR
+                            (v.dx0  BETWEEN 'e780' AND 'e789')   OR
+                            (v.dx1  BETWEEN 'e780' AND 'e789')   OR
+                            (v.dx2  BETWEEN 'e780' AND 'e789')   OR
+                            (v.dx3  BETWEEN 'e780' AND 'e789')   OR
+                            (v.dx4  BETWEEN 'e780' AND 'e789')   OR
+                            (v.dx5  BETWEEN 'e780' AND 'e789')
+                       )
+                      ORDER BY 
+                            v.aid,v.hn,v.vstdate,lo.lab_items_code    
+                   ";
+                       
+          
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => FALSE,
+            ]);
+
+            return $this->render('report14', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+            ]);
+    
+     }
     
     
     
-    
+     
 } // end class
