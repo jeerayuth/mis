@@ -314,7 +314,13 @@ GROUP BY th.addressid
                                 from clinicmember cms 
                                 left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
                                 where cms.clinic = '020' and cms.hn = v.hn
-                             ) as clinic_status
+                             ) as clinic_status,
+                             (
+                                select csu.clinic_member_status_name 
+                                from clinicmember cms_dm 
+                                left outer join clinic_member_status csu on csu.clinic_member_status_id = cms_dm.clinic_member_status_id
+                                where cms_dm.clinic = '001' and cms_dm.hn = v.hn
+                             ) as clinic_dm_status
 
                       FROM vn_stat v
                       LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
@@ -332,7 +338,7 @@ GROUP BY th.addressid
 
                       (
                           (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result >= 180)  OR
-                          (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result  >= 8)
+                          (lo.lab_items_code = '48'   and lo.confirm = 'Y'   and lo.lab_order_result  >= 8)
                       )
 
 
@@ -364,7 +370,7 @@ GROUP BY th.addressid
     public function actionReport5($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือด >= 180 และหรือ hba1c  >= 8";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือดมากกว่าเท่ากับ 180 และหรือ hba1c มากกว่าเท่ากับ 8";
 
             $sql = "SELECT
                         v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -408,7 +414,6 @@ GROUP BY th.addressid
                             (v.dx3  BETWEEN 'e100' AND 'e109' OR v.dx3 BETWEEN 'e110' AND 'e119')   OR
                             (v.dx4  BETWEEN 'e100' AND 'e109' OR v.dx4 BETWEEN 'e110' AND 'e119')   OR
                             (v.dx5  BETWEEN 'e100' AND 'e109' OR v.dx5 BETWEEN 'e110' AND 'e119')
-
 
                        )
 
@@ -473,7 +478,13 @@ GROUP BY th.addressid
                                     from clinicmember cms 
                                     left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
                                     where cms.clinic = '020' and cms.hn = v.hn
-                                ) as clinic_status
+                                ) as clinic_status,
+                             (
+                                select csu.clinic_member_status_name 
+                                from clinicmember cms_dm 
+                                left outer join clinic_member_status csu on csu.clinic_member_status_id = cms_dm.clinic_member_status_id
+                                where cms_dm.clinic = '001' and cms_dm.hn = v.hn
+                             ) as clinic_dm_status
 
                       FROM vn_stat v
                       LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
@@ -689,7 +700,7 @@ GROUP BY th.addressid
     public function actionReport9($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก HT แต่มี Diag HT(I10-I59)) ที่มี ระดับความดันโลหิต (bps >= 140 และ/หรือ /bpd >= 90)";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก HT แต่มี Diag HT(I10-I59)) ที่มี ระดับความดันโลหิต (bps มากกว่าเท่ากับ 140 และ/หรือ bpd มากกว่าเท่ากับ 90)";
 
             $sql = "SELECT
                             v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -870,7 +881,7 @@ GROUP BY th.addressid
                             )  as second_diag,                          
                         v.age_y,
                         lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm,
-                         (
+                            (
                                     select csu.clinic_member_status_name 
                                     from clinicmember cms 
                                     left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
@@ -1104,7 +1115,7 @@ GROUP BY th.addressid
      public function actionReport14($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ ที่มี Diag(e780 ถึง e789) และมีผลแลป(Cholesterol>200 หรือ Triglyceride>200 หรือ LDL-C>110)";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ ที่มี Diag(e780 ถึง e789) และมีผลแลป(Cholesterol มากกว่า 200 หรือ Triglyceride มากกว่า 200 หรือ LDL-C มากกว่า 110)";
 
             $sql = "     
                     SELECT
@@ -1167,7 +1178,6 @@ GROUP BY th.addressid
             } catch (\yii\db\Exception $e) {
                 throw new \yii\web\ConflictHttpException('sql error');
             }
-
 
             $dataProvider = new \yii\data\ArrayDataProvider([
                 'allModels' => $rawData,

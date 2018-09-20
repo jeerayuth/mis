@@ -58,6 +58,9 @@ echo GridView::widget([
         ],[
             'attribute' => 'clinic_status',
             'header' => 'สถานะคนไข้คลินิค DPAC ณ ปัจจุบัน'
+        ],[
+            'attribute' => 'clinic_dm_status',
+            'header' => 'สถานะคนไข้คลินิค DM ณ ปัจจุบัน'
         ],
     
     ]
