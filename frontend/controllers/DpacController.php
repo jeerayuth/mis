@@ -11,7 +11,7 @@ class DpacController extends CommonController {
     public function actionReport1($details) {
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
-     $report_name = 'รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (DPAC)แยกตามสถานบริการ';   
+        $report_name = 'รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (DPAC)แยกตามสถานบริการ';   
              
 
             $sql = " SELECT
@@ -184,7 +184,7 @@ GROUP BY th.addressid
                 $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (8,11,13,15,17,18,20) ";
             } else if ($hosp_area == 5) {
                $hosp_area_condition = " AND (concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'    and pt.moopart in (16,19)
-                                        OR concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860504'     and pt.moopart in (5,7,8)) ";
+                                        OR concat(pt.chwpart,pt.amppart,pt.tmbpart)   =  '860504'     and pt.moopart in (5,7,8)) ";
             } else if ($hosp_area == 6) {
                 $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (1,7,8,10) ";
             } else if ($hosp_area == 7) {
@@ -308,7 +308,13 @@ GROUP BY th.addressid
                             )  as second_diag,
                             
                             v.age_y,
-                            lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+                            lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm,
+                            (
+                                select csu.clinic_member_status_name 
+                                from clinicmember cms 
+                                left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                where cms.clinic = '020' and cms.hn = v.hn
+                             ) as clinic_status
 
                       FROM vn_stat v
                       LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
@@ -356,7 +362,7 @@ GROUP BY th.addressid
     
     
     public function actionReport5($datestart, $dateend, $details) {
-        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
+        $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
         $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือด >= 180 และหรือ hba1c  >= 8";
 
@@ -374,7 +380,13 @@ GROUP BY th.addressid
                                 if(v.dx5 is not null,concat(v.dx5,'   '),' ')
                             )  as second_diag,                          
                         v.age_y,
-                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm,
+                         (
+                            select csu.clinic_member_status_name 
+                            from clinicmember cms 
+                            left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                            where cms.clinic = '020' and cms.hn = v.hn
+                         ) as clinic_status
 
                   FROM vn_stat v
                   LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
@@ -435,7 +447,7 @@ GROUP BY th.addressid
     
     
     public function actionReport6($datestart, $dateend, $details) {
-        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
         $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (และมีชื่อในคลินิก DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง  125 ถึง 179 และหรือ hba1c  ระหว่าง 7 - 7.9 ";
 
@@ -455,7 +467,13 @@ GROUP BY th.addressid
                             )  as second_diag,
                             
                             v.age_y,
-                            lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+                            lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm,
+                               (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
 
                       FROM vn_stat v
                       LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
@@ -501,7 +519,7 @@ GROUP BY th.addressid
     
     
     public function actionReport7($datestart, $dateend, $details) {
-        $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
         $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง 125 ถึง 179 และหรือ hba1c ระหว่าง 7 - 7.9 ";
 
@@ -519,7 +537,13 @@ GROUP BY th.addressid
                                 if(v.dx5 is not null,concat(v.dx5,'   '),' ')
                             )  as second_diag,                          
                         v.age_y,
-                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm,
+                               (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
 
                   FROM vn_stat v
                   LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
@@ -598,7 +622,13 @@ GROUP BY th.addressid
                                 if(v.dx5 is not null,concat(v.dx5,'   '),' ')
                             )  as second_diag,                          
                         v.age_y,
-                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm,
+                         (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
 
                   FROM vn_stat v
                   LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
@@ -675,7 +705,13 @@ GROUP BY th.addressid
                                 if(v.dx5 is not null,concat(v.dx5,'   '),' ')
                             )  as second_diag,
                             
-                            v.age_y ,opd.bps,opd.bpd
+                            v.age_y ,opd.bps,opd.bpd,
+                             (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
 
                       FROM vn_stat v
 
@@ -749,7 +785,13 @@ GROUP BY th.addressid
                                 if(v.dx5 is not null,concat(v.dx5,'   '),' ')
                             )  as second_diag,
                             
-                            v.age_y ,opd.bps,opd.bpd
+                            v.age_y ,opd.bps,opd.bpd,
+                             (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
 
                       FROM vn_stat v
 
@@ -827,7 +869,13 @@ GROUP BY th.addressid
                                 if(v.dx5 is not null,concat(v.dx5,'   '),' ')
                             )  as second_diag,                          
                         v.age_y,
-                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm,
+                         (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
 
                   FROM vn_stat v
                   LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
@@ -903,7 +951,13 @@ GROUP BY th.addressid
                                 if(v.dx5 is not null,concat(v.dx5,'   '),' ')
                             )  as second_diag,                          
                         v.age_y,
-                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+                        lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm,
+                         (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
 
                   FROM vn_stat v
                   LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn
@@ -999,7 +1053,13 @@ GROUP BY th.addressid
                                 if(v.dx5 is not null,concat(v.dx5,'   '),' ')
                             )  as second_diag,
                             
-                            v.age_y ,opd.bps,opd.bpd, opd.bmi
+                            v.age_y ,opd.bps,opd.bpd, opd.bmi,
+                             (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
 
                       FROM vn_stat v
 
@@ -1062,7 +1122,13 @@ GROUP BY th.addressid
                             )  as second_diag,
                             
                             v.age_y,
-                            lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm
+                            lo.lab_items_code,li.lab_items_name,lo.lab_order_result ,lo.confirm,
+                            (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
 
                       FROM vn_stat v
                       LEFT OUTER JOIN lab_head lh ON lh.vn = v.vn

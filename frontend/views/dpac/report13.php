@@ -52,6 +52,9 @@ echo GridView::widget([
         ],[
             'attribute' => 'bmi',
             'header' => 'ค่า BMI'
+        ],[
+            'attribute' => 'clinic_status',
+            'header' => 'สถานะคนไข้คลินิค DPAC ณ ปัจจุบัน'
         ],
     
     ]

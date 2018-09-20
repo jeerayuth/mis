@@ -55,6 +55,9 @@ echo GridView::widget([
         ],[
             'attribute' => 'lab_order_result',
             'header' => 'ผลแลป'
+        ],[
+            'attribute' => 'clinic_status',
+            'header' => 'สถานะคนไข้คลินิค DPAC ณ ปัจจุบัน'
         ],
     
     ]
