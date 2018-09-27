@@ -290,7 +290,7 @@ GROUP BY th.addressid
      public function actionReport4($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (และมีชื่อในคลินิก DM) ที่มีผลระดับน้ำตาลในเลือด >= 180 และหรือ hba1c  >= 8";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (และมีชื่อในคลินิก DM) ที่มีผลระดับน้ำตาลในเลือด >= 180 และหรือ hba1c  >= 8 และหรือ DTX ระหว่าง 125-179";
 
             $sql = "         
                    SELECT
@@ -337,8 +337,9 @@ GROUP BY th.addressid
                       AND
 
                       (
-                          (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result >= 180)  OR
-                          (lo.lab_items_code = '48'   and lo.confirm = 'Y'   and lo.lab_order_result  >= 8)
+                          (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result >= '180')  OR
+                          (lo.lab_items_code = '48'   and lo.confirm = 'Y'   and lo.lab_order_result  >= '8') OR
+                          (lo.lab_items_code = '3246'   and lo.confirm = 'Y'   and lo.lab_order_result  between '125' and '179')
                       )
 
 
@@ -370,7 +371,7 @@ GROUP BY th.addressid
     public function actionReport5($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือดมากกว่าเท่ากับ 180 และหรือ hba1c มากกว่าเท่ากับ 8";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือดมากกว่าเท่ากับ 180 และหรือ hba1c มากกว่าเท่ากับ 8 และหรือ DTX ระหว่าง 125-179";
 
             $sql = "SELECT
                         v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -420,7 +421,8 @@ GROUP BY th.addressid
                   AND
                         (
                             (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result >= 180)  OR
-                            (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result  >= 8)
+                            (lo.lab_items_code = '48'   and lo.confirm = 'Y' and lo.lab_order_result  >= 8) OR
+                            (lo.lab_items_code = '3246' and lo.confirm = 'Y' and lo.lab_order_result  between '125' and '179')
                         )
                   ORDER BY 
                             v.aid,v.hn,v.vstdate,lo.lab_items_code
@@ -454,7 +456,7 @@ GROUP BY th.addressid
     public function actionReport6($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (และมีชื่อในคลินิก DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง  125 ถึง 179 และหรือ hba1c  ระหว่าง 7 - 7.9 ";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (และมีชื่อในคลินิก DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง  125 ถึง 179 และหรือ hba1c  ระหว่าง 7 - 7.9 และหรือ DTX ระหว่าง 125-179";
 
             $sql = "         
                    SELECT
@@ -500,7 +502,8 @@ GROUP BY th.addressid
                       AND
                       (
                           (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result between '125' and '179')  OR
-                          (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result  between '7' and '7.9')
+                          (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result  between '7' and '7.9') OR
+                          (lo.lab_items_code = '3246' and lo.confirm = 'Y' and lo.lab_order_result  between '125' and '179')
                       )
 
                       ORDER BY v.aid,v.hn,v.vstdate,lo.lab_items_code ";
@@ -532,7 +535,7 @@ GROUP BY th.addressid
     public function actionReport7($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง 125 ถึง 179 และหรือ hba1c ระหว่าง 7 - 7.9 ";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง 125 ถึง 179 และหรือ hba1c ระหว่าง 7 - 7.9 และหรือ DTX ระหว่าง 125-179";
 
             $sql = "SELECT
                         v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -583,7 +586,8 @@ GROUP BY th.addressid
                   AND
                         (
                             (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result between  '125' and '179')  OR
-                            (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result between '7' and '7.9')
+                            (lo.lab_items_code = '48' and lo.confirm = 'Y' and lo.lab_order_result between '7' and '7.9') OR
+                            (lo.lab_items_code = '3246' and lo.confirm = 'Y' and lo.lab_order_result  between '125' and '179')
                         )
                   ORDER BY 
                             v.aid,v.hn,v.vstdate,lo.lab_items_code
@@ -617,7 +621,7 @@ GROUP BY th.addressid
     public function actionReport8($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM และไม่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง 100 ถึง 125";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM และไม่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง 100 ถึง 125 และหรือ DTX ระหว่าง 125-179";
 
             $sql = "SELECT
                         v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -667,7 +671,8 @@ GROUP BY th.addressid
 
                   AND
                         (
-                            (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result between  '100' and '125')
+                            (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result between  '100' and '125') OR
+                             (lo.lab_items_code = '3246' and lo.confirm = 'Y' and lo.lab_order_result  between '125' and '179')
                         )
                   ORDER BY 
                             v.aid,v.hn,v.vstdate,lo.lab_items_code
@@ -1105,9 +1110,7 @@ GROUP BY th.addressid
                         'report_name' => $report_name,
             ]);
     
-         
-            
-            
+                    
     }
      
     
