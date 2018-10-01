@@ -12,8 +12,8 @@ class DpacController extends CommonController {
         $this->SaveLog($this->dep_controller, 'report1', $this->getSession());
 
         $report_name = 'รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (DPAC)แยกตามสถานบริการ';   
-             
 
+        
             $sql = " SELECT
 '1' as hosp_area,'รพ.สต.ตำบลทุ่งหลวง' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
 FROM clinicmember  cm
@@ -290,7 +290,7 @@ GROUP BY th.addressid
      public function actionReport4($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (และมีชื่อในคลินิก DM) ที่มีผลระดับน้ำตาลในเลือด >= 180 และหรือ hba1c  >= 8 และหรือ DTX ระหว่าง 125-179";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (และมีชื่อในคลินิก DM)";
 
             $sql = "         
                    SELECT
@@ -332,17 +332,13 @@ GROUP BY th.addressid
                            v.vstdate BETWEEN $datestart and $dateend
                                 
                       AND  v.hn in (select hn from clinicmember where clinic='020')
-                      AND  v.hn in (select hn from clinicmember where clinic='001')
-               
+                      AND  v.hn in (select hn from clinicmember where clinic='001')             
                       AND
-
                       (
-                          (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result >= '180')  OR
-                          (lo.lab_items_code = '48'   and lo.confirm = 'Y'   and lo.lab_order_result  >= '8') OR
-                          (lo.lab_items_code = '3246'   and lo.confirm = 'Y'   and lo.lab_order_result  between '125' and '179')
+                          (lo.lab_items_code = '3001'   and lo.confirm = 'Y' )  OR
+                          (lo.lab_items_code = '48'     and lo.confirm = 'Y' )  OR
+                          (lo.lab_items_code = '3246'   and lo.confirm = 'Y' )
                       )
-
-
                       ORDER BY v.aid,v.hn,v.vstdate,lo.lab_items_code ";
                         
             
@@ -371,7 +367,7 @@ GROUP BY th.addressid
     public function actionReport5($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือดมากกว่าเท่ากับ 180 และหรือ hba1c มากกว่าเท่ากับ 8 และหรือ DTX ระหว่าง 125-179";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM แต่มี Diag DM) ";
 
             $sql = "SELECT
                         v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -420,9 +416,9 @@ GROUP BY th.addressid
 
                   AND
                         (
-                            (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result >= 180)  OR
-                            (lo.lab_items_code = '48'   and lo.confirm = 'Y' and lo.lab_order_result  >= 8) OR
-                            (lo.lab_items_code = '3246' and lo.confirm = 'Y' and lo.lab_order_result  between '125' and '179')
+                            (lo.lab_items_code = '3001' and lo.confirm = 'Y' )  OR
+                            (lo.lab_items_code = '48'   and lo.confirm = 'Y' )  OR
+                            (lo.lab_items_code = '3246' and lo.confirm = 'Y' )
                         )
                   ORDER BY 
                             v.aid,v.hn,v.vstdate,lo.lab_items_code
@@ -621,7 +617,7 @@ GROUP BY th.addressid
     public function actionReport8($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM และไม่มี Diag DM) ที่มีผลระดับน้ำตาลในเลือด ระหว่าง 100 ถึง 125 และหรือ DTX ระหว่าง 125-179";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก DM และไม่มี Diag DM) มี Diag R731";
 
             $sql = "SELECT
                         v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -666,22 +662,27 @@ GROUP BY th.addressid
                             (v.dx4  not BETWEEN 'e100' AND 'e109' OR v.dx4 not BETWEEN 'e110' AND 'e119')   OR
                             (v.dx5  not BETWEEN 'e100' AND 'e109' OR v.dx5 not BETWEEN 'e110' AND 'e119')
 
-
                        )
-
-                  AND
+                       
+                 AND      
                         (
-                            (lo.lab_items_code = '3001' and lo.confirm = 'Y' and lo.lab_order_result between  '100' and '125') OR
-                             (lo.lab_items_code = '3246' and lo.confirm = 'Y' and lo.lab_order_result  between '125' and '179')
+                            (v.pdx   = 'r731')   OR
+                            (v.dx0   = 'r731')   OR
+                            (v.dx1   = 'r731')   OR
+                            (v.dx2   = 'r731')   OR
+                            (v.dx3   = 'r731')   OR
+                            (v.dx4   = 'r731')   OR
+                            (v.dx5   = 'r731')   
                         )
+
+                
+             
                   ORDER BY 
                             v.aid,v.hn,v.vstdate,lo.lab_items_code
-         
-
+       
                    ";
-                        
-            
-
+                   
+ 
             try {
                 $rawData = \yii::$app->db->createCommand($sql)->queryAll();
             } catch (\yii\db\Exception $e) {
@@ -698,7 +699,7 @@ GROUP BY th.addressid
                         'dataProvider' => $dataProvider,
                         'report_name' => $report_name,
             ]);
-        
+       
     }
     
           
@@ -785,7 +786,7 @@ GROUP BY th.addressid
     public function actionReport10($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report10', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก HT และไม่มี Diag HT(I10-I59)) ที่มี ระดับความดันโลหิต (bps ระหว่าง 120-139  และหรือ  bpd ระหว่าง 80-89 )";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ ที่มีการวินิจฉัย R030";
 
             $sql = "SELECT
                             v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -818,28 +819,19 @@ GROUP BY th.addressid
                            v.vstdate BETWEEN $datestart and $dateend
                                 
                       AND  v.hn in (select hn from clinicmember where clinic='020')
-                      AND  v.hn not in (select hn from clinicmember where clinic='002')
-
-
-                      AND (
-                            (v.pdx  NOT BETWEEN 'i10' AND 'i159' )   OR
-                            (v.dx0  NOT BETWEEN 'i10' AND 'i159' )   OR
-                            (v.dx1  NOT BETWEEN 'i10' AND 'i159' )   OR
-                            (v.dx2  NOT BETWEEN 'i10' AND 'i159' )   OR
-                            (v.dx3  NOT BETWEEN 'i10' AND 'i159' )   OR
-                            (v.dx4  NOT BETWEEN 'i10' AND 'i159' )   OR
-                            (v.dx5  NOT BETWEEN 'i10' AND 'i159' )
-
+                      
+                      AND 
+                      
+                        (
+                            (v.pdx  = 'r030' )   OR
+                            (v.dx0  = 'r030' )   OR
+                            (v.dx1  = 'r030' )   OR
+                            (v.dx2  = 'r030' )   OR
+                            (v.dx3  = 'r030' )   OR
+                            (v.dx4  = 'r030' )   OR
+                            (v.dx5  = 'r030' )   
                        )
-
-                      AND
-                             (
-
-                                        ((opd.bps  BETWEEN '120'  AND  '139') and (opd.bpd  BETWEEN   '80'and '89'))  OR
-                                        ((opd.bps  BETWEEN '120'  AND  '139') or (opd.bpd  BETWEEN   '80'and '89'))
-
-                             )
-
+                   
                       ORDER BY v.aid,v.hn,v.vstdate
 
                    ";
@@ -1031,30 +1023,12 @@ GROUP BY th.addressid
     }
     
     
-     public function actionReport13($datestart, $dateend, $bmi,$details) {
+     public function actionReport13($datestart, $dateend,$details) {
         $this->SaveLog($this->dep_controller, 'report13', $this->getSession());
         
-        $report_name = "";
-        $bmi_result = "";
-        
-          if ($bmi != "") {
-              if($bmi == 1 ){
-                    $report_name  = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ  ที่มีค่า BMI >= 23";
-                     $bmi_result  = " AND  opd.bmi  >= '23' ";    
-              } else if ($bmi == 2 ){
-                     $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ  ที่มีค่า BMI ระหว่าง 23 ถึง 24.99";
-                     $bmi_result  = " AND  opd.bmi  between '23' and '24.99' ";  
-              } else if ($bmi == 3 ){
-                     $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ  ที่มีค่า BMI ระหว่าง 25 ถึง 29.99";
-                     $bmi_result  = " AND  opd.bmi  between '25' and '29.99' ";  
-              } else if ($bmi == 4 ){
-                    $report_name  = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ  ที่มีค่า BMI มากกว่าเท่ากับ 30";
-                    $bmi_result   = "  AND  opd.bmi >= 30 ";  
-              }
-              
-          }
-          
-      
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ  ตรวจสอบค่า BMI";
+             
+     
             $sql = "SELECT
                             v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
                             concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
@@ -1086,9 +1060,8 @@ GROUP BY th.addressid
                            v.vstdate BETWEEN $datestart and $dateend
                                 
                       AND  v.hn in (select hn from clinicmember where clinic='020')
-
-                      $bmi_result
-
+                      AND opd.bmi != ''
+  
                       ORDER BY v.aid,v.hn,v.vstdate
                    ";
                                
@@ -1195,6 +1168,77 @@ GROUP BY th.addressid
      }
     
     
+    public function actionReport15($datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
+
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (มีชื่อในคลินิก HT และมี Diag HT(I10-I59))";
+
+            $sql = "SELECT
+                            v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
+                            concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) address,
+                            concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+                            v.pdx,
+                            concat(
+                                if(v.dx0 is not null,concat(v.dx0,'   '),' '),
+                                if(v.dx1 is not null,concat(v.dx1,'   '),' '),
+                                if(v.dx2 is not null,concat(v.dx2,'   '),' '),
+                                if(v.dx3 is not null,concat(v.dx3,'   '),' '),
+                                if(v.dx4 is not null,concat(v.dx4,'   '),' '),
+                                if(v.dx5 is not null,concat(v.dx5,'   '),' ')
+                            )  as second_diag,
+                            
+                            v.age_y ,opd.bps,opd.bpd,
+                             (
+                                    select csu.clinic_member_status_name 
+                                    from clinicmember cms 
+                                    left outer join clinic_member_status csu on csu.clinic_member_status_id=cms.clinic_member_status_id
+                                    where cms.clinic = '020' and cms.hn = v.hn
+                                ) as clinic_status
+
+                      FROM vn_stat v
+
+                      LEFT OUTER JOIN patient pt ON pt.hn = v.hn
+                      LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+                      LEFT OUTER JOIN opdscreen  opd ON opd.vn = v.vn
+                      WHERE
+                           v.vstdate BETWEEN $datestart and $dateend
+                                
+                      AND  v.hn in (select hn from clinicmember where clinic='020')
+                      AND  v.hn in (select hn from clinicmember where clinic='002')
+
+                      AND (
+                            (v.pdx  BETWEEN 'i10' AND 'i159' )   OR
+                            (v.dx0  BETWEEN 'i10' AND 'i159' )   OR
+                            (v.dx1  BETWEEN 'i10' AND 'i159' )   OR
+                            (v.dx2  BETWEEN 'i10' AND 'i159' )   OR
+                            (v.dx3  BETWEEN 'i10' AND 'i159' )   OR
+                            (v.dx4  BETWEEN 'i10' AND 'i159' )   OR
+                            (v.dx5  BETWEEN 'i10' AND 'i159' )
+                       )
+
+                      ORDER BY v.aid,v.hn,v.vstdate
+
+                   ";
+                                   
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => FALSE,
+            ]);
+
+            return $this->render('report15', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+            ]);
+        
+    }
     
      
 } // end class
