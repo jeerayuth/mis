@@ -285,8 +285,7 @@ GROUP BY th.addressid
       
     }
 
-    
-    
+        
      public function actionReport4($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report4', $this->getSession());
 
@@ -338,10 +337,8 @@ GROUP BY th.addressid
                           (lo.lab_items_code = '3001'   and lo.confirm = 'Y' )  OR
                           (lo.lab_items_code = '48'     and lo.confirm = 'Y' )  OR
                           (lo.lab_items_code = '3246'   and lo.confirm = 'Y' )
-                      )
-                      ORDER BY v.aid,v.hn,v.vstdate,lo.lab_items_code ";
-                        
-            
+                       )
+                      ORDER BY v.aid,v.hn,v.vstdate,lo.lab_items_code ";                                 
 
             try {
                 $rawData = \yii::$app->db->createCommand($sql)->queryAll();
@@ -706,7 +703,7 @@ GROUP BY th.addressid
     public function actionReport9($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก HT แต่มี Diag HT(I10-I59)) ที่มี ระดับความดันโลหิต (bps มากกว่าเท่ากับ 140 และ/หรือ bpd มากกว่าเท่ากับ 90)";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก HT แต่มี Diag HT(I10-I59))";
 
             $sql = "SELECT
                             v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -751,11 +748,7 @@ GROUP BY th.addressid
                             (v.dx5  BETWEEN 'i10' AND 'i159' )
                        )
 
-                      AND
-                             (
-                                    (opd.bps  >= '140'  AND opd.bpd >= '90') OR
-                                    (opd.bps  >= '140'  OR opd.bpd >= '90')
-                             )
+    
 
                       ORDER BY v.aid,v.hn,v.vstdate
 
@@ -861,7 +854,7 @@ GROUP BY th.addressid
     public function actionReport11($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report11', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (มีชื่อในคลินิก CKD และมี Diag N183-N185) ที่มีค่า eGFR น้อยกว่า 60";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (มีชื่อในคลินิก CKD และมี Diag N183-N185)";
 
             $sql = "SELECT
                         v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -910,7 +903,7 @@ GROUP BY th.addressid
 
                   AND
                         (
-                            (lo.lab_items_code = '3248' and lo.confirm = 'Y' and lo.lab_order_result < 60)
+                            (lo.lab_items_code = '3248' and lo.confirm = 'Y')
                         )
 
                   ORDER BY 
@@ -943,7 +936,7 @@ GROUP BY th.addressid
     public function actionReport12($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report12', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก CKD แต่มี Diag N183-N185) ที่มีค่า eGFR น้อยกว่า 60";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ (ไม่มีชื่อในคลินิก CKD แต่มี Diag N183-N185)";
 
             $sql = "SELECT
                         v.vn,v.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
@@ -992,7 +985,7 @@ GROUP BY th.addressid
 
                   AND
                         (
-                            (lo.lab_items_code = '3248' and lo.confirm = 'Y' and lo.lab_order_result < 60)
+                            (lo.lab_items_code = '3248' and lo.confirm = 'Y')
                         )
 
                   ORDER BY 
@@ -1091,7 +1084,7 @@ GROUP BY th.addressid
      public function actionReport14($datestart, $dateend, $details) {
         $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
 
-        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ ที่มี Diag(e780 ถึง e789) และมีผลแลป(Cholesterol มากกว่า 200 หรือ Triglyceride มากกว่า 200 หรือ LDL-C มากกว่า 110)";
+        $report_name = "รายงานคนไข้ทะเบียนคลินิครักษ์สุขภาพ ที่มี Diag(e780 ถึง e789) ";
 
             $sql = "     
                     SELECT
@@ -1129,9 +1122,9 @@ GROUP BY th.addressid
                       AND  v.hn in (select hn from clinicmember where clinic='020')
                       AND
                       (
-                          (lo.lab_items_code = '3005'  and lo.confirm = 'Y' and lo.lab_order_result >'200')  OR
-                          (lo.lab_items_code = '3006'  and lo.confirm = 'Y' and lo.lab_order_result >'200')  OR
-                          (lo.lab_items_code = '3008'  and lo.confirm = 'Y' and lo.lab_order_result >'110')
+                          (lo.lab_items_code = '3005'  and lo.confirm = 'Y' )  OR
+                          (lo.lab_items_code = '3006'  and lo.confirm = 'Y' )  OR
+                          (lo.lab_items_code = '3008'  and lo.confirm = 'Y' )
                       )
 
                         AND (
