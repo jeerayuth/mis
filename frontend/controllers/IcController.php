@@ -609,5 +609,60 @@ class IcController extends CommonController {
     }
     
  
+    public function actionReport6($details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
+        $report_name = "รายงานคนไข้ IPD Admit ณ ปัจจุบัน ที่มีวันนอนมากกว่าเท่ากับ 3 วัน";
+
+        $sql = "SELECT
+                    i.an,i.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
+                    a.age_y,
+                    concat(DAY(i.regdate),'/',MONTH(i.regdate),'/',(YEAR(i.regdate)+543)) as regdate,
+                    i.regtime,i.prediag ,a.pdx,
+                    concat(
+                        if(a.dx0 is not null,concat(a.dx0,'   '),' '),
+                        if(a.dx1 is not null,concat(a.dx1,'   '),' '),
+                        if(a.dx2 is not null,concat(a.dx2,'   '),' '),
+                        if(a.dx3 is not null,concat(a.dx3,'   '),' '),
+                        if(a.dx4 is not null,concat(a.dx4,'   '),' '),
+                        if(a.dx5 is not null,concat(a.dx5,'   '),' ')
+                    )  AS second_diag,
+                    
+                    a.admdate,concat(pt.addrpart,' ม.',pt.moopart,' ',th.full_name) AS address
+              FROM ipt i
+              LEFT OUTER JOIN patient pt ON pt.hn = i.hn
+              LEFT OUTER JOIN an_stat a  ON a.an = i.an
+              LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+              WHERE 
+                    i.ward = '01' AND  i.dchstts IS NULL  AND 
+                    a.admdate >= '3' 
+             ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report6', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
+    
+    
 }
