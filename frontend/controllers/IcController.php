@@ -619,7 +619,7 @@ class IcController extends CommonController {
                     i.an,i.hn,CONCAT(pt.pname,pt.fname,'  ', pt.lname) as pt_name,
                     a.age_y,
                     concat(DAY(i.regdate),'/',MONTH(i.regdate),'/',(YEAR(i.regdate)+543)) as regdate,
-                    i.regtime,i.prediag ,a.pdx,
+                    i.regtime,i.prediag ,a.pdx,w.name as depname,
                     concat(
                         if(a.dx0 is not null,concat(a.dx0,'   '),' '),
                         if(a.dx1 is not null,concat(a.dx1,'   '),' '),
@@ -634,8 +634,9 @@ class IcController extends CommonController {
               LEFT OUTER JOIN patient pt ON pt.hn = i.hn
               LEFT OUTER JOIN an_stat a  ON a.an = i.an
               LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+              LEFT OUTER JOIN ward w ON w.ward = a.ward
               WHERE 
-                    i.ward = '01' AND  i.dchstts IS NULL  AND 
+                    i.dchstts IS NULL  AND 
                     a.admdate >= '3' 
              ";
                          
