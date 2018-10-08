@@ -274,20 +274,20 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
         $sql = "select o.hn,o.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,v.age_y,s.name as sex,
             v.age_y,s.name as sex,o.vstdate, v.moopart,t.full_name as address
 
-from ovst  o
+            from ovst  o
 
-left outer join clinicmember c on c.hn = o.hn
-left outer join patient p on p.hn = o.hn
-left outer join vn_stat v on v.vn = o.vn
-left OUTER join thaiaddress t on t.addressid=v.aid
-left outer join sex s on s.code = p.sex
-left outer join an_stat a on  a.an = o.an
+            left outer join clinicmember c on c.hn = o.hn
+            left outer join patient p on p.hn = o.hn
+            left outer join vn_stat v on v.vn = o.vn
+            left OUTER join thaiaddress t on t.addressid=v.aid
+            left outer join sex s on s.code = p.sex
+            left outer join an_stat a on  a.an = o.an
 
-where a.dchdate between $datestart and $dateend
-and o.an  != ''  and c.clinic='005'  /* and c.clinic_member_status_id='1' */
-and a.pdx between 'j440'  and 'j449'
-group by o.hn
-order by v.aid, v.moopart, v.hn, v.vstdate  ";
+            where a.dchdate between $datestart and $dateend
+            and o.an  != ''  and c.clinic='005'  
+            and a.pdx between 'j440'  and 'j449'
+            group by o.hn
+            order by v.aid, v.moopart, v.hn, v.vstdate  ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();

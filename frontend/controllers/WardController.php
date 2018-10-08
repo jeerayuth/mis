@@ -1051,7 +1051,121 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
     }
     
     
+      public function actionReport21($datestart, $dateend, $totalid,$details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
+        
+         if ($totalid != "") {
+            if ($totalid == 1) {
+                $criteria = ' ';
+                $report_name = 'รายงานจำนวนคนไข้ถุงลมโป่งพองทั้งหมด (เงื่อนไขรหัสวินิจฉัยหลัก ระหว่าง j440-j449) ได้รับการ Admit (นับเป็นจำนวนครั้ง)';
+            } else if ($totalid == 2) {             
+                $criteria = ' group by o.hn ';
+                $report_name = 'รายงานจำนวนคนไข้ถุงลมโป่งพองทั้งหมด (เงื่อนไขรหัสวินิจฉัยหลัก ระหว่าง j440-j449) ได้รับการ Admit (นับเป็นจำนวนคน)';
+            }
+         }               
+        $sql = "select o.hn,o.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,v.age_y,s.name as sex,
+            v.age_y,s.name as sex,o.vstdate, v.moopart,t.full_name as address
+
+            from ovst  o
+
+            left outer join clinicmember c on c.hn = o.hn
+            left outer join patient p on p.hn = o.hn
+            left outer join vn_stat v on v.vn = o.vn
+            left OUTER join thaiaddress t on t.addressid=v.aid
+            left outer join sex s on s.code = p.sex
+            left outer join an_stat a on  a.an = o.an
+
+            where a.dchdate between $datestart and $dateend
+            and o.an  != ''   
+            and a.pdx between 'j440'  and 'j449'
+            $criteria
+            order by v.aid, v.moopart, v.hn, v.vstdate  ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report21', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
     
+    
+    
+     public function actionReport22($datestart, $dateend, $totalid,$details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report22', $this->getSession());
+        
+         if ($totalid != "") {
+            if ($totalid == 1) {
+                $criteria = ' ';
+                $report_name = 'รายงานจำนวนคนไข้ถุงลมโป่งพองทั้งหมด (เงื่อนไขรหัสวินิจฉัยหลัก ระหว่าง j440-j449) Re-Admit (นับเป็นจำนวนครั้ง)';
+            } else if ($totalid == 2) {             
+                $criteria = ' group by patient.hn ';
+                $report_name = 'รายงานจำนวนคนไข้ถุงลมโป่งพองทั้งหมด (เงื่อนไขรหัสวินิจฉัยหลัก ระหว่าง j440-j449) Re-Admit (นับเป็นจำนวนคน)';
+            }
+         }               
+        $sql = "select
+                    q3.hn,concat(patient.pname,patient.fname,'  ',patient.lname) as ptname,
+                    patient.birthday,
+                    timestampdiff(year,patient.birthday,q3.regdate_AN_New) as age_y,
+                    q3.AN_new ,q3.regdate_AN_New ,q3.dcdate_AN_New ,q3.AN_Old as AN_old
+                   ,q3.regdate_AN_Old ,q3.dcdate_AN_Old ,q3.icd10_1,q3.ReAdmitDate
+
+               from patient inner join
+
+                    (select q1.hn ,q1.an as AN_new ,q1.regdate as regdate_AN_New,q1.dchdate as dcdate_AN_New,q2.an as AN_old ,q2.regdate as regdate_AN_Old 
+                    ,q2.dchdate as dcdate_AN_Old,q1.icd10 as icd10_1,TIMESTAMPDIFF(day,substring(q2.dchdate,1,10),substring(q1.regdate,1,10)) as ReAdmitDate
+
+                   from (select ipt.hn ,ipt.an ,ipt.regdate,ipt.dchdate,iptdiag.icd10 ,iptdiag.diagtype from
+
+                    ipt  inner join iptdiag on ipt.an = iptdiag.an where ipt.hn != ' ' and iptdiag.diagtype = '1') as q1
+
+                    inner join 
+
+                   (select ipt1.hn ,ipt1.an ,ipt1.regdate,ipt1.dchdate,iptdiag1.icd10 ,iptdiag1.diagtype from ipt as ipt1 
+                   inner join iptdiag as iptdiag1 on ipt1.an = iptdiag1.an where ipt1.hn != ' ' and iptdiag1.diagtype ='1' ) as q2
+                    where q1.hn = q2.hn and q1.an <> q2.an and q1.icd10 = q2.icd10 and
+
+                   TIMESTAMPDIFF(day,substring(q2.dchdate,1,10),substring(q1.regdate,1,10)) > 0 and 
+                   TIMESTAMPDIFF(day,substring(q2.dchdate,1,10),substring(q1.regdate,1,10)) <= 28 and
+
+                   q1.regdate between $datestart and $dateend  ) as q3  on q3.hn = patient.hn   AND q3.icd10_1 between 'j440' and 'j449'
+                     $criteria ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report22', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
     
     
 }
