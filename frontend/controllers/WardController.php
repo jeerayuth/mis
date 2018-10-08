@@ -1057,19 +1057,17 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
         
          if ($totalid != "") {
             if ($totalid == 1) {
-                $criteria = ' ';
+                $criteria = ' group by o.an ';
                 $report_name = 'รายงานจำนวนคนไข้ถุงลมโป่งพองทั้งหมด (เงื่อนไขรหัสวินิจฉัยหลัก ระหว่าง j440-j449) ได้รับการ Admit (นับเป็นจำนวนครั้ง)';
             } else if ($totalid == 2) {             
                 $criteria = ' group by o.hn ';
                 $report_name = 'รายงานจำนวนคนไข้ถุงลมโป่งพองทั้งหมด (เงื่อนไขรหัสวินิจฉัยหลัก ระหว่าง j440-j449) ได้รับการ Admit (นับเป็นจำนวนคน)';
             }
-         }               
+         }
+         
         $sql = "select o.hn,o.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,v.age_y,s.name as sex,
             v.age_y,s.name as sex,o.vstdate, v.moopart,t.full_name as address
-
-            from ovst  o
-
-            left outer join clinicmember c on c.hn = o.hn
+            from ovst  o        
             left outer join patient p on p.hn = o.hn
             left outer join vn_stat v on v.vn = o.vn
             left OUTER join thaiaddress t on t.addressid=v.aid

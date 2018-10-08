@@ -269,7 +269,7 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
         $this->SaveLog($this->dep_controller, 'report5', $this->getSession());
 
 
-        $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง ได้รับการ Admit";
+        $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง ได้รับการ Admit (นับเป็นจำนวนคน)";
 
         $sql = "select o.hn,o.an,concat(p.pname,p.fname,'  ',p.lname) as pt_name,v.age_y,s.name as sex,
             v.age_y,s.name as sex,o.vstdate, v.moopart,t.full_name as address
@@ -315,7 +315,7 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
         $this->SaveLog($this->dep_controller, 'report6', $this->getSession());
 
 
-        $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง Re-visit ภายใน 48 ชั่วโมง ที่ OPD";
+        $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง Re-visit ภายใน 48 ชั่วโมง ที่ OPD (นับเป็นจำนวนคน)";
 
         $sql = "select
                     v.lastvisit_hour,v.vn,v.hn,v.vstdate,v.age_y,
@@ -365,7 +365,7 @@ order by v.aid, v.moopart, os.hn, os.vstdate ";
         // save log
         $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
 
-        $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง Re-visit ภายใน 48 ชั่วโมง ที่ ER";
+        $report_name = "รายงานจำนวนคนไข้คลินิกถุงลมโป่งพอง Re-visit ภายใน 48 ชั่วโมง ที่ ER (นับเป็นจำนวนคน)";
 
         $sql = "select  v.hn,v.vstdate,
                 concat(p.pname,p.fname,'  ',p.lname) as pt_name,v.age_y, s.name,

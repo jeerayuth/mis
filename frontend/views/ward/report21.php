@@ -26,6 +26,10 @@ echo GridView::widget([
     ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
+         [
+            'attribute' => 'an',
+            'header' => 'AN'
+        ],
         [
             'attribute' => 'hn',
             'header' => 'HN'
