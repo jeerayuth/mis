@@ -38,7 +38,7 @@ echo GridView::widget([
             'attribute' => 'vstdate',
             'header' => 'วันที่รับบริการ'
         ],
-        [
+      /*  [
             'attribute' => 'drug_name',
             'header' => 'รายการยาที่สั่งใช้'
         ],            
@@ -49,7 +49,7 @@ echo GridView::widget([
         [
             'attribute' => 'doctor_name',
             'header' => 'แพทย์ผู้สั่ง',
-        ],
+        ], */
        
        
     ]
