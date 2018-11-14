@@ -133,6 +133,10 @@ echo GridView::widget([
             'attribute' => 'income',
             'header' => 'ค่ารักษา(บาท)'
         ],
+        [
+            'attribute' => 'sum_adjrw',
+            'header' => 'ผลรวม Adjust RW'
+        ],
           
     ]
 ])

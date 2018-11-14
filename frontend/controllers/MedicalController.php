@@ -69,6 +69,7 @@ COUNT(a.an) as count_an_ipd  ,
 COUNT(distinct(a.hn)) as count_hn_ipd ,
 SUM(a.admdate) as wunnon,
 SUM(a.income) as income,
+SUM(ipt.adjrw) as sum_adjrw,
 
 (
       SELECT
@@ -80,6 +81,7 @@ SUM(a.income) as income,
 )     AS count_in_year
 
 FROM an_stat a
+LEFT OUTER JOIN ipt ON ipt.an = a.an
 
 WHERE  a.dchdate BETWEEN $datestart AND $dateend
 
