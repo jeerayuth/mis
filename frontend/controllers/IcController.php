@@ -663,6 +663,69 @@ class IcController extends CommonController {
     
     
     
+    public function actionReport7($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report7', $this->getSession());
+
+        $report_name = "รายงานตรวจสอบ แลป Culture คนไข้ OPD";
+
+        $sql = "SELECT
+                    v.hn,
+                    v.vn,
+                    concat(pt.pname,pt.fname) as fname,
+                    pt.lname,
+                    v.age_y,
+                    v.vstdate,
+                    v.pttype,
+                    pp.name as pttype_name,
+                    v.pdx,
+                    v.dx0,v.dx1,v.dx2,v.dx3,v.dx4,v.dx5,
+                    if(lhe.lab_items_code = '3166', lhe.order_date,'') as hemo_cs,
+                    if(lhe.lab_items_code = '3259', lhe.order_date,'') as pus_cs,
+                    if(lhe.lab_items_code = '3252', lhe.order_date,'') as sputum_cs,
+                    if(lhe.lab_items_code = '3213', lhe.order_date,'') as stool_cs,
+                    if(lhe.lab_items_code = '3250', lhe.order_date,'') as urine_cs
+
+
+              FROM vn_stat v
+              left outer join patient pt on pt.hn = v.hn
+              left outer join pttype pp on pp.pttype = v.pttype
+
+              left outer join (
+
+                   select lh.vn,lh.order_date,lo.lab_order_number, lo.lab_items_code,lo.lab_order_result
+                   from lab_head lh
+                   left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                   where lh.order_date between  $datestart and $dateend   and lo.lab_items_code in ('3166','3259','3252','3213','3250')
+
+              ) lhe on lhe.vn = v.vn
+              left outer join lab_order lo on lo.lab_order_number = lhe.lab_order_number
+
+
+
+              WHERE v.vstdate between $datestart and $dateend    AND   lo.lab_items_code in ('3166','3259','3252','3213','3250')
+              GROUP BY v.vn ORDER BY v.vstdate ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report7', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
     
     
     

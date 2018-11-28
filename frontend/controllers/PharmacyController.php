@@ -1230,8 +1230,139 @@ group by o.icode ";
     }
     
     
+      public function actionReport23($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report23', $this->getSession());
+
+        $report_name = "รายงานอัตราการสั่งใช้สารน้ำ แยกตามหน่วยงานที่สั่งใช้";
+        $sql = " SELECT
+                        o.rxdate as rxdate,
+                        o.dep_code,ks.department,
+                        o.icode ,d.name as drugname,count(o.icode) as count_icode,sum(o.qty) as sum_qty,
+                        d.units as drug_unit, 
+                        d.unitprice as unit_price,
+                        d.unitcost as unit_cost,
+                        sum(
+                            IF(o.unitprice <> 0,o.unitprice*o.qty,d.unitprice*o.qty)
+                            ) as sum_price ,
+
+                        sum(
+                            IF(o.cost <> 0,o.cost*o.qty,d.unitcost*o.qty)
+                            ) as sum_cost 
+
+                  FROM opitemrece o
+                  LEFT OUTER JOIN drugitems d ON d.icode = o.icode
+                  LEFT OUTER JOIN kskdepartment ks ON ks.depcode = o.dep_code
+                  WHERE
+                    o.icode IN ('1000098',1510028 ,'1000096','1000095','1000100',
+                               '1000102','1000266','1000215','1600088','1470540','1570021')
+
+                    AND
+                    o.rxdate BETWEEN $datestart AND $dateend
+
+
+                  GROUP BY o.rxdate,o.dep_code,o.icode
+                  ORDER BY o.dep_code,o.rxdate,o.icode ";
+
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+       
+        return $this->render('report23', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
     
+     public function actionReport24($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report24', $this->getSession());
+
+        $report_name = "รายงานยอดผู้ป่วย NCD นัดแลปรายวัน";
+        $sql = " SELECT
+                        h.nextdate as nextdate,
+                        h.sub_group_list as sub_group_list,su.name as sub_group_name,
+                        COUNT(h.vn) as count_vn
+                    FROM lab_app_head h
+                    LEFT OUTER JOIN patient p on p.hn = h.hn
+                    LEFT OUTER JOIN lamae_subgroup_list su on su.id = h.sub_group_list
+                    WHERE h.nextdate BETWEEN $datestart AND $dateend
+                    AND form_name ='LAB NCDs clinic'
+                    AND h.sub_group_list in ('166','167','168','169','170')
+                    GROUP BY h.sub_group_list,h.nextdate
+                    ORDER BY h.nextdate ,h.sub_group_list ";
+
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+       
+        return $this->render('report24', [
+                    'dataProvider' => $dataProvider,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+    }
     
+    public function actionReport25($nextdate,$sub_group_list) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report25', $this->getSession());
+
+        $report_name = "รายงานผู้ป่วย NCD นัดแลปรายวัน";
+        $sql = " SELECT
+                        h.hn,h.nextdate as nextdate,su.name as sub_group_name,
+                        concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                        concat(DAY(h.nextdate),'/',MONTH(h.nextdate),'/',(YEAR(h.nextdate)+543)) as nextdate_th
+                    FROM lab_app_head h
+                    LEFT OUTER JOIN patient p on p.hn = h.hn
+                    LEFT OUTER JOIN lamae_subgroup_list su on su.id = h.sub_group_list
+                    WHERE h.nextdate = '$nextdate'
+                    AND form_name ='LAB NCDs clinic'
+                    AND h.sub_group_list = '$sub_group_list'
+                    ORDER BY h.nextdate ,h.sub_group_list ";
+  
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+       
+        return $this->render('report25', [
+                    'dataProvider' => $dataProvider,
+
+                    'rawData' => $rawData,
+               
+        ]); 
+    }
     
 
 }

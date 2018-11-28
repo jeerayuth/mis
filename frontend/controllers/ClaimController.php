@@ -2387,32 +2387,24 @@ SELECT
     }
     
     
-     
-      /*  
-     
-      public function actionReport30($date_start, $date_end) {
-         // save log
-        $this->SaveLog($this->dep_controller, 'report30', $this->getSession());
+    
+    
+       public function actionReport32($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report32', $this->getSession());
 
-        $report_name = "รายงานจำนวนคนไข้ที่ใช้สิทธิ์ 37(พรบ.30000 จ่ายเงินไม่มีสิทธิเบิกคืนจาก รพ.) ระหว่างวันที่ $date_start ถึงวันที่ $date_end";
-   
+        $report_name = "รายงานสรุปคนไข้ Refer Out แยกตามสถานพยาบาล";
         $sql = "SELECT
-                    'ผู้ป่วยนอก' as name,
-                    count(distinct(hn)) as count_hn,count(distinct(vn)) as count_visit
-                    from vn_stat   where pttype = '37'     
-                    and vstdate between $date_start AND $date_end 
-                
-                UNION ALL  
-                
-                SELECT
-                    'ผู้ป่วยใน' as name,
-                    count(distinct(hn)) as count_hn,count(distinct(an)) as count_visit
-                    from an_stat   where pttype = '37'     
-                    and dchdate between $date_start AND $date_end  ";
-             
-        echo $sql;  
+                    r.refer_hospcode,concat(h.hosptype,h.name) as hp_name,
+                    count(r.refer_hospcode) as count_hc
+                FROM referout  r
+                    left outer join hospcode h on h.hospcode = r.refer_hospcode
+                WHERE
+                    r.refer_date between $datestart and $dateend
+                GROUP BY r.refer_hospcode
+                ORDER BY  count(r.refer_hospcode) desc ";
+                                    
 
-                                                    
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -2423,20 +2415,50 @@ SELECT
             'allModels' => $rawData,
             'pagination' => FALSE,
         ]);
-        
-      
-        return $this->render('report30', [
-                    'dataProvider' => $dataProvider,
-                    'rawData' => $rawData,
-                    'date_start' => $date_start,
-                    'date_end' => $date_end,
-                    'report_name' => $report_name,
 
-        ]); 
-      
- 
-     } */
-     
+        return $this->render('report32', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    public function actionReport33($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report33', $this->getSession());
+
+        $report_name = "รายงานสรุปคนไข้ Refer In แยกตามสถานพยาบาล";
+        $sql = "SELECT
+                    r.refer_hospcode,concat(h.hosptype,h.name) as hp_name,
+                    count(r.refer_hospcode) as count_hc
+                FROM referin  r
+                    left outer join hospcode h on h.hospcode = r.refer_hospcode
+                WHERE
+                    r.refer_date between $datestart and $dateend
+                GROUP BY r.refer_hospcode
+                ORDER BY  count(r.refer_hospcode) DESC ";
+                                    
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report33', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
      
      
 }
