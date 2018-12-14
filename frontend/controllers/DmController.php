@@ -2589,6 +2589,70 @@ select pn.plain_text , count(distinct(pn.hn)) as count_hn
     
     
     
+    public function actionReport25($uclinic, $datestart, $dateend, $details) {
+        $this->SaveLog($this->dep_controller, 'report25', $this->getSession());
+        // ตัวแปร $get_type เอาไว้ตรวจสอบว่าเป็นคนไข้ dm หรือ dm with ht
+        // ตัวแปร $report_name เอาไว้ไปแสดงชื่อรายงานในหน้า view
+        if ($uclinic != "") {
+            if ($uclinic == 1) {
+                $get_type = 'not';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานที่ไม่มีความดันโลหิตร่วมได้รับการตรวจปริทันต์';
+            } else if ($uclinic == 2) {
+                $get_type = '';
+                $report_name = 'รายงานจำนวนคนไข้คลินิคเบาหวานที่มีความดันร่วมได้รับการตรวจปริทันต์';
+            }
+
+            $sql = "
+SELECT
+
+cc.hn, concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name, v.age_y as age_y,
+v.moopart,t.full_name as address,
+cc.screen_date as vstdate 
+
+FROM clinicmember_cormobidity_screen cc
+
+left outer join clinicmember    cm  on cm.clinicmember_id =  cc.clinicmember_id
+left outer join clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+left outer join provis_typedis pd on pd.code=cs.provis_typedis
+left outer join patient pt on pt.hn = cc.hn
+left outer join sex s on s.code = pt.sex
+left outer join vn_stat v on v.vn = cc.vn
+left OUTER join thaiaddress t on t.addressid=v.aid
+
+WHERE 
+    cc.screen_date between $datestart and $dateend
+and
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+and
+    cm.hn  $get_type   in (select hn from clinicmember cl where cl.clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+    
+and (cc.do_dental_screen='Y') 
+group by cc.hn
+order by v.aid, v.moopart, v.hn, cc.screen_date
+
+";
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => False,
+            ]);
+
+            return $this->render('report25', [
+                        'dataProvider' => $dataProvider,
+                        'report_name' => $report_name,
+                        'details' => $details,
+            ]);
+        }
+    }
+
+// จบ function
+
     
 
 } // end class
