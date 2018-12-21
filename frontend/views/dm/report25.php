@@ -9,6 +9,7 @@ $this->title = $report_name;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
+
 <?php
 
 echo GridView::widget([

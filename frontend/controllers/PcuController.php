@@ -1887,8 +1887,69 @@ class PcuController extends CommonController {
                     'report_name' => $report_name,
                     'details' => $details,
         ]);
-         
-         
+                 
     }
+    
+    
+    
+    public function actionReport37($village_id,$details) {
+        $this->SaveLog($this->dep_controller, 'report37', $this->getSession());
+        
+        
+        if ($village_id != "") { 
+            $report_name = "รายงานประชากรแยกตามหมู่บ้าน";
+    
+            $sql = "SELECT
+                        /* ps.village_id,ps.person_id,ps.house_id,  */
+                        vl.village_moo,hs.address,
+                        if(php.person_house_position_name is not null, php.person_house_position_name,' ') AS person_house_position_name,       
+                        CONCAT(ps.pname,ps.fname,'  ',ps.lname) AS pt_name,
+                        timestampdiff(year,ps.birthdate,curdate()) AS age_y,
+                        ps.cid,ps.house_regist_type_id AS house_regist_type_id, hp.house_regist_type_name AS house_regist_type_name,
+                        edu.name AS education_name,occ.name AS occupation_name,
+                        mss.name AS marrystatus_name,psd.person_discharge_name AS person_discharge_name,
+                        ' ' AS comments
+
+                  FROM person  ps
+                  LEFT OUTER JOIN house hs ON hs.house_id = ps.house_id
+                  LEFT OUTER JOIN village vl ON vl.village_id = hs.village_id
+                  LEFT OUTER JOIN house_regist_type hp ON hp.house_regist_type_id = ps.house_regist_type_id
+                  LEFT OUTER JOIN education edu ON edu.education = ps.education
+                  LEFT OUTER JOIN occupation occ ON occ.occupation = ps.occupation
+                  LEFT OUTER JOIN marrystatus mss ON mss.code = ps.marrystatus
+                  LEFT OUTER JOIN person_discharge psd ON psd.person_discharge_id = ps.person_discharge_id
+                  LEFT OUTER JOIN person_house_position  php ON php.person_house_position_id = ps.home_position_id
+
+                  WHERE
+                       vl.village_id = $village_id
+                  ORDER BY  vl.village_moo, hs.address
+
+                  ";
+
+
+            try {
+                $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+            } catch (\yii\db\Exception $e) {
+                throw new \yii\web\ConflictHttpException('sql error');
+            }
+
+            $dataProvider = new \yii\data\ArrayDataProvider([
+                'allModels' => $rawData,
+                'pagination' => FALSE,
+            ]);
+
+            return $this->render('report37', [
+                        'dataProvider' => $dataProvider,
+                        'rawData' => $rawData,
+                        'village_id' => $village_id,
+                        'report_name' => $report_name,
+                        'details' => $details
+            ]);
+        } else {  
+            echo "กรุณาเลือกหมู่บ้านที่ต้องการด้วยครับ";
+        }
+    }
+
+
 
 }
