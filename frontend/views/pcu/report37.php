@@ -46,7 +46,7 @@ echo GridView::widget([
         ],
             [
             'attribute' => 'age_y',
-            'header' => 'อายุ'
+            'header' => 'อายุ(ปี)'
         ],
          [
             'attribute' => 'cid',
