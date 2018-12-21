@@ -53,14 +53,14 @@ echo GridView::widget([
             'header' => 'CID'
         ],
     
-         [
+      /*   [
             'attribute' => 'house_regist_type_id',
             'header' => 'Type AREA'
-        ],
+        ], */
     
          [
             'attribute' => 'house_regist_type_name',
-            'header' => 'Type Area Name'
+            'header' => 'Type Area'
         ],
     
          [

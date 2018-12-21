@@ -1908,7 +1908,8 @@ class PcuController extends CommonController {
                         ps.cid,ps.house_regist_type_id AS house_regist_type_id, hp.house_regist_type_name AS house_regist_type_name,
                         edu.name AS education_name,occ.name AS occupation_name,
                         mss.name AS marrystatus_name,psd.person_discharge_name AS person_discharge_name,
-                        ' ' AS comments
+                        ' ' AS commentss,
+                        if(ps.person_discharge_id = '1', psd.person_discharge_name,' ') as comments
 
                   FROM person  ps
                   LEFT OUTER JOIN house hs ON hs.house_id = ps.house_id
@@ -1918,7 +1919,7 @@ class PcuController extends CommonController {
                   LEFT OUTER JOIN occupation occ ON occ.occupation = ps.occupation
                   LEFT OUTER JOIN marrystatus mss ON mss.code = ps.marrystatus
                   LEFT OUTER JOIN person_discharge psd ON psd.person_discharge_id = ps.person_discharge_id
-                  LEFT OUTER JOIN person_house_position  php ON php.person_house_position_id = ps.home_position_id
+                  LEFT OUTER JOIN person_house_position  php ON php.person_house_position_id = ps.person_house_position_id
 
                   WHERE
                        vl.village_id = $village_id
