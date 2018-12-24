@@ -711,7 +711,7 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
               // save log
         $this->SaveLog($this->dep_controller, 'report14', $this->getSession());
               
-        $report_name = "รายงานจำนวนครั้งคนไข้(IPD) สั่งใช้ PRC1,PRC2";
+        $report_name = "รายงานจำนวนครั้งคนไข้(IPD) สั่งจอง PRC1,PRC2,PRC3,PC1,PC3,PC5,LPRC.NAT1,LPRC.NAT2";
         $sql = "SELECT
                 lh.lab_order_number,lh.vn,lh.hn,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,lh.order_date,lh.confirm_report,
                 lh.order_department,k.department ,ipt.an ,ipt.ward,ipt.regdate,ipt.dchdate,a.pdx
@@ -724,7 +724,7 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
 
                 WHERE 
                     ipt.dchdate BETWEEN $datestart and $dateend  AND 
-                    lo.lab_items_code in ('3124','3125')   AND ipt.ward = '01' AND 
+                    lo.lab_items_code in ('3121','3122','3104','3123','3129','3288','3290','25')   AND ipt.ward = '01' AND 
                     lh.order_department = '003'
                 GROUP BY lh.vn
                ";
@@ -1164,6 +1164,63 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
                     'details' => $details,
         ]);
     }
+    
+    
+
+    
+    
+     public function actionReport23($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report23', $this->getSession());
+
+        $report_name = "รายงานตรวจสอบจำนวนการสั่งค่าบริการอัตโนมัติ (ค่าเตียง,ค่าบริการพยาบาลทั่วไป(ipd))";
+
+        $sql = " SELECT
+                    a.an,a.hn,            
+                    concat(DAY(a.regdate),'/',MONTH(a.regdate),'/',(YEAR(a.regdate)+543)) as regdate,
+                    concat(DAY(a.dchdate),'/',MONTH(a.dchdate),'/',(YEAR(a.dchdate)+543)) as dchdate,  
+                    a.admdate ,                 
+                    CONCAT(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                    (
+                      select count(o.icode) 
+                      from opitemrece  o 
+                      where  o.icode = '3000001' and o.an = a.an
+                    ) AS count_bed ,
+                    (
+                      select count(o.icode) 
+                      from opitemrece  o 
+                      where  o.icode = '3001372' and o.an = a.an
+                    ) AS count_nurse
+
+              FROM an_stat a
+              LEFT OUTER JOIN patient pt ON pt.hn = a.hn
+              WHERE
+                   a.dchdate BETWEEN $datestart and $dateend AND a.ward = '01'
+              GROUP BY
+                    a.an ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report23', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
     
     
 }
