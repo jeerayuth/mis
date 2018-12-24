@@ -1198,8 +1198,8 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
                    a.dchdate BETWEEN $datestart and $dateend AND a.ward = '01'
               GROUP BY
                     a.an ";
-                         
 
+        
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();
         } catch (\yii\db\Exception $e) {
@@ -1220,6 +1220,85 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
         ]);
     }
     
+    
+    
+    public function actionReport24($an) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report24', $this->getSession());
+
+        $report_name = "รายงานตรวจสอบจำนวนการสั่งค่าบริการอัตโนมัติ ค่าเตียง";
+  
+        $sql = "SELECT
+                        o.hn,o.icode,o.an,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        o.icode,nd.name as nondrugname,o.qty,
+                        concat(DAY(o.rxdate),'/',MONTH(o.rxdate),'/',(YEAR(o.rxdate)+543)) as rxdate 
+                  FROM opitemrece o
+                  left outer join nondrugitems nd on nd.icode = o.icode
+                  left outer join patient pt on pt.hn= o.hn
+                  WHERE
+                       o.an = $an  AND o.icode = '3000001' ORDER BY o.rxdate ASC ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report24', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+        ]); 
+         
+        
+    }
+    
+    
+    
+    public function actionReport25($an) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report25', $this->getSession());
+
+        $report_name = "รายงานตรวจสอบจำนวนการสั่งค่าบริการอัตโนมัติ ค่าบริการพยาบาลทั่วไป(IPD)";
+  
+        $sql = "SELECT
+                        o.hn,o.icode,o.an,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        o.icode,nd.name as nondrugname,o.qty,
+                        concat(DAY(o.rxdate),'/',MONTH(o.rxdate),'/',(YEAR(o.rxdate)+543)) as rxdate 
+                  FROM opitemrece o
+                  left outer join nondrugitems nd on nd.icode = o.icode
+                  left outer join patient pt on pt.hn= o.hn
+                  WHERE
+                       o.an = $an  AND o.icode = '3001372' ORDER BY o.rxdate ASC ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report25', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+        ]); 
+         
+        
+    }
     
     
     

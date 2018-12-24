@@ -53,14 +53,29 @@ echo GridView::widget([
             'attribute' => 'admdate',
             'header' => 'จำนวนวันนอน'
         ],
-         [
+          [
             'attribute' => 'count_bed',
-            'header' => 'เตียงอัตโนมัติ(ครั้ง)'
+            'header' => 'เตียงอัตโนมัติ(ครั้ง)',
+            'format' => 'raw',
+            'value' => function($model)  {
+                $an = $model['an'];
+                $count_bed = $model['count_bed'];             
+                return Html::a(Html::encode($count_bed), 
+                    ['ward/report24', 'an' => $an],['target'=>'_blank']);
+                    }
         ],
+
         [
             'attribute' => 'count_nurse',
-            'header' => 'บริการพยาบาลทั่วไป IPD(ครั้ง)'
-        ],
+            'header' => 'บริการพยาบาลทั่วไป IPD(ครั้ง)',
+            'format' => 'raw',
+            'value' => function($model)  {
+                $an = $model['an'];
+                $count_nurse = $model['count_nurse'];             
+                return Html::a(Html::encode($count_nurse), 
+                    ['ward/report25', 'an' => $an],['target'=>'_blank']);
+                    }
+        ]
       
       
         
