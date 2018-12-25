@@ -75,6 +75,17 @@ echo GridView::widget([
                 return Html::a(Html::encode($count_nurse), 
                     ['ward/report25', 'an' => $an],['target'=>'_blank']);
                     }
+        ],
+             [
+            'attribute' => 'count_room',
+            'header' => 'ห้องพิเศษ',
+            'format' => 'raw',
+            'value' => function($model)  {
+                $an = $model['an'];
+                $count_room = $model['count_room'];             
+                return Html::a(Html::encode($count_room), 
+                    ['ward/report26', 'an' => $an],['target'=>'_blank']);
+                    }
         ]
       
       

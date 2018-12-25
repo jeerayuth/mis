@@ -1173,7 +1173,7 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
         // save log
         $this->SaveLog($this->dep_controller, 'report23', $this->getSession());
 
-        $report_name = "รายงานตรวจสอบจำนวนการสั่งค่าบริการอัตโนมัติ (ค่าเตียง,ค่าบริการพยาบาลทั่วไป(ipd))";
+        $report_name = "รายงานตรวจสอบจำนวนการสั่งค่าบริการอัตโนมัติ (ค่าเตียง,ห้องพิเศษ,ค่าบริการพยาบาลทั่วไป(ipd))";
 
         $sql = " SELECT
                     a.an,a.hn,            
@@ -1190,7 +1190,14 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
                       select count(o.icode) 
                       from opitemrece  o 
                       where  o.icode = '3001372' and o.an = a.an
-                    ) AS count_nurse
+                    ) AS count_nurse,
+                    (
+                      select count(o.icode) 
+                      from opitemrece  o 
+                      where  o.icode in('3000002','3007945','3007982','3007984','3007986','3007994',
+                                        '3008007','3008050','3008069','3008107','3008160','3008179') 
+                      and o.an = a.an
+                    ) AS count_room
 
               FROM an_stat a
               LEFT OUTER JOIN patient pt ON pt.hn = a.hn
@@ -1300,6 +1307,47 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
         
     }
     
+    
+    
+     public function actionReport26($an) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report26', $this->getSession());
+
+        $report_name = "รายงานตรวจสอบจำนวนการสั่งค่าบริการอัตโนมัติ ค่าห้องพิเศษ";
+  
+        $sql = "SELECT
+                        o.hn,o.icode,o.an,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        o.icode,nd.name as nondrugname,o.qty,
+                        concat(DAY(o.rxdate),'/',MONTH(o.rxdate),'/',(YEAR(o.rxdate)+543)) as rxdate 
+                  FROM opitemrece o
+                  left outer join nondrugitems nd on nd.icode = o.icode
+                  left outer join patient pt on pt.hn= o.hn
+                  WHERE
+                       o.an = $an  AND o.icode in('3000002','3007945','3007982','3007984','3007986','3007994',
+                                                  '3008007','3008050','3008069','3008107','3008160','3008179') 
+                  ORDER BY o.rxdate ASC ";
+                         
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report26', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+        ]); 
+         
+        
+    }
     
     
 }
