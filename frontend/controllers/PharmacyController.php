@@ -1364,5 +1364,64 @@ group by o.icode ";
         ]); 
     }
     
+    
+    
+    
+    
+    public function actionReport26($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report26', $this->getSession());
+
+        $report_name = "จำนวน visit คนไข้ที่อยู่ในคลินิคเบาหวาน โดยมีเงื่อนไข คือ ต้องตรวจแลป FBS หรือ DTX";
+        $sql = "SELECT
+                v.vn,v.hn,concat(p.pname,p.fname,' ',p.lname) as pt_name, v.pdx, 
+                concat(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as vstdate,
+                lh.lab_order_number , li.lab_items_name,lo.lab_order_result,            
+                if(rx.note is not null,rx.note,' ') as note
+                           
+                FROM vn_stat  v
+                left outer join patient p on p.hn = v.hn
+                left outer join lab_head lh on lh.vn = v.vn
+                left outer join lab_order lo on lo.lab_order_number = lh.lab_order_number
+                left outer join lab_items li on li.lab_items_code = lo.lab_items_code
+                left outer join rx_operator rx on rx.vn = v.vn
+                WHERE 
+                    v.vstdate BETWEEN $datestart AND $dateend
+                AND
+                v.hn in
+                (
+                  select c.hn  from clinicmember c where c.clinic = '001'
+                )
+
+                and lo.lab_items_code in (3001,3246)
+                and lo.confirm = 'Y'
+
+                GROUP BY v.vn
+                ORDER BY v.vstdate ";
+  
+        
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+       
+             return $this->render('report26', [
+                    'dataProvider' => $dataProvider,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);  
+    }
+    
+    
 
 }
