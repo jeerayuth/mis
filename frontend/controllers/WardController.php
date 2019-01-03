@@ -1238,12 +1238,14 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
         $sql = "SELECT
                         o.hn,o.icode,o.an,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                         o.icode,nd.name as nondrugname,o.qty,
-                        concat(DAY(o.rxdate),'/',MONTH(o.rxdate),'/',(YEAR(o.rxdate)+543)) as rxdate 
+                        concat(DAY(o.rxdate),'/',MONTH(o.rxdate),'/',(YEAR(o.rxdate)+543)) as rxdate ,
+                        ipo.order_type
                   FROM opitemrece o
                   left outer join nondrugitems nd on nd.icode = o.icode
                   left outer join patient pt on pt.hn= o.hn
+                  left outer join ipt_order_no ipo on ipo.order_no = o.order_no
                   WHERE
-                       o.an = $an  AND o.icode = '3000001' ORDER BY o.rxdate ASC ";
+                       o.an = '$an'  AND o.icode = '3000001' ORDER BY o.rxdate ASC ";
                          
 
         try {
@@ -1278,12 +1280,14 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
         $sql = "SELECT
                         o.hn,o.icode,o.an,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                         o.icode,nd.name as nondrugname,o.qty,
-                        concat(DAY(o.rxdate),'/',MONTH(o.rxdate),'/',(YEAR(o.rxdate)+543)) as rxdate 
+                        concat(DAY(o.rxdate),'/',MONTH(o.rxdate),'/',(YEAR(o.rxdate)+543)) as rxdate ,
+                        ipo.order_type
                   FROM opitemrece o
                   left outer join nondrugitems nd on nd.icode = o.icode
                   left outer join patient pt on pt.hn= o.hn
+                  left outer join ipt_order_no ipo on ipo.order_no = o.order_no
                   WHERE
-                       o.an = $an  AND o.icode = '3001372' ORDER BY o.rxdate ASC ";
+                       o.an = '$an'  AND o.icode = '3001372' ORDER BY o.rxdate ASC ";
                          
 
         try {
@@ -1318,12 +1322,14 @@ q1.regdate between $datestart AND $dateend ) as q3  on q3.hn = patient.hn ";
         $sql = "SELECT
                         o.hn,o.icode,o.an,concat(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
                         o.icode,nd.name as nondrugname,o.qty,
-                        concat(DAY(o.rxdate),'/',MONTH(o.rxdate),'/',(YEAR(o.rxdate)+543)) as rxdate 
+                        concat(DAY(o.rxdate),'/',MONTH(o.rxdate),'/',(YEAR(o.rxdate)+543)) as rxdate ,
+                        ipo.order_type
                   FROM opitemrece o
                   left outer join nondrugitems nd on nd.icode = o.icode
                   left outer join patient pt on pt.hn= o.hn
+                  left outer join ipt_order_no ipo on ipo.order_no = o.order_no
                   WHERE
-                       o.an = $an  AND o.icode in('3000002','3007945','3007982','3007984','3007986','3007994',
+                       o.an = '$an'  AND o.icode in('3000002','3007945','3007982','3007984','3007986','3007994',
                                                   '3008007','3008050','3008069','3008107','3008160','3008179') 
                   ORDER BY o.rxdate ASC ";
                          

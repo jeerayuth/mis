@@ -40,6 +40,10 @@ echo GridView::widget([
             'attribute' => 'pt_name',
             'header' => 'ชื่อ-สกุล'
         ],
+        [
+            'attribute' => 'order_type',
+            'header' => 'ประเภท ORDER'
+        ],
          [
             'attribute' => 'icode',
             'header' => 'รหัสค่าใช้จ่าย'
