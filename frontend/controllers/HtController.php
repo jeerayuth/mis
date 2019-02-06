@@ -158,6 +158,49 @@ AND pd.code in('3','03')
 AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14)
 GROUP BY th.addressid
 
+union
+
+SELECT
+'8' as hosp_area,'อำเภอหลังสวน' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+AND concat(pt.chwpart,pt.amppart) =  '8604' 
+GROUP BY concat(pt.chwpart,pt.amppart)
+
+
+
+union
+
+SELECT
+'9' as hosp_area,'อำเภอท่าชนะ' as hosp_name , th.full_name as address,count(distinct(cm.hn)) as count_hn
+FROM clinicmember  cm
+LEFT OUTER JOIN clinic_member_status cs on cs.clinic_member_status_id=cm.clinic_member_status_id
+LEFT OUTER JOIN provis_typedis pd on pd.code=cs.provis_typedis
+LEFT OUTER JOIN patient pt ON pt.hn = cm.hn
+LEFT OUTER JOIN thaiaddress th ON th.addressid = concat(pt.chwpart,pt.amppart,pt.tmbpart)
+WHERE 
+    cm.hn in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='ht_clinic_code'))
+AND 
+    cm.hn  not  in(select hn from clinicmember where clinic=(select sys_value from sys_var where sys_name='dm_clinic_code'))
+
+AND pd.code in('3','03')
+AND concat(pt.chwpart,pt.amppart) =  '8407' 
+GROUP BY concat(pt.chwpart,pt.amppart)
+
+
+
+
+
+
  ";
 
         try {
@@ -202,6 +245,10 @@ GROUP BY th.addressid
             $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860503'   and pt.moopart in (1,7,8,10) ";
         } else if ($hosp_area == 7) {
             $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart,pt.tmbpart) =  '860501'   and pt.moopart in (1,2,3,4,5,6,7,9,10,12,14) ";
+        }else if ($hosp_area == 8) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart) =  '8604' ";
+        }else if ($hosp_area == 9) {
+            $hosp_area_condition = " AND concat(pt.chwpart,pt.amppart) =  '8407' ";
         }
 
 
