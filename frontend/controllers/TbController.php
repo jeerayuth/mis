@@ -92,11 +92,24 @@ class TbController extends CommonController {
                                    select universal_item_value_text
                                    from universal_detail n where n.universal_head_id = u.universal_head_id   and n.universal_item_id = '34'
 
-                            ) as lab_afb_result_3
-                            
+                            ) as lab_afb_result_3,
+                            p.addrpart,
+                            p.moopart,
+                            t1.name as chw_name, t2.name as amp_name,
+                            t3.name as tmb_name
+         
 
                         FROM 
                             universal_head u
+                        LEFT OUTER JOIN patient p ON p.hn = u.hn
+                        
+                        LEFT OUTER JOIN thaiaddress t1 on t1.chwpart=p.chwpart and t1.codetype='1'                     
+                        LEFT OUTER JOIN thaiaddress t2 on t2.chwpart=p.chwpart
+                        and t2.amppart=p.amppart and t2.codetype='2'
+                        LEFT OUTER JOIN thaiaddress t3 on t3.chwpart=p.chwpart
+                        and t3.amppart=p.amppart and t3.tmbpart=p.tmbpart and t3.codetype='3'
+                        
+
                         WHERE
                             u.universal_form_id = '8' AND 
                             u.entry_date BETWEEN $datestart and $dateend ";

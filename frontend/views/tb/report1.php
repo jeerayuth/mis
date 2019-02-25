@@ -114,6 +114,27 @@ echo GridView::widget([
             'header' => 'HN'
         ],
         [
+            'attribute' => 'addrpart',
+            'header' => 'บ้านเลขที่'
+        ],
+        [
+            'attribute' => 'moopart',
+            'header' => 'หมู่'
+        ],
+         [
+            'attribute' => 'tmb_name',
+            'header' => 'ตำบล'
+        ],
+        [
+            'attribute' => 'amp_name',
+            'header' => 'อำเภอ'
+        ],
+        
+         [
+            'attribute' => 'chw_name',
+            'header' => 'จังหวัด'
+        ],
+        [
             'attribute' => 'entry_date',
             'header' => 'วันที่คัดกรอง'
         ],
