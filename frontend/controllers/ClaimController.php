@@ -2459,6 +2459,45 @@ SELECT
     }
     
     
+    
+    public function actionReport34($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report34', $this->getSession());
+
+        $report_name = "รายงานลูกหนี้ต่างจังหวัดค้างจ่ายค่ารักษาพยาบาล";
+        
+        $sql = " SELECT 
+                    p.hn, concat(p.pname,p.fname,'  ',p.lname) as ptname, 
+                    CONCAT(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as visitdate,
+                    v.income,
+                    v.paid_money,v.remain_money,v.rcpt_money,
+                    p.addrpart,p.moopart,th.full_name as address
+                FROM vn_stat v
+                LEFT OUTER JOIN patient p on p.hn = v.hn
+                LEFT OUTER JOIN thaiaddress th on th.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
+                WHERE 
+                    v.vstdate BETWEEN $datestart and $dateend AND 
+                    v.pttype IN ('56','57') AND
+                    v.paid_money > v.rcpt_money  ";
+                                              
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+        return $this->render('report34', [
+                    'dataProvider' => $dataProvider,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
      
      
 }
