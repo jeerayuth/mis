@@ -2703,4 +2703,53 @@ order by v.aid, v.moopart, v.hn, cc.screen_date
 
     
 
+    // ประมวลผลรายงานคัดกรองบุหรี่
+    public function actionReport26($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report26', $this->getSession());
+
+        $report_name = "รายงานจำนวนครั้งการคัดกรองบุหรี่";
+
+        $sql = "SELECT
+                           u.universal_head_id,u.staff,u.hn,
+                           CONCAT(p.pname,p.fname,'  ',p.lname) as pt_name,                       
+                           u.vn,concat(DAY(u.entry_date),'/',MONTH(u.entry_date),'/',(YEAR(u.entry_date)+543)) as entry_date
+
+                        FROM 
+                            universal_head u
+                        LEFT OUTER JOIN patient p ON p.hn = u.hn                  
+                        LEFT OUTER JOIN thaiaddress t1 on t1.chwpart=p.chwpart and t1.codetype='1'                     
+                        LEFT OUTER JOIN thaiaddress t2 on t2.chwpart=p.chwpart
+                        and t2.amppart=p.amppart and t2.codetype='2'
+                        LEFT OUTER JOIN thaiaddress t3 on t3.chwpart=p.chwpart
+                        and t3.amppart=p.amppart and t3.tmbpart=p.tmbpart and t3.codetype='3'
+                        
+                        WHERE
+                            u.universal_form_id = '12' AND 
+                            u.entry_date BETWEEN $datestart and $dateend ";
+
+        
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();        
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+        return $this->render('report26', [
+                    'dataProvider' => $dataProvider,          
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
 } // end class

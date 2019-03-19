@@ -52,30 +52,20 @@ echo GridView::widget([
             'attribute' => 'visitdate',
             'header' => 'วันที่รับบริการ'
         ],
-         [
-            'attribute' => 'income',
-            'header' => 'income'
-        ],
+     
         [
             'attribute' => 'paid_money',
-            'header' => 'paid_money'
+            'header' => 'ต้องชำระ'
         ],
           [
             'attribute' => 'remain_money',
-            'header' => 'remain_money'
+            'header' => 'ค้างชำระ'
         ],
           [
             'attribute' => 'rcpt_money',
-            'header' => 'rcpt_money'
+            'header' => 'ชำระแล้ว'
         ],
-        [
-            'attribute' => 'addrpart',
-            'header' => 'บ้านเลขที่'
-        ],
-        [
-            'attribute' => 'moopart',
-            'header' => 'หมู่'
-        ],
+      
            [
             'attribute' => 'address',
             'header' => 'ที่อยู่'

@@ -2471,7 +2471,7 @@ SELECT
                     CONCAT(DAY(v.vstdate),'/',MONTH(v.vstdate),'/',(YEAR(v.vstdate)+543)) as visitdate,
                     v.income,
                     v.paid_money,v.remain_money,v.rcpt_money,
-                    p.addrpart,p.moopart,th.full_name as address
+                    CONCAT(p.addrpart,' หมู่ที่',p.moopart,' ',th.full_name) as address
                 FROM vn_stat v
                 LEFT OUTER JOIN patient p on p.hn = v.hn
                 LEFT OUTER JOIN thaiaddress th on th.addressid = concat(p.chwpart,p.amppart,p.tmbpart)
