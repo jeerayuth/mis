@@ -137,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
         
           <tr>
             <th scope="row">23</th>
-            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 24, 'dep_name' => 'ตรวจสอบข้อมูล']) ?>">ตรวจสอบข้อมูล(ทดสอบ) <span class="glyphicon glyphicon-zoom-in"></span></a></td>
+            <td><a href="<?= Yii::$app->urlManager->createUrl(['report/grid', 'dep_id' => 24, 'dep_name' => 'ตรวจสอบข้อมูล']) ?>">รายงานทั่วไป <span class="glyphicon glyphicon-zoom-in"></span></a></td>
         </tr>
         
        
