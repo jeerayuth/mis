@@ -1484,13 +1484,14 @@ group by o.icode ";
                       
         $report_name = "รายงานประวัติการพิมพ์ฟอร์ม Reconciliation";
         $sql = "SELECT
-                    r.report_name,r.loginname,r.department,
+                    r.report_name,r.loginname,opd.name as login_name,r.department,
                     k.department as dep_name,r.access_date_time,r.computer_name
                 FROM report_access_log r
                 LEFT OUTER JOIN kskdepartment k ON k.depcode = r.department
+                LEFT OUTER JOIN opduser opd ON opd.loginname = r.loginname
                 WHERE
                      report_name LIKE '%CUSTOM-Admission_Reconciliation_Form%'   AND
-                     access_date_time BETWEEN $datestart AND $dateend AND loginname != 'admin'
+                     access_date_time BETWEEN $datestart AND $dateend AND r.loginname != 'admin'
                  ";
       
         try {

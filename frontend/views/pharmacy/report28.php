@@ -33,7 +33,7 @@ echo GridView::widget([
             'header' => 'ชื่อแบบฟอร์ม'
         ],
         [
-            'attribute' => 'loginname',
+            'attribute' => 'login_name',
             'header' => 'ผู้สั่งพิมพ์'
         ],
         [
@@ -44,8 +44,7 @@ echo GridView::widget([
             'attribute' => 'access_date_time',
             'header' => 'วันที่สั่งพิมพ์'
         ]
-
-        
+       
     ]
 ])
 ?>
