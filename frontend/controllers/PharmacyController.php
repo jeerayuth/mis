@@ -1476,4 +1476,46 @@ group by o.icode ";
     }
     
 
+    
+    
+    public function actionReport28($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report28', $this->getSession());
+                      
+        $report_name = "รายงานประวัติการพิมพ์ฟอร์ม Reconciliation";
+        $sql = "SELECT
+                    r.report_name,r.loginname,r.department,
+                    k.department as dep_name,r.access_date_time,r.computer_name
+                FROM report_access_log r
+                LEFT OUTER JOIN kskdepartment k ON k.depcode = r.department
+                WHERE
+                     report_name LIKE '%CUSTOM-Admission_Reconciliation_Form%'   AND
+                     access_date_time BETWEEN $datestart AND $dateend AND loginname != 'admin'
+                 ";
+      
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+       
+             return $this->render('report28', [
+                    'dataProvider' => $dataProvider,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);  
+    }
+    
+    
+    
+    
 }
