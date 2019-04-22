@@ -387,7 +387,7 @@ class TtmController extends CommonController {
     
      public function actionReport8($datestart, $dateend, $details) {
         // save log
-        $this->SaveLog($this->dep_controller, 'report21', $this->getSession());
+        $this->SaveLog($this->dep_controller, 'report8', $this->getSession());
 
         $report_name = "รายงานการลง Diag U778 ในผู้ป่วยที่ไม่ใช่สิทธิ์ UC";
         $sql = "SELECT           
@@ -442,6 +442,73 @@ class TtmController extends CommonController {
     }
     
     
+    public function actionReport9($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report9', $this->getSession());
+
+        $report_name = "รายงานการสั่งใช้ยามะระขี้นก";
+        $sql = "SELECT
+      o.hn,o.vn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+      o.icode,dr.name as drug_name,o.qty,
+      if(o.drugusage !='',du.shortlist,concat(s.name1,'  ',s.name2,'  ',s.name3)) as shortlist,
+      o.vstdate ,o.doctor,d.name as doctor_name ,
+      GROUP_CONCAT(DISTINCT concat('[ ',lh.order_date,'=', lo.lab_order_result, ' ]') SEPARATOR ', ')  as lab_Glucose_FBS ,
+      GROUP_CONCAT(DISTINCT concat('[ ',lh2.order_date,'=', lo2.lab_order_result, ' ]') SEPARATOR ', ')  as lab_HbA1C
+
+
+FROM opitemrece  o
+LEFT OUTER JOIN patient p ON p.hn = o.hn
+LEFT OUTER JOIN doctor d  ON d.code = o.doctor
+
+
+LEFT OUTER JOIN (select lab_order_number,hn,order_date from lab_head where order_date between '2017-10-01' AND CURDATE()  AND confirm_report='Y' order by order_date desc)  as lh ON lh.hn = o.hn
+LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number  and lo.lab_items_code = '3001'
+LEFT OUTER JOIN lab_items li ON li.lab_items_code = lo.lab_items_code
+
+
+
+LEFT OUTER JOIN (select lab_order_number,hn,order_date from lab_head where order_date between '2017-10-01' AND CURDATE() AND confirm_report='Y' order by order_date desc)  as  lh2 ON lh2.hn = o.hn
+LEFT OUTER JOIN lab_order lo2 ON lo2.lab_order_number = lh2.lab_order_number  and lo2.lab_items_code = '48'
+LEFT OUTER JOIN lab_items li2 ON li2.lab_items_code = lo2.lab_items_code
+
+LEFT OUTER JOIN drugitems dr ON dr.icode = o.icode
+LEFT OUTER JOIN drugusage du ON du.drugusage = o.drugusage
+LEFT OUTER JOIN sp_use s     ON s.sp_use = o.sp_use
+
+
+
+WHERE
+     o.vstdate BETWEEN $datestart and $dateend  AND
+     o.icode = '1560012'
+
+
+
+GROUP BY o.vn ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+        
+  
+        return $this->render('report9', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]); 
+        
+        
+        
+    
+        
+    }
     
     
     
