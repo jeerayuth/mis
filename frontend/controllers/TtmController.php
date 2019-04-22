@@ -451,7 +451,8 @@ class TtmController extends CommonController {
       o.hn,o.vn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
       o.icode,dr.name as drug_name,o.qty,
       if(o.drugusage !='',du.shortlist,concat(s.name1,'  ',s.name2,'  ',s.name3)) as shortlist,
-      o.vstdate ,o.doctor,d.name as doctor_name ,
+      concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate, 
+      o.doctor,d.name as doctor_name ,
       GROUP_CONCAT(DISTINCT concat('[ ',lh.order_date,'=', lo.lab_order_result, ' ]') SEPARATOR ', ')  as lab_Glucose_FBS ,
       GROUP_CONCAT(DISTINCT concat('[ ',lh2.order_date,'=', lo2.lab_order_result, ' ]') SEPARATOR ', ')  as lab_HbA1C
 
