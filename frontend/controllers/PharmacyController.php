@@ -1490,7 +1490,7 @@ group by o.icode ";
                 LEFT OUTER JOIN kskdepartment k ON k.depcode = r.department
                 LEFT OUTER JOIN opduser opd ON opd.loginname = r.loginname
                 WHERE
-                     report_name LIKE '%CUSTOM-Admission_Reconciliation_Form%'   AND
+                     report_name LIKE '%Reconciliation%'   AND
                      access_date_time BETWEEN $datestart AND $dateend AND r.loginname != 'admin'
                  ";
       

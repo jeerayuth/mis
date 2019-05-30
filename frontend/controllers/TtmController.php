@@ -448,43 +448,38 @@ class TtmController extends CommonController {
 
         $report_name = "รายงานการสั่งใช้ยามะระขี้นก";
         $sql = "SELECT
-      o.hn,o.vn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
-      o.icode,dr.name as drug_name,o.qty,
-      if(o.drugusage !='',du.shortlist,concat(s.name1,'  ',s.name2,'  ',s.name3)) as shortlist,
-      concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate, 
-      o.doctor,d.name as doctor_name ,
-      GROUP_CONCAT(DISTINCT concat('[ ',lh.order_date,'=', lo.lab_order_result, ' ]') SEPARATOR ', ')  as lab_Glucose_FBS ,
-      GROUP_CONCAT(DISTINCT concat('[ ',lh2.order_date,'=', lo2.lab_order_result, ' ]') SEPARATOR ', ')  as lab_HbA1C
+                o.hn,o.vn,concat(p.pname,p.fname,'  ',p.lname) as pt_name,
+                o.icode,dr.name as drug_name,o.qty,
+                if(o.drugusage !='',du.shortlist,concat(s.name1,'  ',s.name2,'  ',s.name3)) as shortlist,
+                concat(DAY(o.vstdate),'/',MONTH(o.vstdate),'/',(YEAR(o.vstdate)+543)) as vstdate, 
+                o.doctor,d.name as doctor_name ,
+                GROUP_CONCAT(DISTINCT concat('[ ',lh.order_date,'=', lo.lab_order_result, ' ]') SEPARATOR ', ')  as lab_Glucose_FBS ,
+                GROUP_CONCAT(DISTINCT concat('[ ',lh2.order_date,'=', lo2.lab_order_result, ' ]') SEPARATOR ', ')  as lab_HbA1C
 
 
-FROM opitemrece  o
-LEFT OUTER JOIN patient p ON p.hn = o.hn
-LEFT OUTER JOIN doctor d  ON d.code = o.doctor
+          FROM opitemrece  o
+          LEFT OUTER JOIN patient p ON p.hn = o.hn
+          LEFT OUTER JOIN doctor d  ON d.code = o.doctor
 
+          LEFT OUTER JOIN (select lab_order_number,hn,order_date from lab_head where order_date between '2017-10-01' AND CURDATE()  AND confirm_report='Y' order by order_date desc)  as lh ON lh.hn = o.hn
+          LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number  and lo.lab_items_code = '3001'
+          LEFT OUTER JOIN lab_items li ON li.lab_items_code = lo.lab_items_code
 
-LEFT OUTER JOIN (select lab_order_number,hn,order_date from lab_head where order_date between '2017-10-01' AND CURDATE()  AND confirm_report='Y' order by order_date desc)  as lh ON lh.hn = o.hn
-LEFT OUTER JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number  and lo.lab_items_code = '3001'
-LEFT OUTER JOIN lab_items li ON li.lab_items_code = lo.lab_items_code
+          LEFT OUTER JOIN (select lab_order_number,hn,order_date from lab_head where order_date between '2017-10-01' AND CURDATE() AND confirm_report='Y' order by order_date desc)  as  lh2 ON lh2.hn = o.hn
+          LEFT OUTER JOIN lab_order lo2 ON lo2.lab_order_number = lh2.lab_order_number  and lo2.lab_items_code = '48'
+          LEFT OUTER JOIN lab_items li2 ON li2.lab_items_code = lo2.lab_items_code
 
-
-
-LEFT OUTER JOIN (select lab_order_number,hn,order_date from lab_head where order_date between '2017-10-01' AND CURDATE() AND confirm_report='Y' order by order_date desc)  as  lh2 ON lh2.hn = o.hn
-LEFT OUTER JOIN lab_order lo2 ON lo2.lab_order_number = lh2.lab_order_number  and lo2.lab_items_code = '48'
-LEFT OUTER JOIN lab_items li2 ON li2.lab_items_code = lo2.lab_items_code
-
-LEFT OUTER JOIN drugitems dr ON dr.icode = o.icode
-LEFT OUTER JOIN drugusage du ON du.drugusage = o.drugusage
-LEFT OUTER JOIN sp_use s     ON s.sp_use = o.sp_use
+          LEFT OUTER JOIN drugitems dr ON dr.icode = o.icode
+          LEFT OUTER JOIN drugusage du ON du.drugusage = o.drugusage
+          LEFT OUTER JOIN sp_use s     ON s.sp_use = o.sp_use
 
 
 
-WHERE
-     o.vstdate BETWEEN $datestart and $dateend  AND
-     o.icode = '1560012'
+          WHERE
+               o.vstdate BETWEEN $datestart and $dateend  AND
+               o.icode = '1560012'
 
-
-
-GROUP BY o.vn ";
+          GROUP BY o.vn ";
 
         try {
             $rawData = \yii::$app->db->createCommand($sql)->queryAll();

@@ -1952,5 +1952,159 @@ class PcuController extends CommonController {
     }
 
 
+    
+     public function actionReport38($datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report38', $this->getSession());
 
-}
+        $report_name = "รายงานตรวจสอบประชากรอายุ 15 ถึง 34 ปี บันทึกข้อมูล Special PP รหัส 1b5/1b6";
+        $sql = "
+                   SELECT
+                      p.person_id,p.house_id,p.cid,CONCAT(p.pname,p.fname,'  ',p.lname) as pt_name,p.sex,p.age_y,
+                      p.house_regist_type_id,p.nationality,p.birthdate,v.village_moo,v.village_name,p.hometel,
+            
+                      (
+                        select count(v1.vn)
+                        from vn_stat v1
+                        LEFT OUTER JOIN pp_special pp1 ON pp1.vn = v1.vn
+                        where v1.cid = p.cid   and pp1.pp_special_type_id  BETWEEN  '241' AND '261'   AND 
+                        v1.vstdate BETWEEN '$datestart' AND '$dateend'
+
+                      ) as count_1b5 ,
+                        (
+                        select count(v2.vn)
+                        from vn_stat v2
+                        LEFT OUTER JOIN pp_special pp2 ON pp2.vn = v2.vn
+                        where v2.cid = p.cid   and pp2.pp_special_type_id  BETWEEN  '271' AND '281'   AND 
+                        v2.vstdate BETWEEN '$datestart' AND '$dateend'
+
+                      ) as count_1b6
+
+                FROM
+                    person p
+                    LEFT OUTER JOIN village v ON v.village_id = p.village_id
+                WHERE
+                     p.house_regist_type_id in ('1','3') AND
+                     p.age_y   BETWEEN '15' AND '34'
+
+                GROUP BY p.cid
+                ORDER BY p.village_id
+
+            ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report38', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
+        ]);
+    }
+
+
+     public function actionReport39($cid,$datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report39', $this->getSession());
+
+        $report_name = "รายงานประวัติการบันทึกข้อมูล SpecialPP รหัส 1b5*";
+        $sql = "
+                   SELECT 
+                        v1.vn,v1.vstdate,v1.hn,CONCAT(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        pp1.pp_special_type_id,pty.pp_special_type_name
+                   FROM 
+                        vn_stat v1
+                   LEFT OUTER JOIN pp_special pp1 ON pp1.vn = v1.vn
+                   LEFT OUTER JOIN patient pt ON pt.hn = v1.hn
+                   LEFT OUTER JOIN pp_special_type pty ON pty.pp_special_type_id = pp1.pp_special_type_id
+                   WHERE  
+                        pp1.pp_special_type_id  BETWEEN  '241' AND '261' AND
+                        v1.cid = '$cid'   AND 
+                        v1.vstdate BETWEEN '$datestart' AND '$dateend'
+                   ORDER BY v1.vstdate DESC
+            ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report39', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
+    public function actionReport40($cid,$datestart, $dateend, $details) {
+        // save log
+        $this->SaveLog($this->dep_controller, 'report40', $this->getSession());
+
+        $report_name = "รายงานประวัติการบันทึกข้อมูล SpecialPP รหัส 1b6*";
+        $sql = "
+                   SELECT 
+                        v1.vn,v1.vstdate,v1.hn,CONCAT(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
+                        pp1.pp_special_type_id,pty.pp_special_type_name
+                   FROM 
+                        vn_stat v1
+                   LEFT OUTER JOIN pp_special pp1 ON pp1.vn = v1.vn
+                   LEFT OUTER JOIN patient pt ON pt.hn = v1.hn
+                   LEFT OUTER JOIN pp_special_type pty ON pty.pp_special_type_id = pp1.pp_special_type_id
+                   WHERE  
+                        pp1.pp_special_type_id  BETWEEN  '271' AND '281' AND
+                        v1.cid = '$cid'   AND 
+                        v1.vstdate BETWEEN '$datestart' AND '$dateend'
+                   ORDER BY v1.vstdate DESC
+            ";
+
+        try {
+            $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+        } catch (\yii\db\Exception $e) {
+            throw new \yii\web\ConflictHttpException('sql error');
+        }
+
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $rawData,
+            'pagination' => FALSE,
+        ]);
+
+
+        return $this->render('report40', [
+                    'dataProvider' => $dataProvider,
+                    'rawData' => $rawData,
+                    'report_name' => $report_name,
+                    'details' => $details,
+        ]);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+        }
