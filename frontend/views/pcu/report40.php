@@ -39,7 +39,11 @@ echo GridView::widget([
         ],
          [
             'attribute' => 'vstdate',
-            'header' => 'วันที่รับบริการ'
+            'header' => 'วันที่ visit ที่ถูกเชื่อมโยงเพื่อบันทึก SpecialPP'
+        ],
+         [
+            'attribute' => 'entry_datetime',
+            'header' => 'วันที่บันทึก SpecialPP'
         ],
         [
             'attribute' => 'pp_special_type_name',

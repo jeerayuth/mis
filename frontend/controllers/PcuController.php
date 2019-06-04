@@ -1953,7 +1953,7 @@ class PcuController extends CommonController {
 
 
     
-     public function actionReport38($datestart, $dateend, $details) {
+     public function actionReport38($details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report38', $this->getSession());
 
@@ -1961,23 +1961,19 @@ class PcuController extends CommonController {
         $sql = "
                    SELECT
                       p.person_id,p.house_id,p.cid,CONCAT(p.pname,p.fname,'  ',p.lname) as pt_name,p.sex,p.age_y,
-                      p.house_regist_type_id,p.nationality,p.birthdate,v.village_moo,v.village_name,p.hometel,
-            
+                      p.house_regist_type_id,p.nationality,p.birthdate,v.village_moo,v.village_name,p.hometel,   
                       (
                         select count(v1.vn)
                         from vn_stat v1
                         LEFT OUTER JOIN pp_special pp1 ON pp1.vn = v1.vn
-                        where v1.cid = p.cid   and pp1.pp_special_type_id  BETWEEN  '241' AND '261'   AND 
-                        v1.vstdate BETWEEN '$datestart' AND '$dateend'
-
+                        where v1.cid = p.cid   and pp1.pp_special_type_id  BETWEEN  '241' AND '261'   
+                         
                       ) as count_1b5 ,
                         (
                         select count(v2.vn)
                         from vn_stat v2
                         LEFT OUTER JOIN pp_special pp2 ON pp2.vn = v2.vn
-                        where v2.cid = p.cid   and pp2.pp_special_type_id  BETWEEN  '271' AND '281'   AND 
-                        v2.vstdate BETWEEN '$datestart' AND '$dateend'
-
+                        where v2.cid = p.cid   and pp2.pp_special_type_id  BETWEEN  '271' AND '281'  
                       ) as count_1b6
 
                 FROM
@@ -2009,13 +2005,12 @@ class PcuController extends CommonController {
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
-                    'datestart' => $datestart,
-                    'dateend' => $dateend,
+        
         ]);
     }
 
 
-     public function actionReport39($cid,$datestart, $dateend, $details) {
+     public function actionReport39($cid, $details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report39', $this->getSession());
 
@@ -2023,7 +2018,7 @@ class PcuController extends CommonController {
         $sql = "
                    SELECT 
                         v1.vn,v1.vstdate,v1.hn,CONCAT(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
-                        pp1.pp_special_type_id,pty.pp_special_type_name
+                        pp1.pp_special_type_id,pty.pp_special_type_name,pp1.entry_datetime
                    FROM 
                         vn_stat v1
                    LEFT OUTER JOIN pp_special pp1 ON pp1.vn = v1.vn
@@ -2031,8 +2026,7 @@ class PcuController extends CommonController {
                    LEFT OUTER JOIN pp_special_type pty ON pty.pp_special_type_id = pp1.pp_special_type_id
                    WHERE  
                         pp1.pp_special_type_id  BETWEEN  '241' AND '261' AND
-                        v1.cid = '$cid'   AND 
-                        v1.vstdate BETWEEN '$datestart' AND '$dateend'
+                        v1.cid = '$cid'   
                    ORDER BY v1.vstdate DESC
             ";
 
@@ -2059,7 +2053,7 @@ class PcuController extends CommonController {
     
     
     
-    public function actionReport40($cid,$datestart, $dateend, $details) {
+    public function actionReport40($cid, $details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report40', $this->getSession());
 
@@ -2067,7 +2061,7 @@ class PcuController extends CommonController {
         $sql = "
                    SELECT 
                         v1.vn,v1.vstdate,v1.hn,CONCAT(pt.pname,pt.fname,'  ',pt.lname) as pt_name,
-                        pp1.pp_special_type_id,pty.pp_special_type_name
+                        pp1.pp_special_type_id,pty.pp_special_type_name,pp1.entry_datetime
                    FROM 
                         vn_stat v1
                    LEFT OUTER JOIN pp_special pp1 ON pp1.vn = v1.vn
@@ -2075,8 +2069,7 @@ class PcuController extends CommonController {
                    LEFT OUTER JOIN pp_special_type pty ON pty.pp_special_type_id = pp1.pp_special_type_id
                    WHERE  
                         pp1.pp_special_type_id  BETWEEN  '271' AND '281' AND
-                        v1.cid = '$cid'   AND 
-                        v1.vstdate BETWEEN '$datestart' AND '$dateend'
+                        v1.cid = '$cid'  
                    ORDER BY v1.vstdate DESC
             ";
 

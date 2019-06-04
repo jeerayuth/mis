@@ -59,11 +59,11 @@ echo GridView::widget([
             'attribute' => 'count_1b5',
             'header' => '1B5*',
             'format' => 'raw',
-            'value' => function($model) use ($datestart,$dateend,$details)  {
+            'value' => function($model) use ($details)  {
                 $cid = $model['cid'];
                 $count_1b5 = $model['count_1b5'];
                 return Html::a(Html::encode($count_1b5), 
-                    ['pcu/report39', 'cid' => $cid, 'datestart' => $datestart,'dateend'=>$dateend,'details'=>$details],['target'=>'_blank']);
+                    ['pcu/report39', 'cid' => $cid, 'details'=>$details],['target'=>'_blank']);
                     }
                 ],
         
@@ -72,11 +72,11 @@ echo GridView::widget([
             'attribute' => 'count_1b6',
             'header' => '1B6*',
             'format' => 'raw',
-            'value' => function($model) use ($datestart,$dateend,$details) {
+            'value' => function($model) use ($details) {
                 $cid = $model['cid'];
                 $count_1b6 = $model['count_1b6'];
                 return Html::a(Html::encode($count_1b6), 
-                    ['pcu/report40', 'cid' => $cid,'datestart' => $datestart,'dateend'=>$dateend,'details'=>$details],['target'=>'_blank']);
+                    ['pcu/report40', 'cid' => $cid,'details'=>$details],['target'=>'_blank']);
                     }
                 ],
        
