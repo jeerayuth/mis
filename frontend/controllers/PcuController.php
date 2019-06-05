@@ -1953,7 +1953,7 @@ class PcuController extends CommonController {
 
 
     
-     public function actionReport38($details) {
+     public function actionReport38($datestart, $dateend,$details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report38', $this->getSession());
 
@@ -1966,14 +1966,16 @@ class PcuController extends CommonController {
                         select count(v1.vn)
                         from vn_stat v1
                         LEFT OUTER JOIN pp_special pp1 ON pp1.vn = v1.vn
-                        where v1.cid = p.cid   and pp1.pp_special_type_id  BETWEEN  '241' AND '261'   
+                        where v1.cid = p.cid   and pp1.pp_special_type_id  BETWEEN  '241' AND '261' AND
+                        v1.vstdate between $datestart and $dateend
                          
                       ) as count_1b5 ,
                         (
                         select count(v2.vn)
                         from vn_stat v2
                         LEFT OUTER JOIN pp_special pp2 ON pp2.vn = v2.vn
-                        where v2.cid = p.cid   and pp2.pp_special_type_id  BETWEEN  '271' AND '281'  
+                        where v2.cid = p.cid   and pp2.pp_special_type_id  BETWEEN  '271' AND '281' AND
+                        v2.vstdate between $datestart and $dateend
                       ) as count_1b6
 
                 FROM
@@ -2002,6 +2004,8 @@ class PcuController extends CommonController {
 
         return $this->render('report38', [
                     'dataProvider' => $dataProvider,
+                    'datestart' => $datestart,
+                    'dateend' => $dateend,
                     'rawData' => $rawData,
                     'report_name' => $report_name,
                     'details' => $details,
@@ -2010,7 +2014,7 @@ class PcuController extends CommonController {
     }
 
 
-     public function actionReport39($cid, $details) {
+     public function actionReport39($datestart, $dateend,$cid, $details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report39', $this->getSession());
 
@@ -2026,7 +2030,7 @@ class PcuController extends CommonController {
                    LEFT OUTER JOIN pp_special_type pty ON pty.pp_special_type_id = pp1.pp_special_type_id
                    WHERE  
                         pp1.pp_special_type_id  BETWEEN  '241' AND '261' AND
-                        v1.cid = '$cid'   
+                        v1.cid = '$cid' AND v1.vstdate between $datestart and $dateend
                    ORDER BY v1.vstdate DESC
             ";
 
@@ -2053,7 +2057,7 @@ class PcuController extends CommonController {
     
     
     
-    public function actionReport40($cid, $details) {
+    public function actionReport40($datestart, $dateend,$cid, $details) {
         // save log
         $this->SaveLog($this->dep_controller, 'report40', $this->getSession());
 
@@ -2069,7 +2073,7 @@ class PcuController extends CommonController {
                    LEFT OUTER JOIN pp_special_type pty ON pty.pp_special_type_id = pp1.pp_special_type_id
                    WHERE  
                         pp1.pp_special_type_id  BETWEEN  '271' AND '281' AND
-                        v1.cid = '$cid'  
+                        v1.cid = '$cid'   AND v1.vstdate between $datestart and $dateend
                    ORDER BY v1.vstdate DESC
             ";
 
