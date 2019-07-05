@@ -13,7 +13,7 @@ $this->title = 'ระบบศูนย์ข้อมูลและสาร�
 <?php 
       if ($session["loginname"] != null) {
 ?>
-       <button type="button" class="btn  btn-success btn-lg" style="float:right;">ฟอร์มขอรายงานใหม่</button>
+      
 <?php
        } 
 ?>
